@@ -30,12 +30,7 @@ namespace Grapher
         {
             this.InitializeComponent();
         }
-
-        private void DoNotConnect_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DisplayPage));
-        }
-
+        
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
 
@@ -46,7 +41,7 @@ namespace Grapher
             base.OnNavigatedTo(e);
             
             graph = new Graph();
-            graph.EmplaceNode("s0");
+            graph.EmplaceNode("a long name to prove a point");
             graph.EmplaceNode("s1");
             graph.EmplaceNode("s2");
             graph.EmplaceNode("s3");
@@ -57,10 +52,10 @@ namespace Grapher
             graph.EmplaceEdge("s3", "s4", "e0");
             graph.EmplaceEdge("s4", "s1", "e0");
 
-            graph.EmplaceEdge("s0", "s1", "e1");
-            graph.EmplaceEdge("s0", "s2", "e2");
-            graph.EmplaceEdge("s0", "s3", "e3");
-            graph.EmplaceEdge("s0", "s4", "e4");
+            graph.EmplaceEdge(graph.nodes[0], "s1", "e1");
+            graph.EmplaceEdge(graph.nodes[0], "s2", "e2");
+            graph.EmplaceEdge(graph.nodes[0], "s3", "e3");
+            graph.EmplaceEdge(graph.nodes[0], "s4", "e4");
 
             LayoutProgress.Maximum = graph.PermutationsCount();
             Stopwatch stopWatch = new Stopwatch();
@@ -76,6 +71,7 @@ namespace Grapher
                                 () => LayoutProgress.Value = current
                             );
                             stopWatch.Reset();
+                            stopWatch.Start();
                         }
                     }
                 )
@@ -93,6 +89,10 @@ namespace Grapher
             return true;
         }
 
+        private void ContinueButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(DisplayPage), graph);
+        }
     }
 
 }

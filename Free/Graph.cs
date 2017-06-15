@@ -11,9 +11,9 @@ namespace Grapher
     class Graph
     {
 
-        private List<Tuple<String, Point>>      nodes;
+        public List<String>                    nodes;
         private List<Tuple<int, int, String>>   edges;
-        private List<Point[]>                   candidates;
+        public List<Point[]>                    candidates;
         private int                             intersection_count;
         private int                             largest_index;
 
@@ -21,14 +21,14 @@ namespace Grapher
         {
             intersection_count = int.MaxValue;
             largest_index = 0;
-            nodes = new List<Tuple<String, Point>>();
+            nodes = new List<String>();
             edges = new List<Tuple<int, int, String>>();
             candidates = new List<Point[]>();
         }
 
         public void EmplaceNode(String text)
         {
-            nodes.Add(new Tuple<String, Point>(text, new Point(0, 0)));
+            nodes.Add(text);
         }
 
         public void EmplaceEdge(String from, String to, String label)
@@ -37,14 +37,14 @@ namespace Grapher
             var from_index = nodes.FindIndex(
                 (x) =>
                 {
-                    return x.Item1 == from;
+                    return x == from;
                 }
             );
 
             var to_index = nodes.FindIndex(
                 (x) =>
                 {
-                    return x.Item1 == to;
+                    return x == to;
                 }
             );
 

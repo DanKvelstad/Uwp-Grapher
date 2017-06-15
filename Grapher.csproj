@@ -96,6 +96,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Free\Graph.cs" />
+    <Compile Include="Xaml\State.xaml.cs">
+      <DependentUpon>State.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Xaml\ProcessingPage.xaml.cs">
       <DependentUpon>ProcessingPage.xaml</DependentUpon>
     </Compile>
@@ -128,6 +131,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Xaml\State.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Xaml\ProcessingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
