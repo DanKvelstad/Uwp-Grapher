@@ -41,7 +41,7 @@ namespace Grapher
             base.OnNavigatedTo(e);
             
             graph = new Graph();
-            graph.EmplaceNode("a long name to prove a point");
+            graph.EmplaceNode("s0");
             graph.EmplaceNode("s1");
             graph.EmplaceNode("s2");
             graph.EmplaceNode("s3");

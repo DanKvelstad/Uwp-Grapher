@@ -11,8 +11,8 @@ namespace Grapher
     class Graph
     {
 
-        public List<String>                    nodes;
-        private List<Tuple<int, int, String>>   edges;
+        public List<String>                     nodes;
+        public List<Tuple<int, int, String>>    edges;
         public List<Point[]>                    candidates;
         private int                             intersection_count;
         private int                             largest_index;

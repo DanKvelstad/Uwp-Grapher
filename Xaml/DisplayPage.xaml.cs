@@ -31,34 +31,45 @@ namespace Grapher
 
             var graph  = e.Parameter as Graph;
             var states = new State[graph.candidates[0].Length];
+            var edges = new Edge[graph.edges.Count];
 
             double longest = 0;
             for (int i=0; i < graph.candidates[0].Length; i++)
             {
                 states[i] = new State(graph.nodes[i]);
+                states[i].Grid_Point = graph.candidates[0][i];
                 if(longest < states[i].Width)
                 {
                     longest = states[i].Width;
                 }
             }
 
-            for (int i= 0; i<graph.candidates[0].Length; i++)
+            foreach (var state in states)
             {
 
-                states[i].Width = longest;
-
-                canvas.Children.Add(states[i]);
-                Canvas.SetLeft(
-                    states[i], 
-                    /*frame_thickness*/ states[i].Height + graph.candidates[0][i].X * states[i].Width + graph.candidates[0][i].X * states[i].Height //spacing_width
-                );
-                Canvas.SetTop(
-                    states[i], 
-                    /*frame_thickness*/ states[i].Height + graph.candidates[0][i].Y * states[i].Height + graph.candidates[0][i].Y * states[i].Height//spacing_height
-                );
+                state.Width     = longest;
+                state.Center.X  = /*frame_thickness*/ state.Height + state.Grid_Point.X * state.Width  + state.Width/2  + state.Grid_Point.X * state.Height; //spacing_width;
+                state.Center.Y  = /*frame_thickness*/ state.Height + state.Grid_Point.Y * state.Height + state.Height/2 + state.Grid_Point.Y * state.Height; //spacing_height
+                canvas.Children.Add(state);
+                Canvas.SetLeft(state, state.Center.X-state.Width/2 );
+                Canvas.SetTop (state, state.Center.Y-state.Height/2);
                 
             }
-            
+
+            for (int i = 0; i < graph.edges.Count; i++)
+            {
+                var FromState = Array.Find(
+                    states,
+                    p => 0 == p.StateName.Text.CompareTo(graph.nodes[graph.edges[i].Item1])
+                );
+                var ToState = Array.Find(
+                    states,
+                    p => 0 == p.StateName.Text.CompareTo(graph.nodes[graph.edges[i].Item2])
+                );
+                edges[i] = new Edge(FromState, ToState);
+                canvas.Children.Add(edges[i]);
+            }
+
         }
 
     }
