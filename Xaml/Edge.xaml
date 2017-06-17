@@ -12,6 +12,8 @@
     <Line
         Name="TheLine"
         StrokeThickness="5"
-        Stroke="Black"/>
+        Stroke="Black"
+        StrokeEndLineCap="Round"
+        StrokeStartLineCap="Round"/>
 
 </UserControl>

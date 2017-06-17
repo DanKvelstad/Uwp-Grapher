@@ -27,10 +27,37 @@ namespace Grapher
             FromState   = from;
             ToState     = to;
 
-            TheLine.X1  = FromState.Center.X;
-            TheLine.Y1  = FromState.Center.Y;
-            TheLine.X2  =   ToState.Center.X;
-            TheLine.Y2  =   ToState.Center.Y;
+            if(FromState.Center.X < ToState.Center.X)
+            {
+                TheLine.X1 = FromState.Center.X + FromState.Width/2;
+                TheLine.X2 =   ToState.Center.X -   ToState.Width/2;
+            }
+            else if(FromState.Center.X > ToState.Center.X)
+            {
+                TheLine.X1 = FromState.Center.X - FromState.Width/2;
+                TheLine.X2 =   ToState.Center.X +   ToState.Width/2;
+            }
+            else
+            {
+                TheLine.X1 = FromState.Center.X;
+                TheLine.X2 =   ToState.Center.X;
+            }
+
+            if (FromState.Center.Y < ToState.Center.Y)
+            {
+                TheLine.Y1 = FromState.Center.Y + FromState.Height/2;
+                TheLine.Y2 =   ToState.Center.Y -   ToState.Height/2;
+            }
+            else if (FromState.Center.Y > ToState.Center.Y)
+            {
+                TheLine.Y1 = FromState.Center.Y - FromState.Height/2;
+                TheLine.Y2 =   ToState.Center.Y +   ToState.Height/2;
+            }
+            else
+            {
+                TheLine.Y1 = FromState.Center.Y;
+                TheLine.Y2 =   ToState.Center.Y;
+            }
 
         }
 
