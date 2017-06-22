@@ -106,22 +106,22 @@ namespace Grapher
             var rotateTransform = (RotateTransform)Label.RenderTransform;
             rotateTransform.Angle   = Math.Atan2(Baseline.Y2 - Baseline.Y1, Baseline.X2 - Baseline.X1) * 180 / Math.PI;
 
+            double ArrowOffsetLength = 10;
             {   // Place the arrow head
 
-                double OffsetMagnitude = 10;
                 double OffsetAngle     = 3 * Math.PI / 4;
 
                 var OffsetAngleAbove = rotateTransform.Angle * Math.PI / 180 - OffsetAngle;
                 ArrowAbove.X2 = Baseline.X2;
                 ArrowAbove.Y2 = Baseline.Y2;
-                ArrowAbove.X1 = ArrowAbove.X2 + OffsetMagnitude * Math.Cos(OffsetAngleAbove);
-                ArrowAbove.Y1 = ArrowAbove.Y2 + OffsetMagnitude * Math.Sin(OffsetAngleAbove);
+                ArrowAbove.X1 = ArrowAbove.X2 + ArrowOffsetLength * Math.Cos(OffsetAngleAbove);
+                ArrowAbove.Y1 = ArrowAbove.Y2 + ArrowOffsetLength * Math.Sin(OffsetAngleAbove);
 
                 var OffsetAngleBelow = rotateTransform.Angle * Math.PI / 180 + OffsetAngle;
                 ArrowBelow.X2 = Baseline.X2;
                 ArrowBelow.Y2 = Baseline.Y2;
-                ArrowBelow.X1 = ArrowBelow.X2 + OffsetMagnitude * Math.Cos(OffsetAngleBelow);
-                ArrowBelow.Y1 = ArrowBelow.Y2 + OffsetMagnitude * Math.Sin(OffsetAngleBelow);
+                ArrowBelow.X1 = ArrowBelow.X2 + ArrowOffsetLength * Math.Cos(OffsetAngleBelow);
+                ArrowBelow.Y1 = ArrowBelow.Y2 + ArrowOffsetLength * Math.Sin(OffsetAngleBelow);
 
             }
 
@@ -129,12 +129,15 @@ namespace Grapher
 
                 Point LabelOrigin;
 
-                var Xmin = Math.Min(Baseline.X1, Baseline.X2);
-                var Xdel = Math.Abs(Baseline.X1 - Baseline.X2) / 2;
+                var ArrowOffsetX = ArrowOffsetLength * Math.Cos(rotateTransform.Angle * Math.PI / 180);
+                var ArrowOffsetY = ArrowOffsetLength * Math.Sin(rotateTransform.Angle * Math.PI / 180);
+
+                var Xmin = Math.Min(Baseline.X1,  (Baseline.X2-ArrowOffsetX));
+                var Xdel = Math.Abs(Baseline.X1 - (Baseline.X2-ArrowOffsetX)) / 2;
                 var Xabs = Xmin + Xdel;
 
-                var Ymin = Math.Min(Baseline.Y1, Baseline.Y2);
-                var Ydel = Math.Abs(Baseline.Y1 - Baseline.Y2) / 2;
+                var Ymin = Math.Min(Baseline.Y1,  (Baseline.Y2-ArrowOffsetY));
+                var Ydel = Math.Abs(Baseline.Y1 - (Baseline.Y2-ArrowOffsetY)) / 2;
                 var Yabs = Ymin + Ydel;
 
                 var OffsetMagnitude = Label.DesiredSize.Height/2;
