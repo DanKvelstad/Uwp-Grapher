@@ -31,65 +31,65 @@ namespace Grapher
             {
                 if (FromState.Center.Y < ToState.Center.Y)
                 {
-                    Baseline.X1 = FromState.Center.X + FromState.Width /2 - FromState.StateBorder.CornerRadius.BottomRight*Math.Cos(Math.PI/4);
-                    Baseline.Y1 = FromState.Center.Y + FromState.Height/2 - FromState.StateBorder.CornerRadius.BottomRight*Math.Sin(Math.PI/4);
-                    Baseline.X2 =   ToState.Center.X -   ToState.Width /2 +   ToState.StateBorder.CornerRadius.TopLeft    *Math.Cos(Math.PI/4);
-                    Baseline.Y2 =   ToState.Center.Y -   ToState.Height/2 +   ToState.StateBorder.CornerRadius.TopLeft    *Math.Sin(Math.PI/4);
+                    Baseline.X1 = FromState.AnchorBottomRight.X;
+                    Baseline.Y1 = FromState.AnchorBottomRight.Y;
+                    Baseline.X2 =   ToState.AnchorTopLeft.X;
+                    Baseline.Y2 =   ToState.AnchorTopLeft.Y;
                 }
                 else if (FromState.Center.Y > ToState.Center.Y)
                 {
-                    Baseline.X1 = FromState.Center.X + FromState.Width /2 - FromState.StateBorder.CornerRadius.TopRight  *Math.Cos(Math.PI/4);
-                    Baseline.Y1 = FromState.Center.Y - FromState.Height/2 + FromState.StateBorder.CornerRadius.TopRight  *Math.Sin(Math.PI/4);
-                    Baseline.X2 =   ToState.Center.X -   ToState.Width /2 +   ToState.StateBorder.CornerRadius.BottomLeft*Math.Cos(Math.PI/4);
-                    Baseline.Y2 =   ToState.Center.Y +   ToState.Height/2 -   ToState.StateBorder.CornerRadius.BottomLeft*Math.Sin(Math.PI/4);
+                    Baseline.X1 = FromState.AnchorTopRight.X;
+                    Baseline.Y1 = FromState.AnchorTopRight.Y;
+                    Baseline.X2 =   ToState.AnchorBottomLeft.X;
+                    Baseline.Y2 =   ToState.AnchorBottomLeft.Y;
                 }
                 else
                 {
-                    Baseline.X1 = FromState.Center.X + FromState.Width/2;
-                    Baseline.Y1 = FromState.Center.Y;
-                    Baseline.X2 =   ToState.Center.X -   ToState.Width/2;
-                    Baseline.Y2 =   ToState.Center.Y;
+                    Baseline.X1 = FromState.AnchorRight.X;
+                    Baseline.Y1 = FromState.AnchorRight.Y;
+                    Baseline.X2 =   ToState.AnchorLeft.X;
+                    Baseline.Y2 =   ToState.AnchorLeft.Y;
                 }
             }
             else if(FromState.Center.X > ToState.Center.X)
             {
                 if (FromState.Center.Y < ToState.Center.Y)
                 {
-                    Baseline.X1 = FromState.Center.X - FromState.Width /2 + FromState.StateBorder.CornerRadius.BottomLeft*Math.Cos(Math.PI/4);
-                    Baseline.Y1 = FromState.Center.Y + FromState.Height/2 - FromState.StateBorder.CornerRadius.BottomLeft*Math.Sin(Math.PI/4);
-                    Baseline.X2 =   ToState.Center.X +   ToState.Width /2 -   ToState.StateBorder.CornerRadius.TopRight  *Math.Cos(Math.PI/4);
-                    Baseline.Y2 =   ToState.Center.Y -   ToState.Height/2 +   ToState.StateBorder.CornerRadius.TopRight  *Math.Sin(Math.PI/4);
+                    Baseline.X1 = FromState.AnchorBottomLeft.X;
+                    Baseline.Y1 = FromState.AnchorBottomLeft.Y;
+                    Baseline.X2 =   ToState.AnchorTopRight.X;
+                    Baseline.Y2 =   ToState.AnchorTopRight.Y;
                 }
                 else if (FromState.Center.Y > ToState.Center.Y)
                 {
-                    Baseline.X1 = FromState.Center.X - FromState.Width /2 + FromState.StateBorder.CornerRadius.TopLeft    *Math.Cos(Math.PI/4);
-                    Baseline.Y1 = FromState.Center.Y - FromState.Height/2 + FromState.StateBorder.CornerRadius.TopLeft    *Math.Sin(Math.PI/4);
-                    Baseline.X2 =   ToState.Center.X + ToState.Width   /2 -   ToState.StateBorder.CornerRadius.BottomRight*Math.Cos(Math.PI/4);
-                    Baseline.Y2 =   ToState.Center.Y +   ToState.Height/2 -   ToState.StateBorder.CornerRadius.BottomRight*Math.Sin(Math.PI/4);
+                    Baseline.X1 = FromState.AnchorTopLeft.X;
+                    Baseline.Y1 = FromState.AnchorTopLeft.Y;
+                    Baseline.X2 =   ToState.AnchorBottomRight.X;
+                    Baseline.Y2 =   ToState.AnchorBottomRight.Y;
                 }
                 else
                 {
-                    Baseline.X1 = FromState.Center.X - FromState.Width / 2;
-                    Baseline.Y1 = FromState.Center.Y;
-                    Baseline.X2 =   ToState.Center.X + ToState.Width / 2;
-                    Baseline.Y2 =   ToState.Center.Y;
+                    Baseline.X1 = FromState.AnchorLeft.X;
+                    Baseline.Y1 = FromState.AnchorLeft.Y;
+                    Baseline.X2 =   ToState.AnchorRight.X;
+                    Baseline.Y2 =   ToState.AnchorRight.Y;
                 }
             }
             else
             {
                 if (FromState.Center.Y < ToState.Center.Y)
                 {
-                    Baseline.X1 = FromState.Center.X;
-                    Baseline.X2 =   ToState.Center.X;
-                    Baseline.Y1 = FromState.Center.Y + FromState.Height/2;
-                    Baseline.Y2 =   ToState.Center.Y -   ToState.Height/2;
+                    Baseline.X1 = FromState.AnchorBottomCenter.X;
+                    Baseline.Y1 = FromState.AnchorBottomCenter.Y;
+                    Baseline.X2 =   ToState.AnchorTopCenter.X;
+                    Baseline.Y2 =   ToState.AnchorTopCenter.Y;
                 }
                 else if (FromState.Center.Y > ToState.Center.Y)
                 {
-                    Baseline.X1 = FromState.Center.X;
-                    Baseline.X2 =   ToState.Center.X;
-                    Baseline.Y1 = FromState.Center.Y - FromState.Height/2;
-                    Baseline.Y2 =   ToState.Center.Y +   ToState.Height/2;
+                    Baseline.X1 = FromState.AnchorTopCenter.X;
+                    Baseline.Y1 = FromState.AnchorTopCenter.Y;
+                    Baseline.X2 =   ToState.AnchorBottomCenter.X;
+                    Baseline.Y2 =   ToState.AnchorBottomCenter.Y;
                 }
                 else
                 {   // this is actually an error state, they overlap

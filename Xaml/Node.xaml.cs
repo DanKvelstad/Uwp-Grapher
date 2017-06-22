@@ -32,9 +32,62 @@ namespace Grapher
             
         }
 
-        public Point Center;
-        
         public Point Grid_Point;
+
+        private Point _Center;
+        public Point Center
+        {
+            get
+            {
+                return this._Center;
+            }
+            set
+            {
+                _Center            = value;
+                AnchorLeft         = new Point(
+                    _Center.X - Width / 2, 
+                    _Center.Y                
+                );
+                AnchorTopLeft      = new Point(
+                    _Center.X - Width  / 2 + StateBorder.CornerRadius.TopLeft * Math.Cos(Math.PI / 4),
+                    _Center.Y - Height / 2 + StateBorder.CornerRadius.TopLeft * Math.Sin(Math.PI / 4)
+                );
+                AnchorTopCenter    = new Point(
+                    _Center.X,
+                    _Center.Y - Height / 2   
+                );
+                AnchorTopRight     = new Point(
+                    _Center.X + Width  / 2 - StateBorder.CornerRadius.TopRight * Math.Cos(Math.PI / 4),
+                    _Center.Y - Height / 2 + StateBorder.CornerRadius.TopRight * Math.Sin(Math.PI / 4)
+                );
+                AnchorRight        = new Point(
+                    _Center.X + Width / 2, 
+                    _Center.Y
+                );
+                AnchorBottomRight  = new Point(
+                    _Center.X + Width  / 2 - StateBorder.CornerRadius.BottomRight * Math.Cos(Math.PI / 4),
+                    _Center.Y + Height / 2 - StateBorder.CornerRadius.BottomRight * Math.Sin(Math.PI / 4)
+                );
+                AnchorBottomCenter = new Point(
+                    _Center.X,
+                    _Center.Y + Height / 2   
+                );
+                AnchorBottomLeft  = new Point(
+                    _Center.X - Width  / 2 + StateBorder.CornerRadius.BottomLeft * Math.Cos(Math.PI / 4),
+                    _Center.Y + Height / 2 - StateBorder.CornerRadius.BottomLeft * Math.Sin(Math.PI / 4)
+                );
+                
+            }
+        }
+        
+        public Point AnchorLeft;
+        public Point AnchorTopLeft;
+        public Point AnchorTopCenter;
+        public Point AnchorTopRight;
+        public Point AnchorRight;
+        public Point AnchorBottomLeft;
+        public Point AnchorBottomCenter;
+        public Point AnchorBottomRight;
 
     }
 }

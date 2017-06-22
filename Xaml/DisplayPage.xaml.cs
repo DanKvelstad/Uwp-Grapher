@@ -50,8 +50,10 @@ namespace Grapher
             {
 
                 state.Width     = longest;
-                state.Center.X  = /*frame_thickness*/ state.Grid_Point.X * state.Width  + state.Width/2  + state.Grid_Point.X * state.Height; //spacing_width;
-                state.Center.Y  = /*frame_thickness*/ state.Grid_Point.Y * state.Height + state.Height/2 + state.Grid_Point.Y * state.Height; //spacing_height
+                state.Center    = new Point(
+                    state.Grid_Point.X * state.Width  + state.Width/2  + state.Grid_Point.X * state.Height, 
+                    state.Grid_Point.Y * state.Height + state.Height/2 + state.Grid_Point.Y * state.Height
+                );
                 canvas.Children.Add(state);
                 Canvas.SetLeft(state, state.Center.X-state.Width/2 );
                 Canvas.SetTop (state, state.Center.Y-state.Height/2);
