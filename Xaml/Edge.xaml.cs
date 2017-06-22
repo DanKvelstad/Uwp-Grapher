@@ -19,7 +19,7 @@ namespace Grapher
     public sealed partial class Edge : UserControl
     {
 
-        public Edge(State from, State to)
+        public Edge(State from, State to, String label)
         {
 
             this.InitializeComponent();
@@ -99,6 +99,64 @@ namespace Grapher
                     TheLine.Y2 =   ToState.Center.Y;
                 }
             }
+
+            Label.Text = label;
+            Label.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+
+            var rotateTransform = (RotateTransform)Label.RenderTransform;
+            rotateTransform.Angle   = Math.Atan2(TheLine.Y2 - TheLine.Y1, TheLine.X2 - TheLine.X1) * 180 / Math.PI;
+            
+            Point LabelOrigin;
+            if (90.1>rotateTransform.Angle && 89.9<rotateTransform.Angle)
+            {
+                LabelOrigin.X            = Math.Min(TheLine.X1, TheLine.X2) + Math.Abs(TheLine.X1 - TheLine.X2) / 2;
+                LabelOrigin.Y            = Math.Min(TheLine.Y1, TheLine.Y2) + Math.Abs(TheLine.Y1 - TheLine.Y2) / 2;
+                LabelOrigin.Y           -= Label.DesiredSize.Height / 2;
+                rotateTransform.CenterX  = Label.DesiredSize.Width  / 2;
+                rotateTransform.CenterY  = Label.DesiredSize.Height / 2;
+                rotateTransform.Angle    = -90;
+            }
+            else if(-90.1 < rotateTransform.Angle && -89.9 > rotateTransform.Angle)
+            {
+                LabelOrigin.X            = Math.Min(TheLine.X1, TheLine.X2) + Math.Abs(TheLine.X1 - TheLine.X2) / 2;
+                LabelOrigin.Y            = Math.Min(TheLine.Y1, TheLine.Y2) + Math.Abs(TheLine.Y1 - TheLine.Y2) / 2;
+                LabelOrigin.Y           -= Label.DesiredSize.Height / 2;
+                rotateTransform.CenterX  = Label.DesiredSize.Width  / 2;
+                rotateTransform.CenterY  = Label.DesiredSize.Height / 2;
+                rotateTransform.Angle    = -90;
+            }
+            else
+            {
+
+                var Xmin = Math.Min(TheLine.X1, TheLine.X2);
+                var Xdel = Math.Abs(TheLine.X1 - TheLine.X2) / 2;
+                var Xabs = Xmin + Xdel;
+
+                var Ymin = Math.Min(TheLine.Y1, TheLine.Y2);
+                var Ydel = Math.Abs(TheLine.Y1 - TheLine.Y2) / 2;
+                var Yabs = Ymin + Ydel;
+
+                var OffsetMagnitude = Label.DesiredSize.Height/2;
+                var OffsetAngle     = (rotateTransform.Angle-90) * Math.PI / 180;
+                var OffsetX         = OffsetMagnitude * Math.Cos(OffsetAngle);
+                var OffsetY         = OffsetMagnitude * Math.Sin(OffsetAngle);
+
+                var CenterX = Xabs + OffsetX;
+                var CenterY = Yabs + OffsetY;
+
+                LabelOrigin.X = CenterX - Label.DesiredSize.Width / 2;
+                LabelOrigin.Y = CenterY - Label.DesiredSize.Height / 2;
+
+                rotateTransform.CenterX = Label.DesiredSize.Width/2;
+                rotateTransform.CenterY = Label.DesiredSize.Height/2;
+                if (90 < rotateTransform.Angle || -90 > rotateTransform.Angle)
+                {
+                    rotateTransform.Angle += 180;
+                }
+
+            }
+            Canvas.SetTop (Label, LabelOrigin.Y);
+            Canvas.SetLeft(Label, LabelOrigin.X);
 
         }
 

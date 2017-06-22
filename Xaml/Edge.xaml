@@ -9,11 +9,18 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Line
-        Name="TheLine"
-        StrokeThickness="5"
-        Stroke="Black"
-        StrokeEndLineCap="Triangle"
-        StrokeStartLineCap="Flat"/>
+    <Canvas Background="Azure" Name="TheCanvas">
+        <Line
+            Name="TheLine"
+            StrokeThickness="5"
+            Stroke="Black"
+            StrokeEndLineCap="Triangle"
+            StrokeStartLineCap="Flat"/>
+        <TextBlock Name="Label">
+            <TextBlock.RenderTransform>
+                <RotateTransform Angle="0"/>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+    </Canvas>
 
 </UserControl>

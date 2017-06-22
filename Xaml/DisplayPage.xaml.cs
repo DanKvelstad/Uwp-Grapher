@@ -80,7 +80,7 @@ namespace Grapher
                     states,
                     p => 0 == p.StateName.Text.CompareTo(graph.nodes[graph.edges[i].Item2])
                 );
-                edges[i] = new Edge(FromState, ToState);
+                edges[i] = new Edge(FromState, ToState, graph.edges[i].Item3);
                 canvas.Children.Add(edges[i]);
             }
 
