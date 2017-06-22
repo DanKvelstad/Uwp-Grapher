@@ -31,72 +31,72 @@ namespace Grapher
             {
                 if (FromState.Center.Y < ToState.Center.Y)
                 {
-                    TheLine.X1 = FromState.Center.X + FromState.Width /2 - FromState.StateBorder.CornerRadius.BottomRight*Math.Cos(Math.PI/4);
-                    TheLine.Y1 = FromState.Center.Y + FromState.Height/2 - FromState.StateBorder.CornerRadius.BottomRight*Math.Sin(Math.PI/4);
-                    TheLine.X2 =   ToState.Center.X -   ToState.Width /2 +   ToState.StateBorder.CornerRadius.TopLeft    *Math.Cos(Math.PI/4);
-                    TheLine.Y2 =   ToState.Center.Y -   ToState.Height/2 +   ToState.StateBorder.CornerRadius.TopLeft    *Math.Sin(Math.PI/4);
+                    Baseline.X1 = FromState.Center.X + FromState.Width /2 - FromState.StateBorder.CornerRadius.BottomRight*Math.Cos(Math.PI/4);
+                    Baseline.Y1 = FromState.Center.Y + FromState.Height/2 - FromState.StateBorder.CornerRadius.BottomRight*Math.Sin(Math.PI/4);
+                    Baseline.X2 =   ToState.Center.X -   ToState.Width /2 +   ToState.StateBorder.CornerRadius.TopLeft    *Math.Cos(Math.PI/4);
+                    Baseline.Y2 =   ToState.Center.Y -   ToState.Height/2 +   ToState.StateBorder.CornerRadius.TopLeft    *Math.Sin(Math.PI/4);
                 }
                 else if (FromState.Center.Y > ToState.Center.Y)
                 {
-                    TheLine.X1 = FromState.Center.X + FromState.Width /2 - FromState.StateBorder.CornerRadius.TopRight  *Math.Cos(Math.PI/4);
-                    TheLine.Y1 = FromState.Center.Y - FromState.Height/2 + FromState.StateBorder.CornerRadius.TopRight  *Math.Sin(Math.PI/4);
-                    TheLine.X2 =   ToState.Center.X -   ToState.Width /2 +   ToState.StateBorder.CornerRadius.BottomLeft*Math.Cos(Math.PI/4);
-                    TheLine.Y2 =   ToState.Center.Y +   ToState.Height/2 -   ToState.StateBorder.CornerRadius.BottomLeft*Math.Sin(Math.PI/4);
+                    Baseline.X1 = FromState.Center.X + FromState.Width /2 - FromState.StateBorder.CornerRadius.TopRight  *Math.Cos(Math.PI/4);
+                    Baseline.Y1 = FromState.Center.Y - FromState.Height/2 + FromState.StateBorder.CornerRadius.TopRight  *Math.Sin(Math.PI/4);
+                    Baseline.X2 =   ToState.Center.X -   ToState.Width /2 +   ToState.StateBorder.CornerRadius.BottomLeft*Math.Cos(Math.PI/4);
+                    Baseline.Y2 =   ToState.Center.Y +   ToState.Height/2 -   ToState.StateBorder.CornerRadius.BottomLeft*Math.Sin(Math.PI/4);
                 }
                 else
                 {
-                    TheLine.X1 = FromState.Center.X + FromState.Width/2;
-                    TheLine.Y1 = FromState.Center.Y;
-                    TheLine.X2 =   ToState.Center.X -   ToState.Width/2;
-                    TheLine.Y2 =   ToState.Center.Y;
+                    Baseline.X1 = FromState.Center.X + FromState.Width/2;
+                    Baseline.Y1 = FromState.Center.Y;
+                    Baseline.X2 =   ToState.Center.X -   ToState.Width/2;
+                    Baseline.Y2 =   ToState.Center.Y;
                 }
             }
             else if(FromState.Center.X > ToState.Center.X)
             {
                 if (FromState.Center.Y < ToState.Center.Y)
                 {
-                    TheLine.X1 = FromState.Center.X - FromState.Width /2 + FromState.StateBorder.CornerRadius.BottomLeft*Math.Cos(Math.PI/4);
-                    TheLine.Y1 = FromState.Center.Y + FromState.Height/2 - FromState.StateBorder.CornerRadius.BottomLeft*Math.Sin(Math.PI/4);
-                    TheLine.X2 =   ToState.Center.X +   ToState.Width /2 -   ToState.StateBorder.CornerRadius.TopRight  *Math.Cos(Math.PI/4);
-                    TheLine.Y2 =   ToState.Center.Y -   ToState.Height/2 +   ToState.StateBorder.CornerRadius.TopRight  *Math.Sin(Math.PI/4);
+                    Baseline.X1 = FromState.Center.X - FromState.Width /2 + FromState.StateBorder.CornerRadius.BottomLeft*Math.Cos(Math.PI/4);
+                    Baseline.Y1 = FromState.Center.Y + FromState.Height/2 - FromState.StateBorder.CornerRadius.BottomLeft*Math.Sin(Math.PI/4);
+                    Baseline.X2 =   ToState.Center.X +   ToState.Width /2 -   ToState.StateBorder.CornerRadius.TopRight  *Math.Cos(Math.PI/4);
+                    Baseline.Y2 =   ToState.Center.Y -   ToState.Height/2 +   ToState.StateBorder.CornerRadius.TopRight  *Math.Sin(Math.PI/4);
                 }
                 else if (FromState.Center.Y > ToState.Center.Y)
                 {
-                    TheLine.X1 = FromState.Center.X - FromState.Width /2 + FromState.StateBorder.CornerRadius.TopLeft    *Math.Cos(Math.PI/4);
-                    TheLine.Y1 = FromState.Center.Y - FromState.Height/2 + FromState.StateBorder.CornerRadius.TopLeft    *Math.Sin(Math.PI/4);
-                    TheLine.X2 =   ToState.Center.X + ToState.Width   /2 -   ToState.StateBorder.CornerRadius.BottomRight*Math.Cos(Math.PI/4);
-                    TheLine.Y2 =   ToState.Center.Y +   ToState.Height/2 -   ToState.StateBorder.CornerRadius.BottomRight*Math.Sin(Math.PI/4);
+                    Baseline.X1 = FromState.Center.X - FromState.Width /2 + FromState.StateBorder.CornerRadius.TopLeft    *Math.Cos(Math.PI/4);
+                    Baseline.Y1 = FromState.Center.Y - FromState.Height/2 + FromState.StateBorder.CornerRadius.TopLeft    *Math.Sin(Math.PI/4);
+                    Baseline.X2 =   ToState.Center.X + ToState.Width   /2 -   ToState.StateBorder.CornerRadius.BottomRight*Math.Cos(Math.PI/4);
+                    Baseline.Y2 =   ToState.Center.Y +   ToState.Height/2 -   ToState.StateBorder.CornerRadius.BottomRight*Math.Sin(Math.PI/4);
                 }
                 else
                 {
-                    TheLine.X1 = FromState.Center.X - FromState.Width / 2;
-                    TheLine.Y1 = FromState.Center.Y;
-                    TheLine.X2 =   ToState.Center.X + ToState.Width / 2;
-                    TheLine.Y2 =   ToState.Center.Y;
+                    Baseline.X1 = FromState.Center.X - FromState.Width / 2;
+                    Baseline.Y1 = FromState.Center.Y;
+                    Baseline.X2 =   ToState.Center.X + ToState.Width / 2;
+                    Baseline.Y2 =   ToState.Center.Y;
                 }
             }
             else
             {
                 if (FromState.Center.Y < ToState.Center.Y)
                 {
-                    TheLine.X1 = FromState.Center.X;
-                    TheLine.X2 =   ToState.Center.X;
-                    TheLine.Y1 = FromState.Center.Y + FromState.Height/2;
-                    TheLine.Y2 =   ToState.Center.Y -   ToState.Height/2;
+                    Baseline.X1 = FromState.Center.X;
+                    Baseline.X2 =   ToState.Center.X;
+                    Baseline.Y1 = FromState.Center.Y + FromState.Height/2;
+                    Baseline.Y2 =   ToState.Center.Y -   ToState.Height/2;
                 }
                 else if (FromState.Center.Y > ToState.Center.Y)
                 {
-                    TheLine.X1 = FromState.Center.X;
-                    TheLine.X2 =   ToState.Center.X;
-                    TheLine.Y1 = FromState.Center.Y - FromState.Height/2;
-                    TheLine.Y2 =   ToState.Center.Y +   ToState.Height/2;
+                    Baseline.X1 = FromState.Center.X;
+                    Baseline.X2 =   ToState.Center.X;
+                    Baseline.Y1 = FromState.Center.Y - FromState.Height/2;
+                    Baseline.Y2 =   ToState.Center.Y +   ToState.Height/2;
                 }
                 else
                 {   // this is actually an error state, they overlap
-                    TheLine.X1 = FromState.Center.X;
-                    TheLine.X2 =   ToState.Center.X;
-                    TheLine.Y1 = FromState.Center.Y;
-                    TheLine.Y2 =   ToState.Center.Y;
+                    Baseline.X1 = FromState.Center.X;
+                    Baseline.X2 =   ToState.Center.X;
+                    Baseline.Y1 = FromState.Center.Y;
+                    Baseline.Y2 =   ToState.Center.Y;
                 }
             }
 
@@ -104,36 +104,37 @@ namespace Grapher
             Label.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
 
             var rotateTransform = (RotateTransform)Label.RenderTransform;
-            rotateTransform.Angle   = Math.Atan2(TheLine.Y2 - TheLine.Y1, TheLine.X2 - TheLine.X1) * 180 / Math.PI;
-            
-            Point LabelOrigin;
-            if (90.1>rotateTransform.Angle && 89.9<rotateTransform.Angle)
-            {
-                LabelOrigin.X            = Math.Min(TheLine.X1, TheLine.X2) + Math.Abs(TheLine.X1 - TheLine.X2) / 2;
-                LabelOrigin.Y            = Math.Min(TheLine.Y1, TheLine.Y2) + Math.Abs(TheLine.Y1 - TheLine.Y2) / 2;
-                LabelOrigin.Y           -= Label.DesiredSize.Height / 2;
-                rotateTransform.CenterX  = Label.DesiredSize.Width  / 2;
-                rotateTransform.CenterY  = Label.DesiredSize.Height / 2;
-                rotateTransform.Angle    = -90;
-            }
-            else if(-90.1 < rotateTransform.Angle && -89.9 > rotateTransform.Angle)
-            {
-                LabelOrigin.X            = Math.Min(TheLine.X1, TheLine.X2) + Math.Abs(TheLine.X1 - TheLine.X2) / 2;
-                LabelOrigin.Y            = Math.Min(TheLine.Y1, TheLine.Y2) + Math.Abs(TheLine.Y1 - TheLine.Y2) / 2;
-                LabelOrigin.Y           -= Label.DesiredSize.Height / 2;
-                rotateTransform.CenterX  = Label.DesiredSize.Width  / 2;
-                rotateTransform.CenterY  = Label.DesiredSize.Height / 2;
-                rotateTransform.Angle    = -90;
-            }
-            else
-            {
+            rotateTransform.Angle   = Math.Atan2(Baseline.Y2 - Baseline.Y1, Baseline.X2 - Baseline.X1) * 180 / Math.PI;
 
-                var Xmin = Math.Min(TheLine.X1, TheLine.X2);
-                var Xdel = Math.Abs(TheLine.X1 - TheLine.X2) / 2;
+            {   // Place the arrow head
+
+                double OffsetMagnitude = 10;
+                double OffsetAngle     = 3 * Math.PI / 4;
+
+                var OffsetAngleAbove = rotateTransform.Angle * Math.PI / 180 - OffsetAngle;
+                ArrowAbove.X2 = Baseline.X2;
+                ArrowAbove.Y2 = Baseline.Y2;
+                ArrowAbove.X1 = ArrowAbove.X2 + OffsetMagnitude * Math.Cos(OffsetAngleAbove);
+                ArrowAbove.Y1 = ArrowAbove.Y2 + OffsetMagnitude * Math.Sin(OffsetAngleAbove);
+
+                var OffsetAngleBelow = rotateTransform.Angle * Math.PI / 180 + OffsetAngle;
+                ArrowBelow.X2 = Baseline.X2;
+                ArrowBelow.Y2 = Baseline.Y2;
+                ArrowBelow.X1 = ArrowBelow.X2 + OffsetMagnitude * Math.Cos(OffsetAngleBelow);
+                ArrowBelow.Y1 = ArrowBelow.Y2 + OffsetMagnitude * Math.Sin(OffsetAngleBelow);
+
+            }
+
+            {   // Place the label
+
+                Point LabelOrigin;
+
+                var Xmin = Math.Min(Baseline.X1, Baseline.X2);
+                var Xdel = Math.Abs(Baseline.X1 - Baseline.X2) / 2;
                 var Xabs = Xmin + Xdel;
 
-                var Ymin = Math.Min(TheLine.Y1, TheLine.Y2);
-                var Ydel = Math.Abs(TheLine.Y1 - TheLine.Y2) / 2;
+                var Ymin = Math.Min(Baseline.Y1, Baseline.Y2);
+                var Ydel = Math.Abs(Baseline.Y1 - Baseline.Y2) / 2;
                 var Yabs = Ymin + Ydel;
 
                 var OffsetMagnitude = Label.DesiredSize.Height/2;
@@ -149,14 +150,15 @@ namespace Grapher
 
                 rotateTransform.CenterX = Label.DesiredSize.Width/2;
                 rotateTransform.CenterY = Label.DesiredSize.Height/2;
-                if (90 < rotateTransform.Angle || -90 > rotateTransform.Angle)
+                if (89.9 < rotateTransform.Angle || -90 > rotateTransform.Angle)
                 {
                     rotateTransform.Angle += 180;
                 }
 
+                Canvas.SetTop(Label, LabelOrigin.Y);
+                Canvas.SetLeft(Label, LabelOrigin.X);
+
             }
-            Canvas.SetTop (Label, LabelOrigin.Y);
-            Canvas.SetLeft(Label, LabelOrigin.X);
 
         }
 
