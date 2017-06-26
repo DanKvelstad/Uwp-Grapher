@@ -19,7 +19,7 @@ namespace Grapher
     public sealed partial class Edge : UserControl
     {
 
-        public Edge(State from, State to, String label)
+        public Edge(Node from, Node to, String label)
         {
 
             this.InitializeComponent();
@@ -27,6 +27,15 @@ namespace Grapher
             FromState   = from;
             ToState     = to;
 
+            UpdateLine();
+
+            AppendToEvents(label);
+
+        }
+
+        void UpdateLine()
+        {
+            
             if(FromState.Center.X < ToState.Center.X)
             {
                 if (FromState.Center.Y < ToState.Center.Y)
@@ -100,24 +109,20 @@ namespace Grapher
                 }
             }
 
-            Label.Text = label;
-            Label.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
-
-            var rotateTransform = (RotateTransform)Label.RenderTransform;
-            rotateTransform.Angle   = Math.Atan2(Baseline.Y2 - Baseline.Y1, Baseline.X2 - Baseline.X1) * 180 / Math.PI;
+            var Angle = Math.Atan2(Baseline.Y2 - Baseline.Y1, Baseline.X2 - Baseline.X1) * 180 / Math.PI;
 
             double ArrowOffsetLength = 10;
             {   // Place the arrow head
 
                 double OffsetAngle     = 3 * Math.PI / 4;
 
-                var OffsetAngleAbove = rotateTransform.Angle * Math.PI / 180 - OffsetAngle;
+                var OffsetAngleAbove = Angle * Math.PI / 180 - OffsetAngle;
                 ArrowAbove.X2 = Baseline.X2;
                 ArrowAbove.Y2 = Baseline.Y2;
                 ArrowAbove.X1 = ArrowAbove.X2 + ArrowOffsetLength * Math.Cos(OffsetAngleAbove);
                 ArrowAbove.Y1 = ArrowAbove.Y2 + ArrowOffsetLength * Math.Sin(OffsetAngleAbove);
 
-                var OffsetAngleBelow = rotateTransform.Angle * Math.PI / 180 + OffsetAngle;
+                var OffsetAngleBelow = Angle * Math.PI / 180 + OffsetAngle;
                 ArrowBelow.X2 = Baseline.X2;
                 ArrowBelow.Y2 = Baseline.Y2;
                 ArrowBelow.X1 = ArrowBelow.X2 + ArrowOffsetLength * Math.Cos(OffsetAngleBelow);
@@ -125,48 +130,67 @@ namespace Grapher
 
             }
 
-            {   // Place the label
+        }
 
-                Point LabelOrigin;
+        internal void AppendToEvents(string EventName)
+        {
 
-                var ArrowOffsetX = ArrowOffsetLength * Math.Cos(rotateTransform.Angle * Math.PI / 180);
-                var ArrowOffsetY = ArrowOffsetLength * Math.Sin(rotateTransform.Angle * Math.PI / 180);
-
-                var Xmin = Math.Min(Baseline.X1,  (Baseline.X2-ArrowOffsetX));
-                var Xdel = Math.Abs(Baseline.X1 - (Baseline.X2-ArrowOffsetX)) / 2;
-                var Xabs = Xmin + Xdel;
-
-                var Ymin = Math.Min(Baseline.Y1,  (Baseline.Y2-ArrowOffsetY));
-                var Ydel = Math.Abs(Baseline.Y1 - (Baseline.Y2-ArrowOffsetY)) / 2;
-                var Yabs = Ymin + Ydel;
-
-                var OffsetMagnitude = Label.DesiredSize.Height/2;
-                var OffsetAngle     = (rotateTransform.Angle-90) * Math.PI / 180;
-                var OffsetX         = OffsetMagnitude * Math.Cos(OffsetAngle);
-                var OffsetY         = OffsetMagnitude * Math.Sin(OffsetAngle);
-
-                var CenterX = Xabs + OffsetX;
-                var CenterY = Yabs + OffsetY;
-
-                LabelOrigin.X = CenterX - Label.DesiredSize.Width / 2;
-                LabelOrigin.Y = CenterY - Label.DesiredSize.Height / 2;
-
-                rotateTransform.CenterX = Label.DesiredSize.Width/2;
-                rotateTransform.CenterY = Label.DesiredSize.Height/2;
-                if (89.9 < rotateTransform.Angle || -90 > rotateTransform.Angle)
-                {
-                    rotateTransform.Angle += 180;
-                }
-
-                Canvas.SetTop(Label, LabelOrigin.Y);
-                Canvas.SetLeft(Label, LabelOrigin.X);
-
+            if(""==Label.Text)
+            {
+                Label.Text = EventName;
             }
+            else
+            {
+                Label.Text += ", " + EventName;
+            }
+
+            Label.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+
+            var rotateTransform = (RotateTransform)Label.RenderTransform;
+            rotateTransform.Angle = Math.Atan2(Baseline.Y2 - Baseline.Y1, Baseline.X2 - Baseline.X1) * 180 / Math.PI;
+
+            Point LabelOrigin;
+
+            var DeltaX = ArrowAbove.X2 - ArrowAbove.X1;
+            var DeltaY = ArrowAbove.Y2 - ArrowAbove.Y1;
+            var Delta = Math.Sqrt(DeltaX * DeltaX + DeltaY * DeltaY);
+
+            var ArrowOffsetX = Delta * Math.Cos(rotateTransform.Angle * Math.PI / 180);
+            var ArrowOffsetY = Delta * Math.Sin(rotateTransform.Angle * Math.PI / 180);
+
+            var Xmin = Math.Min(Baseline.X1,  (Baseline.X2-ArrowOffsetX));
+            var Xdel = Math.Abs(Baseline.X1 - (Baseline.X2-ArrowOffsetX)) / 2;
+            var Xabs = Xmin + Xdel;
+
+            var Ymin = Math.Min(Baseline.Y1,  (Baseline.Y2-ArrowOffsetY));
+            var Ydel = Math.Abs(Baseline.Y1 - (Baseline.Y2-ArrowOffsetY)) / 2;
+            var Yabs = Ymin + Ydel;
+
+            var OffsetMagnitude = Label.DesiredSize.Height/2;
+            var OffsetAngle     = (rotateTransform.Angle-90) * Math.PI / 180;
+            var OffsetX         = OffsetMagnitude * Math.Cos(OffsetAngle);
+            var OffsetY         = OffsetMagnitude * Math.Sin(OffsetAngle);
+
+            var CenterX = Xabs + OffsetX;
+            var CenterY = Yabs + OffsetY;
+
+            LabelOrigin.X = CenterX - Label.DesiredSize.Width / 2;
+            LabelOrigin.Y = CenterY - Label.DesiredSize.Height / 2;
+
+            rotateTransform.CenterX = Label.DesiredSize.Width/2;
+            rotateTransform.CenterY = Label.DesiredSize.Height/2;
+            if (89.9 < rotateTransform.Angle || -90 > rotateTransform.Angle)
+            {
+                rotateTransform.Angle += 180;
+            }
+
+            Canvas.SetTop(Label, LabelOrigin.Y);
+            Canvas.SetLeft(Label, LabelOrigin.X);
 
         }
 
-        private State FromState;
-        private State ToState;
+        public Node FromState;
+        public Node ToState;
 
     }
 

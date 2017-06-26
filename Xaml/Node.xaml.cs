@@ -15,10 +15,10 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Grapher
 {
-    public sealed partial class State : UserControl
+    public sealed partial class Node : UserControl
     {
 
-        public State(String Name)
+        public Node(String Name)
         {
 
             this.InitializeComponent();
@@ -79,7 +79,12 @@ namespace Grapher
                 
             }
         }
-        
+
+        internal int CompareTo(Node fromState)
+        {
+            return StateName.Text.CompareTo(fromState.StateName.Text);
+        }
+
         public Point AnchorLeft;
         public Point AnchorTopLeft;
         public Point AnchorTopCenter;

@@ -53,6 +53,7 @@ namespace Grapher
             graph.EmplaceEdge("s4", "s1", "e0");
 
             graph.EmplaceEdge(graph.nodes[0], "s1", "e1");
+            graph.EmplaceEdge(graph.nodes[0], "s1", "ee");
             graph.EmplaceEdge(graph.nodes[0], "s2", "e2");
             graph.EmplaceEdge(graph.nodes[0], "s3", "e3");
             graph.EmplaceEdge(graph.nodes[0], "s4", "e4");
@@ -78,8 +79,8 @@ namespace Grapher
             );
             LayoutProgress.Value = LayoutProgress.Maximum;
             stopWatch.Stop();
-            
-            ContinueButton.IsEnabled = true;
+
+            this.Frame.Navigate(typeof(DisplayPage), graph);
 
         }
 
@@ -89,10 +90,6 @@ namespace Grapher
             return true;
         }
 
-        private void ContinueButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DisplayPage), graph);
-        }
     }
 
 }

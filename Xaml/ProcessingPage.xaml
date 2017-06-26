@@ -25,24 +25,6 @@
             Width="500"
             Height="100"/>
 
-        <Rectangle 
-            RelativePanel.AlignLeftWithPanel="True"
-            RelativePanel.AlignTopWith="ContinueButton"
-            RelativePanel.AlignBottomWith="ContinueButton"
-            RelativePanel.LeftOf="ContinueButton"
-            Fill="LightGray"/>
-
-        <HyperlinkButton
-            RelativePanel.AlignRightWithPanel="True"
-            RelativePanel.AlignBottomWithPanel="True"
-            Name="ContinueButton"
-            Content="Continue" 
-            Click="ContinueButton_Click"
-            HorizontalAlignment="Center"
-            Background="LightGray"
-            Padding="10"
-            IsEnabled="False"/>
-        
     </RelativePanel>
     
 </Page>
