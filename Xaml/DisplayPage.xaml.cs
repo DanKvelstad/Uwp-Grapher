@@ -46,25 +46,25 @@ namespace Grapher
 
             Node RightState    = nodes[0];
             Node BottomState   = nodes[0];
-            foreach (var state in nodes)
+            foreach (var node in nodes)
             {
 
-                state.Width     = longest;
-                state.Center    = new Point(
-                    state.Grid_Point.X * state.Width  + state.Width/2  + state.Grid_Point.X * state.Height, 
-                    state.Grid_Point.Y * state.Height + state.Height/2 + state.Grid_Point.Y * state.Height
+                node.Width     = longest;
+                node.Center    = new Point(
+                    node.Grid_Point.X * node.Width  + node.Width/2  + node.Grid_Point.X * node.Height, 
+                    node.Grid_Point.Y * node.Height + node.Height/2 + node.Grid_Point.Y * node.Height
                 );
-                canvas.Children.Add(state);
-                Canvas.SetLeft(state, state.Center.X-state.Width/2 );
-                Canvas.SetTop (state, state.Center.Y-state.Height/2);
+                canvas.Children.Add(node);
+                Canvas.SetLeft(node, node.Center.X-node.Width/2 );
+                Canvas.SetTop (node, node.Center.Y-node.Height/2);
                 
-                if(RightState.Center.X<state.Center.X)
+                if(RightState.Center.X<node.Center.X)
                 {
-                    RightState = state;
+                    RightState = node;
                 }
-                if (BottomState.Center.Y < state.Center.Y)
+                if (BottomState.Center.Y < node.Center.Y)
                 {
-                    BottomState = state;
+                    BottomState = node;
                 }
                 
             }
@@ -75,18 +75,18 @@ namespace Grapher
             foreach (var edge in graph.edges)
             {
 
-                var FromState = Array.Find(
+                var FromNode = Array.Find(
                     nodes,
                     p => 0 == p.StateName.Text.CompareTo(graph.nodes[edge.Item1])
                 );
-                var ToState = Array.Find(
+                var ToNode = Array.Find(
                     nodes,
                     p => 0 == p.StateName.Text.CompareTo(graph.nodes[edge.Item2])
                 );
                 
                 var PreExistingEdge = edges.Find(
-                    p => 0 == p.FromState.CompareTo(FromState) &&
-                         0 == p.ToState.CompareTo(ToState)
+                    p => 0 == p.FromState.CompareTo(FromNode) &&
+                         0 == p.ToState.CompareTo(ToNode)
                 );
 
                 if(null!=PreExistingEdge)
@@ -95,7 +95,7 @@ namespace Grapher
                 }
                 else
                 {
-                    edges.Add(new Edge(FromState, ToState, edge.Item3));
+                    edges.Add(new Edge(FromNode, ToNode, edge.Item3));
                     canvas.Children.Add(edges.Last());
                 }
 

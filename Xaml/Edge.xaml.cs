@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,8 +25,11 @@ namespace Grapher
 
             this.InitializeComponent();
 
-            FromState   = from;
-            ToState     = to;
+            FromState = from;
+            FromState.PropertyChanged += new PropertyChangedEventHandler((n, e) => UpdateLine());
+
+            ToState = to;
+            ToState.PropertyChanged += new PropertyChangedEventHandler((n, e) => UpdateLine());
 
             UpdateLine();
 
@@ -35,84 +39,24 @@ namespace Grapher
 
         void UpdateLine()
         {
-            
-            if(FromState.Center.X < ToState.Center.X)
-            {
-                if (FromState.Center.Y < ToState.Center.Y)
-                {
-                    Baseline.X1 = FromState.AnchorBottomRight.X;
-                    Baseline.Y1 = FromState.AnchorBottomRight.Y;
-                    Baseline.X2 =   ToState.AnchorTopLeft.X;
-                    Baseline.Y2 =   ToState.AnchorTopLeft.Y;
-                }
-                else if (FromState.Center.Y > ToState.Center.Y)
-                {
-                    Baseline.X1 = FromState.AnchorTopRight.X;
-                    Baseline.Y1 = FromState.AnchorTopRight.Y;
-                    Baseline.X2 =   ToState.AnchorBottomLeft.X;
-                    Baseline.Y2 =   ToState.AnchorBottomLeft.Y;
-                }
-                else
-                {
-                    Baseline.X1 = FromState.AnchorRight.X;
-                    Baseline.Y1 = FromState.AnchorRight.Y;
-                    Baseline.X2 =   ToState.AnchorLeft.X;
-                    Baseline.Y2 =   ToState.AnchorLeft.Y;
-                }
-            }
-            else if(FromState.Center.X > ToState.Center.X)
-            {
-                if (FromState.Center.Y < ToState.Center.Y)
-                {
-                    Baseline.X1 = FromState.AnchorBottomLeft.X;
-                    Baseline.Y1 = FromState.AnchorBottomLeft.Y;
-                    Baseline.X2 =   ToState.AnchorTopRight.X;
-                    Baseline.Y2 =   ToState.AnchorTopRight.Y;
-                }
-                else if (FromState.Center.Y > ToState.Center.Y)
-                {
-                    Baseline.X1 = FromState.AnchorTopLeft.X;
-                    Baseline.Y1 = FromState.AnchorTopLeft.Y;
-                    Baseline.X2 =   ToState.AnchorBottomRight.X;
-                    Baseline.Y2 =   ToState.AnchorBottomRight.Y;
-                }
-                else
-                {
-                    Baseline.X1 = FromState.AnchorLeft.X;
-                    Baseline.Y1 = FromState.AnchorLeft.Y;
-                    Baseline.X2 =   ToState.AnchorRight.X;
-                    Baseline.Y2 =   ToState.AnchorRight.Y;
-                }
-            }
-            else
-            {
-                if (FromState.Center.Y < ToState.Center.Y)
-                {
-                    Baseline.X1 = FromState.AnchorBottomCenter.X;
-                    Baseline.Y1 = FromState.AnchorBottomCenter.Y;
-                    Baseline.X2 =   ToState.AnchorTopCenter.X;
-                    Baseline.Y2 =   ToState.AnchorTopCenter.Y;
-                }
-                else if (FromState.Center.Y > ToState.Center.Y)
-                {
-                    Baseline.X1 = FromState.AnchorTopCenter.X;
-                    Baseline.Y1 = FromState.AnchorTopCenter.Y;
-                    Baseline.X2 =   ToState.AnchorBottomCenter.X;
-                    Baseline.Y2 =   ToState.AnchorBottomCenter.Y;
-                }
-                else
-                {   // this is actually an error state, they overlap
-                    Baseline.X1 = FromState.Center.X;
-                    Baseline.X2 =   ToState.Center.X;
-                    Baseline.Y1 = FromState.Center.Y;
-                    Baseline.Y2 =   ToState.Center.Y;
-                }
+
+            {   // Update the baseline
+
+                var FromAnchor = FromState.GetFromAnchorRelativeTo(ToState);
+                Baseline.X1 = FromAnchor.X;
+                Baseline.Y1 = FromAnchor.Y;
+
+                var ToAnchor = ToState.GetToAnchorRelativeTo(FromState);
+                Baseline.X2 = ToAnchor.X;
+                Baseline.Y2 = ToAnchor.Y;
+
             }
 
-            var Angle = Math.Atan2(Baseline.Y2 - Baseline.Y1, Baseline.X2 - Baseline.X1) * 180 / Math.PI;
-
-            double ArrowOffsetLength = 10;
             {   // Place the arrow head
+
+                var Angle = Math.Atan2(Baseline.Y2 - Baseline.Y1, Baseline.X2 - Baseline.X1) * 180 / Math.PI;
+
+                double ArrowOffsetLength = 10;
 
                 double OffsetAngle     = 3 * Math.PI / 4;
 

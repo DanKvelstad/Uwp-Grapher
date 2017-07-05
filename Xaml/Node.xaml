@@ -11,7 +11,7 @@
 
     <Border 
         x:FieldModifier="public"
-        Name="StateBorder"
+        Name="NodeBorder"
         BorderThickness="5"
         BorderBrush="Black"
         CornerRadius="10"
