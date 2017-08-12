@@ -8,6 +8,7 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -45,7 +46,11 @@ namespace Grapher
                 var items = await e.DataView.GetStorageItemsAsync();
                 if (1==items.Count)
                 {
-                     this.Frame.Navigate(typeof(ConnectPage), items[0]);
+                    var file = items[0] as IStorageFile;
+                    if(null != file)
+                    {
+                        this.Frame.Navigate(typeof(ConnectPage), file);
+                    }
                 }
                 else if(1<items.Count)
                 {

@@ -8,7 +8,7 @@ using Windows.Foundation;
 namespace Grapher
 {
 
-    class Graph
+    public class Graph
     {
 
         public List<String>                     nodes;
