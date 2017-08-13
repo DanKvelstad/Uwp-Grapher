@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -25,8 +26,8 @@ namespace Grapher
     public sealed partial class ConnectPage : Page
     {
 
-        private Graph graph;
-
+        CancellationTokenSource tokenSource = new CancellationTokenSource();
+        
         public ConnectPage()
         {
             this.InitializeComponent();
@@ -37,75 +38,74 @@ namespace Grapher
 
             base.OnNavigatedTo(e);
 
-            var graph = Serialization.Serializor.Deserialize(
-                await (e.Parameter as IStorageFile).OpenStreamForReadAsync()
-            );
-            
-            //graph = new Graph();
-            //graph.EmplaceNode("s0");
-            //graph.EmplaceNode("s1");
-            //graph.EmplaceNode("s2");
-            //graph.EmplaceNode("s3");
-            //graph.EmplaceNode("s4");
-            //
-            //graph.EmplaceEdge("s1", "s2", "e0");
-            //graph.EmplaceEdge("s2", "s3", "e0");
-            //graph.EmplaceEdge("s3", "s4", "e0");
-            //graph.EmplaceEdge("s4", "s1", "e0");
-            //
-            //graph.EmplaceEdge(graph.nodes[0], "s1", "e1");
-            //graph.EmplaceEdge(graph.nodes[0], "s2", "e2");
-            //graph.EmplaceEdge(graph.nodes[0], "s3", "e3");
-            //graph.EmplaceEdge(graph.nodes[0], "s4", "e4");
-            //
-            //if (true)
-            //{
-            //
-            //    graph.EmplaceEdge("s2", "s1", "e1");
-            //    graph.EmplaceEdge("s3", "s2", "e1");
-            //    graph.EmplaceEdge("s4", "s3", "e1");
-            //    graph.EmplaceEdge("s1", "s4", "e1");
-            //
-            //    graph.EmplaceEdge("s1", graph.nodes[0], "e1");
-            //    graph.EmplaceEdge("s2", graph.nodes[0], "e2");
-            //    graph.EmplaceEdge("s3", graph.nodes[0], "e3");
-            //    graph.EmplaceEdge("s4", graph.nodes[0], "e4");
-            //
-            //}
+            ContentDialog Dialog = new ContentDialog
+            {
+                Title = "Error opening file",
+                Content = "Verify that it is a valid file for this program.",
+                CloseButtonText = "Ok"
+            };
 
-            LayoutProgress.Maximum = graph.PermutationsCount();
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            await Task<bool>.Run(
-                () => graph.Layout(
-                    async (current) =>
+            var File = e.Parameter as IStorageFile;
+            if (null == File)
+            {
+                var result = await Dialog.ShowAsync();
+                this.Frame.Navigate(typeof(MainPage));
+            }
+            else
+            {
+
+                var graph = await Serialization.Serializor.Deserialize(File);
+                if (null == graph)
+                {
+                    var result = await Dialog.ShowAsync();
+                    this.Frame.Navigate(typeof(MainPage));
+                }
+                else
+                {
+
+                    tokenSource = new CancellationTokenSource();
+
+                    LayoutProgress.Maximum = graph.PermutationsCount();
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    
+                    await Task.Run(
+                        () => graph.Layout(
+                            tokenSource.Token,
+                            async (current) =>
+                            {
+                                if (TimeSpan.FromMilliseconds(500) < stopWatch.Elapsed)
+                                {
+                                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                                        CoreDispatcherPriority.Normal,
+                                        () => LayoutProgress.Value = current
+                                    );
+                                    stopWatch.Reset();
+                                    stopWatch.Start();
+                                }
+                            }
+                        )
+                    );
+                    LayoutProgress.Value = LayoutProgress.Maximum;
+                    stopWatch.Stop();
+
+                    //var File = await ApplicationData.Current.LocalFolder.CreateFileAsync("output.xml");
+                    //Serialization.Serializor.SerializeAsXml(graph, await File.OpenStreamForWriteAsync());
+
+                    if(!tokenSource.IsCancellationRequested)
                     {
-                        if(TimeSpan.FromMilliseconds(500) < stopWatch.Elapsed)
-                        {
-                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                                CoreDispatcherPriority.Normal,
-                                () => LayoutProgress.Value = current
-                            );
-                            stopWatch.Reset();
-                            stopWatch.Start();
-                        }
+                        this.Frame.Navigate(typeof(DisplayPage), graph);
                     }
-                )
-            );
-            LayoutProgress.Value = LayoutProgress.Maximum;
-            stopWatch.Stop();
 
-            var File = await ApplicationData.Current.LocalFolder.CreateFileAsync("output.xml");
-            Serialization.Serializor.SerializeAsXml(graph, await File.OpenStreamForWriteAsync());
+                }
 
-            this.Frame.Navigate(typeof(DisplayPage), graph);
-
+            }
+            
         }
 
-        private async System.Threading.Tasks.Task<bool> ProcessFile()
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            await Task.Delay(TimeSpan.FromSeconds(10));
-            return true;
+            tokenSource.Cancel();
         }
 
     }

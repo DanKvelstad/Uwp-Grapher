@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
@@ -61,7 +62,7 @@ namespace Grapher
             return n==0 ? 1 : Enumerable.Range(1, n).Aggregate((acc, x) => acc * x);
         }
 
-        public void Layout(Action<int> StatusUpdate)
+        public void Layout(CancellationToken Token, Action<int> StatusUpdate)
         {
 
             var currently = 0;
@@ -81,6 +82,11 @@ namespace Grapher
 
             do
             {
+
+                if(Token.IsCancellationRequested)
+                {
+                    return;
+                }
 
                 var candidate = new Point[state_count];
                 for (int i = 0; i < candidate.Length; i++)

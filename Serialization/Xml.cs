@@ -70,28 +70,51 @@ namespace Grapher.Serialization
 
         }
 
-        public static Graph Deserialize(Stream Input)
+        private static Graph DeserializeAsXml(Stream Input)
         {
 
-            var Result = new Graph();
-
-            var doc = XDocument.Load(Input);
-            var graph = doc.Element("graph");
-            foreach(var Element in graph.Element("nodes").Elements())
+            try
             {
-                Result.EmplaceNode(Element.Attribute("label").Value);
-            }
 
-            foreach (var edge in graph.Element("edges").Elements())
+                var Result = new Graph();
+
+                var doc = XDocument.Load(Input);
+                var graph = doc.Element("graph");
+                foreach (var Element in graph.Element("nodes").Elements())
+                {
+                    Result.EmplaceNode(Element.Attribute("label").Value);
+                }
+
+                foreach (var edge in graph.Element("edges").Elements())
+                {
+                    Result.EmplaceEdge(
+                        edge.Attribute("source").Value,
+                        edge.Attribute("target").Value,
+                        edge.Attribute("label").Value
+                    );
+                }
+
+                return Result;
+
+            }
+            catch (XmlException)
             {
-                Result.EmplaceEdge(
-                    edge.Attribute("source").Value,
-                    edge.Attribute("target").Value,
-                    edge.Attribute("label").Value
-                );
+                return null;
             }
+            
+        }
 
-            return Result;
+        public static async Task<Graph> Deserialize(IStorageFile File)
+        {
+
+            if(".xml"==File.FileType)
+            {
+                return DeserializeAsXml(await File.OpenStreamForReadAsync());
+            }
+            else
+            {
+                return null;
+            }
 
         }
 
