@@ -16,8 +16,7 @@
         BorderBrush="Black"
         CornerRadius="10"
         Margin="10"
-        Padding="10"
-    Background="LightPink">
+        Padding="10">
         <TextBlock
             x:FieldModifier="public"
             Name="StateName"
