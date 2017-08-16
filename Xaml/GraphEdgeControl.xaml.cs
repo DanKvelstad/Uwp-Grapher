@@ -17,10 +17,10 @@ using Windows.UI.Xaml.Navigation;
 namespace Grapher
 {
 
-    public sealed partial class Edge : UserControl
+    public sealed partial class GraphEdgeControl : UserControl
     {
 
-        public Edge(Node from, Node to, String label)
+        public GraphEdgeControl(GraphNodeControl from, GraphNodeControl to, String label)
         {
 
             this.InitializeComponent();
@@ -133,8 +133,8 @@ namespace Grapher
 
         }
 
-        public Node FromState;
-        public Node ToState;
+        public GraphNodeControl FromState;
+        public GraphNodeControl ToState;
 
     }
 

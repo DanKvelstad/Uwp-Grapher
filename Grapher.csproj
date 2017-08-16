@@ -96,21 +96,24 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Serialization\Xml.cs" />
-    <Compile Include="Xaml\Edge.xaml.cs">
-      <DependentUpon>Edge.xaml</DependentUpon>
+    <Compile Include="Xaml\GraphEdgeControl.xaml.cs">
+      <DependentUpon>GraphEdgeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Free\Graph.cs" />
-    <Compile Include="Xaml\Node.xaml.cs">
-      <DependentUpon>Node.xaml</DependentUpon>
+    <Compile Include="Xaml\GraphControl.xaml.cs">
+      <DependentUpon>GraphControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Xaml\ProcessingPage.xaml.cs">
-      <DependentUpon>ProcessingPage.xaml</DependentUpon>
+    <Compile Include="Xaml\GraphDisplayControl.xaml.cs">
+      <DependentUpon>GraphDisplayControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Xaml\DisplayPage.xaml.cs">
-      <DependentUpon>DisplayPage.xaml</DependentUpon>
+    <Compile Include="Xaml\GraphProcessingControl.xaml.cs">
+      <DependentUpon>GraphProcessingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Xaml\DropPage.xaml.cs">
-      <DependentUpon>DropPage.xaml</DependentUpon>
+    <Compile Include="Xaml\GraphNodeControl.xaml.cs">
+      <DependentUpon>GraphNodeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -135,23 +138,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Xaml\Edge.xaml">
+    <Page Include="Xaml\GraphEdgeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Xaml\Node.xaml">
+    <Page Include="Xaml\GraphControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Xaml\ProcessingPage.xaml">
+    <Page Include="Xaml\GraphDisplayControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Xaml\DisplayPage.xaml">
+    <Page Include="Xaml\GraphProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Xaml\DropPage.xaml">
+    <Page Include="Xaml\GraphNodeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

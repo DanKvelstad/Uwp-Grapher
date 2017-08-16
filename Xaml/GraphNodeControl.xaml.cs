@@ -5,10 +5,10 @@ using Windows.UI.Xaml.Controls;
 
 namespace Grapher
 {
-    public sealed partial class Node : UserControl, INotifyPropertyChanged
+    public sealed partial class GraphNodeControl : UserControl, INotifyPropertyChanged
     {
 
-        public Node(String Name)
+        public GraphNodeControl(String Name)
         {
 
             this.InitializeComponent();
@@ -22,12 +22,12 @@ namespace Grapher
 
         }
 
-        internal int CompareTo(Node fromState)
+        internal int CompareTo(GraphNodeControl fromState)
         {
             return StateName.Text.CompareTo(fromState.StateName.Text);
         }
 
-        public Point GetFromAnchorRelativeTo(Node Other)
+        public Point GetFromAnchorRelativeTo(GraphNodeControl Other)
         {
             if (Center.X < Other.Center.X)
             {
@@ -76,7 +76,7 @@ namespace Grapher
             }
         }
         
-        public Point GetToAnchorRelativeTo(Node Other)
+        public Point GetToAnchorRelativeTo(GraphNodeControl Other)
         {
             if (Center.X < Other.Center.X)
             {
