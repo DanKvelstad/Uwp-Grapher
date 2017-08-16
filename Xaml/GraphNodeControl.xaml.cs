@@ -230,7 +230,7 @@ namespace Grapher
                 {
                     var _NewFromAnchorLeft = new Point(
                         value.X - Width / 2,
-                        value.Y + 5
+                        value.Y + NodeBorder.CornerRadius.TopLeft
                     );
                     if (_FromAnchorLeft != _NewFromAnchorLeft)
                     {
@@ -265,7 +265,7 @@ namespace Grapher
                 {
                     var _NewToAnchorLeft = new Point(
                         value.X - Width / 2,
-                        value.Y - 5
+                        value.Y - NodeBorder.CornerRadius.TopLeft
                     );
                     if( _ToAnchorLeft!=_NewToAnchorLeft )
                     {
@@ -375,7 +375,7 @@ namespace Grapher
                 else
                 {
                     var _NewFromAnchorTopCenter = new Point(
-                        value.X - 5,
+                        value.X - NodeBorder.CornerRadius.TopRight,
                         value.Y - Height/2
                     );
                     if (_FromAnchorTopCenter != _NewFromAnchorTopCenter)
@@ -410,7 +410,7 @@ namespace Grapher
                 else
                 {
                     var _NewToAnchorTopCenter = new Point(
-                        value.X + 5,
+                        value.X + NodeBorder.CornerRadius.TopRight,
                         value.Y - Height/2
                     );
                     if (_ToAnchorTopCenter != _NewToAnchorTopCenter)
@@ -522,7 +522,7 @@ namespace Grapher
                 {
                     var _NewFromAnchorRight = new Point(
                         value.X + Width / 2,
-                        value.Y - 5
+                        value.Y - NodeBorder.CornerRadius.BottomRight
                     );
                     if (_FromAnchorRight != _NewFromAnchorRight)
                     {
@@ -557,7 +557,7 @@ namespace Grapher
                 {
                     var _NewToAnchorRight = new Point(
                         value.X + Width / 2,
-                        value.Y + 5
+                        value.Y + NodeBorder.CornerRadius.BottomRight
                     );
                     if (_ToAnchorRight != _NewToAnchorRight)
                     {
@@ -629,7 +629,7 @@ namespace Grapher
                 else
                 {
                     var _NewToAnchorBottomRight = new Point(
-                        value.X +  Width / 2 - 5,
+                        value.X +  Width / 2 - NodeBorder.CornerRadius.BottomRight,
                         value.Y + Height / 2
                     );
                     if (_ToAnchorBottomRight != _NewToAnchorBottomRight)
@@ -667,7 +667,7 @@ namespace Grapher
                 else
                 {
                     var _NewFromAnchorBottomCenter = new Point(
-                        value.X + 5,
+                        value.X + NodeBorder.CornerRadius.BottomLeft,
                         value.Y + Height / 2
                     );
                     if (_FromAnchorBottomCenter != _NewFromAnchorBottomCenter)
@@ -702,7 +702,7 @@ namespace Grapher
                 else
                 {
                     var _NewToAnchorBottomCenter = new Point(
-                        value.X - 5,
+                        value.X - NodeBorder.CornerRadius.BottomLeft,
                         value.Y + Height / 2
                     );
                     if (_ToAnchorBottomCenter != _NewToAnchorBottomCenter)
@@ -740,7 +740,7 @@ namespace Grapher
                 else
                 {
                     var _NewFromAnchorBottomLeft = new Point(
-                        value.X -  Width / 2 + 5,
+                        value.X -  Width / 2 + NodeBorder.CornerRadius.BottomLeft,
                         value.Y + Height / 2
                     );
                     if (_FromAnchorBottomLeft != _NewFromAnchorBottomLeft)
@@ -776,7 +776,7 @@ namespace Grapher
                 {
                     var _NewToAnchorBottomLeft = new Point(
                         value.X -  Width / 2,
-                        value.Y + Height / 2 - 5
+                        value.Y + Height / 2 - NodeBorder.CornerRadius.BottomLeft
                     );
                     if (_ToAnchorBottomLeft != _NewToAnchorBottomLeft)
                     {
