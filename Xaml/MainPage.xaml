@@ -28,14 +28,22 @@
                     </TextBlock>
             </DataTemplate>
         </HubSection>
-        <HubSection>
+        <HubSection Margin="0">
             <DataTemplate>
-                <ListView ItemsSource="{StaticResource Graphs}">
+                <ListView 
+                    ItemsSource="{StaticResource Graphs}"
+                    SelectionMode="None">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"></StackPanel>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="5"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                 </ListView>
             </DataTemplate>
         </HubSection>

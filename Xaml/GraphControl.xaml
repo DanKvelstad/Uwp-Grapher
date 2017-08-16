@@ -7,22 +7,31 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <RelativePanel
+    <StackPanel
         x:Name="WindowPanel"
-        BorderBrush="Black"
+        Orientation="Vertical"
         BorderThickness="1"
-        Padding="10">
-        <Button
-            x:Name="CloseButton"
-            RelativePanel.AlignTopWithPanel="True"
-            RelativePanel.AlignRightWithPanel="True">
-            <SymbolIcon Symbol="Clear"/>
-        </Button>
-        <TextBlock
-            x:Name="Name"
-            RelativePanel.AlignLeftWithPanel="True"
-            RelativePanel.LeftOf="CloseButton"
-            >Header</TextBlock>
-    </RelativePanel>
+        BorderBrush="Black">
+        
+        <RelativePanel
+            Background="LightBlue"
+            BorderThickness="0,0,0,1"
+            BorderBrush="Black">
+            <TextBlock
+                x:Name="Name"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignBottomWithPanel="True">
+                Header
+            </TextBlock>
+            <Button
+                x:Name="CloseButton"
+                RelativePanel.AlignTopWithPanel="True"
+                RelativePanel.AlignRightWithPanel="True"
+                Click="CloseButton_Click">
+                <SymbolIcon Symbol="Clear"/>
+            </Button>
+        </RelativePanel>
+        
+    </StackPanel>
     
 </UserControl>

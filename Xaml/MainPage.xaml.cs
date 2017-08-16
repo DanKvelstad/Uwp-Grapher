@@ -72,6 +72,7 @@ namespace Grapher
                         {
                             var GraphContr = new GraphControl();
                             (Resources["Graphs"] as GraphControls).Add(GraphContr);
+                            GraphContr.CloseGraphControlEvent += (sender2, e2) => (Resources["Graphs"] as GraphControls).Remove(GraphContr);
                             GraphContr.Initiate(graph);
                         }
                     }

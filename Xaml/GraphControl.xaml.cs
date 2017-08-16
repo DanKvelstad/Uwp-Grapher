@@ -26,6 +26,9 @@ namespace Grapher.Xaml
         GraphProcessingControl Processor;
         GraphDisplayControl Displayer;
 
+        public delegate void ValueChangedEventHandler(object sender, EventArgs e);
+        public event ValueChangedEventHandler CloseGraphControlEvent;
+        
         public GraphControl()
         {
             this.InitializeComponent();
@@ -36,8 +39,7 @@ namespace Grapher.Xaml
             
             Processor = new GraphProcessingControl();
             WindowPanel.Children.Add(Processor);
-            Processor.SetValue(RelativePanel.BelowProperty, Name);
-
+            
             await Task.Run(
                 () => Processor.Process(graph)
             ).ContinueWith(
@@ -49,7 +51,6 @@ namespace Grapher.Xaml
                         WindowPanel.Children.Remove(Processor);
                         Displayer = new GraphDisplayControl();
                         WindowPanel.Children.Add(Displayer);
-                        Processor.SetValue(RelativePanel.BelowProperty, Name);
                         Displayer.Adopt(graph);
                     }
                 )
@@ -57,5 +58,9 @@ namespace Grapher.Xaml
             
         }
 
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            CloseGraphControlEvent?.Invoke(this, EventArgs.Empty);
+        }
     }
 }
