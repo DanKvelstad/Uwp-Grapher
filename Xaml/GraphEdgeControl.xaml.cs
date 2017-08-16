@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 namespace Grapher
 {
@@ -31,9 +21,8 @@ namespace Grapher
             ToState = to;
             ToState.PropertyChanged += new PropertyChangedEventHandler((n, e) => UpdateLine());
 
+            Label.Text = label;
             UpdateLine();
-
-            AppendToEvents(label);
 
         }
 
@@ -50,7 +39,7 @@ namespace Grapher
 
             UpdateArrow();
             UpdateLabel();
-            
+
         }
 
         private void UpdateArrow()
@@ -86,19 +75,19 @@ namespace Grapher
 
             Point LabelOrigin;
 
-            var DeltaX = ArrowAbove.X2 - ArrowAbove.X1;
-            var DeltaY = ArrowAbove.Y2 - ArrowAbove.Y1;
-            var Delta = Math.Sqrt(DeltaX * DeltaX + DeltaY * DeltaY);
+            var ArrowDeltaX = ArrowAbove.X2 - ArrowAbove.X1;
+            var ArrowDeltaY = ArrowAbove.Y2 - ArrowAbove.Y1;
+            var ArrowDelta = Math.Sqrt(ArrowDeltaX * ArrowDeltaX + ArrowDeltaY * ArrowDeltaY);
 
-            var ArrowOffsetX = Delta * Math.Cos(rotateTransform.Angle * Math.PI / 180);
-            var ArrowOffsetY = Delta * Math.Sin(rotateTransform.Angle * Math.PI / 180);
+            var ArrowOffsetX = ArrowDelta * Math.Cos(rotateTransform.Angle * Math.PI / 180);
+            var ArrowOffsetY = ArrowDelta * Math.Sin(rotateTransform.Angle * Math.PI / 180);
 
-            var Xmin = Math.Min(Baseline.X1, (Baseline.X2 - ArrowOffsetX));
-            var Xdel = Math.Abs(Baseline.X1 - (Baseline.X2 - ArrowOffsetX)) / 2;
+            var Xmin = Math.Min(Baseline.X1 + ArrowOffsetX, (Baseline.X2 - ArrowOffsetX));
+            var Xdel = Math.Abs(Baseline.X1 + ArrowOffsetX - (Baseline.X2 - ArrowOffsetX)) / 2;
             var Xabs = Xmin + Xdel;
 
-            var Ymin = Math.Min(Baseline.Y1, (Baseline.Y2 - ArrowOffsetY));
-            var Ydel = Math.Abs(Baseline.Y1 - (Baseline.Y2 - ArrowOffsetY)) / 2;
+            var Ymin = Math.Min(Baseline.Y1 + ArrowOffsetY, (Baseline.Y2 - ArrowOffsetY));
+            var Ydel = Math.Abs(Baseline.Y1 + ArrowOffsetY - (Baseline.Y2 - ArrowOffsetY)) / 2;
             var Yabs = Ymin + Ydel;
 
             var OffsetMagnitude = Label.DesiredSize.Height / 2;
@@ -122,20 +111,16 @@ namespace Grapher
             Canvas.SetTop(Label, LabelOrigin.Y);
             Canvas.SetLeft(Label, LabelOrigin.X);
 
+            MinWidth  = Label.DesiredSize.Width  + Math.Abs((ArrowOffsetX+5)*2);
+            MinHeight = Label.DesiredSize.Height + Math.Abs((ArrowOffsetY+5)*2);
+
         }
 
         internal void AppendToEvents(string EventName)
         {
 
-            if(""==Label.Text)
-            {
-                Label.Text = EventName;
-            }
-            else
-            {
-                Label.Text += ", " + EventName;
-            }
-
+            Label.Text += ", " + EventName;
+            
             UpdateLabel();
             
         }

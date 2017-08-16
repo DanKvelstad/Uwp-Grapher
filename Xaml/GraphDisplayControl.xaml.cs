@@ -30,45 +30,37 @@ namespace Grapher.Xaml
             var nodes = new GraphNodeControl[graph.candidates[0].Length];
             var edges = new List<GraphEdgeControl>(graph.edges.Count);
 
-            double longest = 0;
+            double node_widest  = 0;
+            double node_highest = 0;
             for (int i = 0; i < graph.candidates[0].Length; i++)
             {
                 nodes[i] = new GraphNodeControl(graph.nodes[i]);
                 nodes[i].Grid_Point = graph.candidates[0][i];
-                if (longest < nodes[i].Width)
+                if (node_widest < nodes[i].MinWidth)
                 {
-                    longest = nodes[i].Width;
+                    node_widest = nodes[i].MinWidth;
+                }
+                if (node_highest < nodes[i].MinHeight)
+                {
+                    node_highest = nodes[i].MinHeight;
                 }
             }
 
-            GraphNodeControl RightState = nodes[0];
-            GraphNodeControl BottomState = nodes[0];
             foreach (var node in nodes)
             {
 
-                node.Width = longest;
+                canvas.Children.Add(node);
+                node.Width  = node_widest;
+                node.Height = node_highest;
                 node.Center = new Point(
                     node.Grid_Point.X * node.Width + node.Width / 2 + node.Grid_Point.X * node.Height,
                     node.Grid_Point.Y * node.Height + node.Height / 2 + node.Grid_Point.Y * node.Height
                 );
-                canvas.Children.Add(node);
-                Canvas.SetLeft(node, node.Center.X - node.Width / 2);
-                Canvas.SetTop(node, node.Center.Y - node.Height / 2);
-
-                if (RightState.Center.X < node.Center.X)
-                {
-                    RightState = node;
-                }
-                if (BottomState.Center.Y < node.Center.Y)
-                {
-                    BottomState = node;
-                }
-
+                
             }
 
-            Width = Canvas.GetLeft(RightState) + RightState.Width;
-            Height = Canvas.GetTop(BottomState) + RightState.Height;
-
+            double edge_widest  = 0;
+            double edge_highest = 0;
             foreach (var edge in graph.edges)
             {
 
@@ -81,21 +73,53 @@ namespace Grapher.Xaml
                     p => 0 == p.StateName.Text.CompareTo(graph.nodes[edge.Item2])
                 );
 
-                var PreExistingEdge = edges.Find(
+                var Edge = edges.Find(
                     p => 0 == p.FromState.CompareTo(FromNode) &&
                          0 == p.ToState.CompareTo(ToNode)
                 );
 
-                if (null != PreExistingEdge)
+                if (null != Edge)
                 {
-                    PreExistingEdge.AppendToEvents(edge.Item3);
+                    Edge.AppendToEvents(edge.Item3);
                 }
                 else
                 {
-                    edges.Add(new GraphEdgeControl(FromNode, ToNode, edge.Item3));
-                    canvas.Children.Add(edges.Last());
+                    Edge = new GraphEdgeControl(FromNode, ToNode, edge.Item3);
+                    edges.Add(Edge);
+                    canvas.Children.Add(Edge);
                 }
 
+                if(edge_widest < Edge.MinWidth)
+                {
+                    edge_widest = Edge.MinWidth;
+                }
+                if (edge_highest < Edge.MinHeight)
+                {
+                    edge_highest = Edge.MinHeight;
+                }
+
+            }
+
+            foreach (var node in nodes)
+            {
+                node.Center = new Point(
+                    node.Grid_Point.X * node.Width  + node.Width / 2  + node.Grid_Point.X * edge_widest,
+                    node.Grid_Point.Y * node.Height + node.Height / 2 + node.Grid_Point.Y * edge_highest
+                );
+            }
+
+            Width = 0;
+            Height = 0;
+            foreach (var node in nodes)
+            {
+                if (Width < node.Center.X + node.Width / 2)
+                {
+                    Width = node.Center.X + node.Width / 2;
+                }
+                if (Height < node.Center.Y + node.Height / 2)
+                {
+                    Height = node.Center.Y + node.Height / 2;
+                }
             }
 
         }

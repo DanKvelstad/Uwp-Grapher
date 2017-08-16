@@ -12,23 +12,25 @@
     <Canvas Name="TheCanvas">
         <Line
             Name="Baseline"
-            StrokeThickness="5"
+            StrokeThickness="2"
             Stroke="Black"
             StrokeEndLineCap="Triangle"
             StrokeStartLineCap="Round"/>
         <Line
             Name="ArrowAbove"
-            StrokeThickness="5"
+            StrokeThickness="2"
             Stroke="Black"
             StrokeEndLineCap="Triangle"
             StrokeStartLineCap="Round"/>
         <Line
             Name="ArrowBelow"
-            StrokeThickness="5"
+            StrokeThickness="2"
             Stroke="Black"
             StrokeEndLineCap="Triangle"
             StrokeStartLineCap="Round"/>
-        <TextBlock Name="Label">
+        <TextBlock 
+            Name="Label"
+            FontSize="13">
             <TextBlock.RenderTransform>
                 <RotateTransform Angle="0"/>
             </TextBlock.RenderTransform>

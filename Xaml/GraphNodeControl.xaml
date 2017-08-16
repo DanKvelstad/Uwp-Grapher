@@ -12,7 +12,7 @@
     <Border 
         x:FieldModifier="public"
         Name="NodeBorder"
-        BorderThickness="5"
+        BorderThickness="2"
         BorderBrush="Black"
         CornerRadius="10"
         Margin="10"
@@ -21,7 +21,7 @@
             x:FieldModifier="public"
             Name="StateName"
             Text="s0" 
-            FontSize="20"            
+            FontSize="13"            
             TextAlignment="Center"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"/>

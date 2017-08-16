@@ -17,8 +17,8 @@ namespace Grapher
             StateName.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
 
             NodeBorder.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
-            Width   = NodeBorder.DesiredSize.Width;
-            Height  = NodeBorder.DesiredSize.Height;
+            MinWidth   = NodeBorder.DesiredSize.Width;
+            MinHeight  = NodeBorder.DesiredSize.Height;
 
         }
 
@@ -201,6 +201,8 @@ namespace Grapher
                 {
                     ToAnchorBottomRight = Center;
                 }
+                Canvas.SetLeft(this, Center.X - Width / 2);
+                Canvas.SetTop (this, Center.Y - Height / 2);
             }
         }
 

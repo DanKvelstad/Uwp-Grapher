@@ -14,13 +14,17 @@
         BorderBrush="Black">
         
         <RelativePanel
-            Background="LightBlue"
+            Background="{ThemeResource SystemControlForegroundAccentBrush}"
             BorderThickness="0,0,0,1"
             BorderBrush="Black">
             <TextBlock
                 x:Name="Name"
+                RelativePanel.AlignTopWithPanel="True"
                 RelativePanel.AlignLeftWithPanel="True"
-                RelativePanel.AlignBottomWithPanel="True">
+                RelativePanel.AlignBottomWithPanel="True"
+                VerticalAlignment="Center"
+                Padding="10,0,10,0"
+                FontSize="15">
                 Header
             </TextBlock>
             <Button
