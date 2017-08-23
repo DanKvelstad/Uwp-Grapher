@@ -96,10 +96,11 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Serialization\Xml.cs" />
+    <Compile Include="ViewModels\GraphGridder.cs" />
     <Compile Include="Xaml\GraphEdgeControl.xaml.cs">
       <DependentUpon>GraphEdgeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Free\Graph.cs" />
+    <Compile Include="Models\Graph.cs" />
     <Compile Include="Xaml\GraphControl.xaml.cs">
       <DependentUpon>GraphControl.xaml</DependentUpon>
     </Compile>

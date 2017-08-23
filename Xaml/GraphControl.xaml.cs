@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -39,22 +40,17 @@ namespace Grapher.Xaml
             
             Processor = new GraphProcessingControl();
             WindowPanel.Children.Add(Processor);
-
+            Processor.gridder.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+            {
+                if("candidates"==e.PropertyName)
+                {
+                    WindowPanel.Children.Remove(Processor);
+                    Displayer = new GraphDisplayControl();
+                    WindowPanel.Children.Add(Displayer);
+                    Displayer.Adopt(graph);
+                }
+            };
             Processor.Process(graph);
-
-            //.ContinueWith(
-            //    (antecedent) => 
-            //    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-            //        CoreDispatcherPriority.Normal,
-            //        () =>
-            //        {
-            //            WindowPanel.Children.Remove(Processor);
-            //            Displayer = new GraphDisplayControl();
-            //            WindowPanel.Children.Add(Displayer);
-            //            Displayer.Adopt(graph);
-            //        }
-            //    )
-            //);
 
         }
 

@@ -48,23 +48,23 @@ namespace Grapher.Serialization
                 );
             }
 
-            graph.Add(
-                new XElement("candidate"),
-                new XAttribute("index", 0)
-            );
-            var candidates = graph.Element("candidate");
-            var i = 0;
-            foreach (var element in ToSerialize.candidates.ElementAt(0))
-            {
-                candidates.Add(
-                    new XElement(
-                        "coordinate",
-                        new XAttribute("node", ToSerialize.nodes.ElementAt(i++)),
-                        new XAttribute("x", element.X),
-                        new XAttribute("y", element.Y)
-                    )
-                );
-            }
+            //graph.Add(
+            //    new XElement("candidate"),
+            //    new XAttribute("index", 0)
+            //);
+            //var candidates = graph.Element("candidate");
+            //var i = 0;
+            //foreach (var element in ToSerialize.candidates.ElementAt(0))
+            //{
+            //    candidates.Add(
+            //        new XElement(
+            //            "coordinate",
+            //            new XAttribute("node", ToSerialize.nodes.ElementAt(i++)),
+            //            new XAttribute("x", element.X),
+            //            new XAttribute("y", element.Y)
+            //        )
+            //    );
+            //}
             
             doc.Save(Output);
 

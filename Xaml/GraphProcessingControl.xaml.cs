@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Grapher.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -27,6 +28,8 @@ namespace Grapher.Xaml
         //
         //tokenSource = new CancellationTokenSource();
 
+        public GraphGridder gridder = new GraphGridder();
+
         public GraphProcessingControl()
         {
             this.InitializeComponent();
@@ -35,23 +38,24 @@ namespace Grapher.Xaml
         public void Process(Graph graph)
         {
 
-            graph.available_resolution = (int)Width;
+            gridder.graph = graph;
+            gridder.available_resolution = (int)Width;
             
             Binding progressBinding = new Binding();
-            progressBinding.Source = graph;
+            progressBinding.Source = gridder;
             progressBinding.Path = new PropertyPath("progress");
             progressBinding.Mode = BindingMode.TwoWay;
             progressBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
             LayoutProgress.SetBinding(ProgressBar.ValueProperty, progressBinding);
 
             Binding maximumBinding = new Binding();
-            maximumBinding.Source = graph;
+            maximumBinding.Source = gridder;
             maximumBinding.Path = new PropertyPath("maximum");
             maximumBinding.Mode = BindingMode.TwoWay;
             maximumBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
             LayoutProgress.SetBinding(ProgressBar.MaximumProperty, maximumBinding);
 
-            Task.Run(() => graph.Layout());
+            Task.Run(() => gridder.Layout());
             
         }
 
