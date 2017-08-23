@@ -1,23 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
+using Windows.UI.Core;
 
 namespace Grapher
 {
 
-    public class Graph
+    public class Graph : INotifyPropertyChanged
     {
 
         public List<String>                     nodes;
         public List<Tuple<int, int, String>>    edges;
+
+        int _available_resolution;
+        public int available_resolution
+        {
+            get
+            {
+                return _available_resolution;
+            }
+            set
+            {
+                _available_resolution = value;
+            }
+        }
+
+        private int _maximum;
+        public int maximum
+        {
+            get
+            {
+                return _maximum;
+            }
+            set
+            {
+                _maximum = value;
+                OnPropertyChanged("maximum");
+            }
+        }
+
+        private int _progress;
+        public int progress
+        {
+            get
+            {
+                return _progress;
+            }
+            set
+            {
+                _progress = value;
+                if( 0 == _progress%(maximum/available_resolution) || maximum == _progress)
+                {
+                    OnPropertyChanged("progress");
+                }
+            }
+        }
+
         public List<Point[]>                    candidates;
+
         private int                             intersection_count;
         private int                             largest_index;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private async void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                    CoreDispatcherPriority.Normal,
+                    () => handler(this, new PropertyChangedEventArgs(info))
+                );
+            }
+        }
 
         public Graph()
         {
@@ -63,12 +125,12 @@ namespace Grapher
             return n==0 ? 1 : Enumerable.Range(1, n).Aggregate((acc, x) => acc * x);
         }
 
-        public void Layout(CancellationToken Token, Action<int> StatusUpdate)
+        public void Layout()
         {
 
-            var currently = 0;
-            StatusUpdate(currently++);
-
+            maximum = PermutationsCount();
+            progress = 0;
+            
             int state_count        = largest_index+1;
         	int grid_dimensions    = (int)Math.Ceiling(Math.Sqrt((double)state_count));
 
@@ -84,10 +146,10 @@ namespace Grapher
             do
             {
 
-                if(Token.IsCancellationRequested)
-                {
-                    return;
-                }
+                //if(Token.IsCancellationRequested)
+                //{
+                //    return;
+                //}
 
                 var candidate = new Point[state_count];
                 for (int i = 0; i < candidate.Length; i++)
@@ -126,7 +188,7 @@ namespace Grapher
                     intersection_count = candidate_intersection_count;
                 }
 
-                StatusUpdate(currently++);
+                progress++;
 
             } while (NextPermutation(grid));
 

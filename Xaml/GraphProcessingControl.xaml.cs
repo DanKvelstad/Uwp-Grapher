@@ -23,45 +23,35 @@ namespace Grapher.Xaml
     public sealed partial class GraphProcessingControl : UserControl
     {
 
-        public CancellationTokenSource tokenSource = new CancellationTokenSource();
+        //public CancellationTokenSource tokenSource;
+        //
+        //tokenSource = new CancellationTokenSource();
 
         public GraphProcessingControl()
         {
             this.InitializeComponent();
         }
         
-        public async Task Process(Graph graph)
+        public void Process(Graph graph)
         {
-            
-            tokenSource = new CancellationTokenSource();
 
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                CoreDispatcherPriority.Normal,
-                () => LayoutProgress.Maximum = graph.PermutationsCount()
-            );
+            graph.available_resolution = (int)Width;
             
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            graph.Layout(
-                tokenSource.Token,
-                async (current) =>
-                {
-                    if (TimeSpan.FromMilliseconds(500) < stopWatch.Elapsed)
-                    {
-                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                            CoreDispatcherPriority.Normal,
-                            () => LayoutProgress.Value = current
-                        );
-                        stopWatch.Reset();
-                        stopWatch.Start();
-                    }
-                }
-            );
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                CoreDispatcherPriority.Normal,
-                () => LayoutProgress.Value = LayoutProgress.Maximum
-            );
-            stopWatch.Stop();
+            Binding progressBinding = new Binding();
+            progressBinding.Source = graph;
+            progressBinding.Path = new PropertyPath("progress");
+            progressBinding.Mode = BindingMode.TwoWay;
+            progressBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            LayoutProgress.SetBinding(ProgressBar.ValueProperty, progressBinding);
+
+            Binding maximumBinding = new Binding();
+            maximumBinding.Source = graph;
+            maximumBinding.Path = new PropertyPath("maximum");
+            maximumBinding.Mode = BindingMode.TwoWay;
+            maximumBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            LayoutProgress.SetBinding(ProgressBar.MaximumProperty, maximumBinding);
+
+            Task.Run(() => graph.Layout());
             
         }
 

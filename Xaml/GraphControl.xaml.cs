@@ -34,28 +34,28 @@ namespace Grapher.Xaml
             this.InitializeComponent();
         }
 
-        public async void Initiate(Graph graph)
+        public void Initiate(Graph graph)
         {
             
             Processor = new GraphProcessingControl();
             WindowPanel.Children.Add(Processor);
-            
-            await Task.Run(
-                () => Processor.Process(graph)
-            ).ContinueWith(
-                (antecedent) => 
-                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                    CoreDispatcherPriority.Normal,
-                    () =>
-                    {
-                        WindowPanel.Children.Remove(Processor);
-                        Displayer = new GraphDisplayControl();
-                        WindowPanel.Children.Add(Displayer);
-                        Displayer.Adopt(graph);
-                    }
-                )
-            );
-            
+
+            Processor.Process(graph);
+
+            //.ContinueWith(
+            //    (antecedent) => 
+            //    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+            //        CoreDispatcherPriority.Normal,
+            //        () =>
+            //        {
+            //            WindowPanel.Children.Remove(Processor);
+            //            Displayer = new GraphDisplayControl();
+            //            WindowPanel.Children.Add(Displayer);
+            //            Displayer.Adopt(graph);
+            //        }
+            //    )
+            //);
+
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
