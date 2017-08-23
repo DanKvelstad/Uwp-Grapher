@@ -104,12 +104,6 @@
     <Compile Include="Xaml\GraphControl.xaml.cs">
       <DependentUpon>GraphControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Xaml\GraphDisplayControl.xaml.cs">
-      <DependentUpon>GraphDisplayControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Xaml\GraphProcessingControl.xaml.cs">
-      <DependentUpon>GraphProcessingControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Xaml\GraphNodeControl.xaml.cs">
       <DependentUpon>GraphNodeControl.xaml</DependentUpon>
     </Compile>
@@ -144,14 +138,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Xaml\GraphControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Xaml\GraphDisplayControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Xaml\GraphProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

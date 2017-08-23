@@ -27,8 +27,8 @@ namespace Grapher.ViewModels
             }
         }
 
-        int _available_resolution;
-        public int available_resolution
+        private int _available_resolution;
+        public  int available_resolution
         {
             get
             {
@@ -41,7 +41,7 @@ namespace Grapher.ViewModels
         }
 
         private int _maximum;
-        public int maximum
+        public  int maximum
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Grapher.ViewModels
         }
 
         private int _progress;
-        public int progress
+        public  int progress
         {
             get
             {
@@ -64,7 +64,7 @@ namespace Grapher.ViewModels
             set
             {
                 _progress = value;
-                if (0 == _progress % (maximum / available_resolution) || maximum == _progress)
+                if (0 == _progress % 1000 /*(maximum / available_resolution)*/ || maximum == _progress)
                 {
                     OnPropertyChanged("progress");
                 }
@@ -80,7 +80,7 @@ namespace Grapher.ViewModels
             set
             {
                 graph.candidates = value;
-                if (0 == _progress % (maximum / available_resolution) || maximum == _progress)
+                if (0 == _progress % 1000/*(maximum / available_resolution)*/ || maximum == _progress)
                 {
                     OnPropertyChanged("candidates");
                 }
