@@ -7,6 +7,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <local:ConverterVisibileIfStateIsProcessing x:Key="VisibileIfStateIsProcessing"/>
+        <local:ConverterVisibileIfStateIsLayouting x:Key="VisibileIfStateIsLayouting"/>
+        <local:ConverterVisibileIfStateIsDisplaying x:Key="VisibileIfStateIsDisplaying"/>
+    </UserControl.Resources>
+
     <StackPanel
         x:Name="WindowPanel"
         Orientation="Vertical"
@@ -37,10 +43,11 @@
         </RelativePanel>
         
         <RelativePanel
-            x:Name="ProcessPanel"
+            x:Name="ProcessingGraphPanel"
             Padding="10"
-            Visibility="Visible"
-            >
+            Visibility="{x:Bind gridder.ActiveState, Converter={StaticResource VisibileIfStateIsProcessing}}"
+            Width="500"
+            Height="200">
 
             <TextBlock
                 RelativePanel.Above="LayoutProgress"
@@ -58,10 +65,15 @@
                 Height="100"/>
 
         </RelativePanel>
-        
+
+        <StackPanel 
+            Visibility="{x:Bind gridder.ActiveState, Converter={StaticResource VisibileIfStateIsLayouting}}"
+            Width="500"
+            Height="200"/>
+
         <Canvas 
-            Name="canvas"
-            Visibility="Collapsed">
+            x:Name="GraphCanvas"
+            Visibility="{x:Bind gridder.ActiveState, Converter={StaticResource VisibileIfStateIsDisplaying}}">
         </Canvas>
 
     </StackPanel>

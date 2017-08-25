@@ -22,12 +22,70 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Grapher.Xaml
 {
+
+    public class ConverterVisibileIfStateIsProcessing : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string culture)
+        {
+            if(GraphGridder.States.Gridding == (GraphGridder.States)value)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, string culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ConverterVisibileIfStateIsLayouting : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string culture)
+        {
+            if (GraphGridder.States.Layouting == (GraphGridder.States)value)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, string culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ConverterVisibileIfStateIsDisplaying : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string culture)
+        {
+            if (GraphGridder.States.Displaying == (GraphGridder.States)value)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, string culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public sealed partial class GraphControl : UserControl
     {
         
         public delegate void ValueChangedEventHandler(object sender, EventArgs e);
         public event ValueChangedEventHandler CloseGraphControlEvent;
-        public Graph graph;
+        GraphGridder gridder = new GraphGridder();
 
         public GraphControl()
         {
@@ -37,9 +95,6 @@ namespace Grapher.Xaml
         public void Initiate(Graph graph)
         {
 
-            this.graph = graph;
-
-            GraphGridder gridder = new GraphGridder();
             gridder.graph = graph;
             gridder.available_resolution = (int)Width;
 
@@ -48,8 +103,8 @@ namespace Grapher.Xaml
                 if ("candidates" == e2.PropertyName)
                 {
 
-                    ProcessPanel.Visibility = Visibility.Collapsed;
-                    canvas.Visibility = Visibility.Visible;
+                    ProcessingGraphPanel.Visibility = Visibility.Collapsed;
+                    GraphCanvas.Visibility = Visibility.Visible;
 
                     var nodes = new GraphNodeControl[graph.candidates[0].Length];
                     var edges = new List<GraphEdgeControl>(graph.edges.Count);
@@ -73,7 +128,7 @@ namespace Grapher.Xaml
                     foreach (var node in nodes)
                     {
 
-                        canvas.Children.Add(node);
+                        GraphCanvas.Children.Add(node);
                         node.Width = node_widest;
                         node.Height = node_highest;
                         node.Center = new Point(
@@ -110,7 +165,7 @@ namespace Grapher.Xaml
                         {
                             Edge = new GraphEdgeControl(FromNode, ToNode, edge.Item3);
                             edges.Add(Edge);
-                            canvas.Children.Add(Edge);
+                            GraphCanvas.Children.Add(Edge);
                         }
 
                         if (edge_widest < Edge.MinWidth)
@@ -132,19 +187,21 @@ namespace Grapher.Xaml
                         );
                     }
 
-                    canvas.Width = 0;
-                    canvas.Height = 0;
+                    GraphCanvas.Width = 0;
+                    GraphCanvas.Height = 0;
                     foreach (var node in nodes)
                     {
-                        if (canvas.Width < node.Center.X + node.Width / 2)
+                        if (GraphCanvas.Width < node.Center.X + node.Width / 2)
                         {
-                            canvas.Width = node.Center.X + node.Width / 2;
+                            GraphCanvas.Width = node.Center.X + node.Width / 2;
                         }
-                        if (canvas.Height < node.Center.Y + node.Height / 2)
+                        if (GraphCanvas.Height < node.Center.Y + node.Height / 2)
                         {
-                            canvas.Height = node.Center.Y + node.Height / 2;
+                            GraphCanvas.Height = node.Center.Y + node.Height / 2;
                         }
                     }
+
+                    gridder.ActiveState = GraphGridder.States.Displaying;
 
                 }
             };

@@ -71,6 +71,27 @@ namespace Grapher.ViewModels
             }
         }
 
+        public enum States
+        {
+            Starting,
+            Gridding,
+            Layouting,
+            Displaying
+        }
+        private States _ActiveState = States.Starting;
+        public States ActiveState
+        {
+            get
+            {
+                return _ActiveState;
+            }
+            set
+            {
+                _ActiveState = value;
+                OnPropertyChanged("ActiveState");
+            }
+        }
+
         public List<Point[]> candidates
         {
             get
@@ -99,6 +120,7 @@ namespace Grapher.ViewModels
         public void Layout()
         {
 
+            ActiveState = States.Gridding;
             var new_candidates = new List<Point[]>();
             
             maximum = PermutationsCount(graph.nodes.Count + 1);
@@ -213,6 +235,7 @@ namespace Grapher.ViewModels
             );
 
             candidates = new_candidates;
+            ActiveState = States.Layouting;
 
         }
 
