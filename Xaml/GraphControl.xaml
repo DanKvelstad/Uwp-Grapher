@@ -35,39 +35,35 @@
                 <SymbolIcon Symbol="Clear"/>
             </Button>
         </RelativePanel>
-        <Pivot 
-            x:Name="ThePivot" 
-            SelectionChanged="ThePivot_SelectionChanged"
-            Width="500">
-            <PivotItem 
-                x:Name="ProcessTabb">
-                <RelativePanel
-                    Padding="10">
-
-                    <TextBlock
-                        RelativePanel.Above="LayoutProgress"
-                        RelativePanel.AlignHorizontalCenterWith="LayoutProgress">
-                        Progress of layouting
-                    </TextBlock>
-
-                    <ProgressBar 
-                        RelativePanel.AlignVerticalCenterWithPanel="True"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignRightWithPanel="True"
-                        x:Name="LayoutProgress" 
-                        Value="0" 
-                        Margin="0,12"
-                        Height="100"/>
-
-                </RelativePanel>
-            </PivotItem>
-            <PivotItem x:Name="DisplayTabb">
-                <Canvas 
-                    Name="canvas">
-                </Canvas>
-            </PivotItem>
-        </Pivot>
         
+        <RelativePanel
+            x:Name="ProcessPanel"
+            Padding="10"
+            Visibility="Visible"
+            >
+
+            <TextBlock
+                RelativePanel.Above="LayoutProgress"
+                RelativePanel.AlignHorizontalCenterWith="LayoutProgress">
+                Progress of layouting
+            </TextBlock>
+
+            <ProgressBar 
+                RelativePanel.AlignVerticalCenterWithPanel="True"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignRightWithPanel="True"
+                x:Name="LayoutProgress" 
+                Value="0" 
+                Margin="0,12"
+                Height="100"/>
+
+        </RelativePanel>
+        
+        <Canvas 
+            Name="canvas"
+            Visibility="Collapsed">
+        </Canvas>
+
     </StackPanel>
     
 </UserControl>
