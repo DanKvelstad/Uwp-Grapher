@@ -28,154 +28,72 @@ namespace Grapher.ViewModels
             }
         }
 
-        private int _available_resolution;
-        public  int available_resolution
+        private double _Width = 500;
+        public double Width
         {
             get
             {
-                return _available_resolution;
+                return _Width;
             }
             set
             {
-                _available_resolution = value;
+                _Width = value;
+                OnPropertyChanged("Width");
             }
         }
 
-        private int _maximum;
-        public  int maximum
+        public double _Height = 200;
+        public double Height
         {
             get
             {
-                return _maximum;
+                return _Height;
             }
             set
             {
-                _maximum = value;
-                OnPropertyChanged("maximum");
+                _Height = value;
+                OnPropertyChanged("Height");
             }
         }
-
-        private int _progress;
-        public  int progress
-        {
-            get
-            {
-                return _progress;
-            }
-            set
-            {
-                _progress = value;
-                if (0 == _progress % 1000 /*(maximum / available_resolution)*/ || maximum == _progress)
-                {
-                    OnPropertyChanged("progress");
-                }
-            }
-        }
-
-        public enum States
-        {
-            Starting,
-            Gridding,
-            Layouting,
-            Displaying
-        }
-        private States _ActiveState = States.Starting;
-        public States ActiveState
-        {
-            get
-            {
-                return _ActiveState;
-            }
-            set
-            {
-                _ActiveState = value;
-                OnPropertyChanged("ActiveState");
-            }
-        }
-
-        public List<Point[]> candidates
-        {
-            get
-            {
-                return graph.candidates;
-            }
-            set
-            {
-
-                // move this into the layouting stage, it takes 2sec for large
-                value.Sort(
-                    (a, b) =>
-                    {
-
-                        int a_cost = 0;
-                        foreach (var edge in graph.edges)
-                        {
-                            var p1 = a[edge.Item1];
-                            var p2 = a[edge.Item2];
-                            var dx = p1.X - p2.X;
-                            var dy = p1.Y - p2.Y;
-                            a_cost += (int)Math.Round(Math.Sqrt(dx * dx + dy * dy));
-                        }
-
-                        int b_cost = 0;
-                        foreach (var edge in graph.edges)
-                        {
-                            var p1 = b[edge.Item1];
-                            var p2 = b[edge.Item2];
-                            var dx = p1.X - p2.X;
-                            var dy = p1.Y - p2.Y;
-                            b_cost += (int)Math.Round(Math.Sqrt(dx * dx + dy * dy));
-                        }
-
-                        if (a_cost < b_cost)
-                        {   // a precedes b in the sort order
-                        return -1;
-                        }
-                        else if (a_cost > b_cost)
-                        {   // a follows the b in the sort order
-                        return 1;
-                        }
-                        else
-                        {   // a and b occur in the same position in the sort order
-                        for (var i = 0; i < a.Length; i++)
-                            {
-                                var da = (int)Math.Round(Math.Sqrt(a[i].X * a[i].X + a[i].Y * a[i].Y));
-                                var db = (int)Math.Round(Math.Sqrt(b[i].X * b[i].X + b[i].Y * b[i].Y));
-                                if (da < db)
-                                {
-                                    return -1;
-                                }
-                                else if (da > db)
-                                {
-                                    return 1;
-                                }
-                            }
-                            return 0;
-                        }
-
-                    }
-                );
-
-                graph.candidates = value;
-
-                if (0 == _progress % 1000/*(maximum / available_resolution)*/ || maximum == _progress)
-                {
-                    OnPropertyChanged("candidates");
-                }
-
-            }
-        }
-
-        public Graph graph;
         
-        public void Layout()
+        private int _Maximum = 0;
+        public  int Maximum
+        {
+            get
+            {
+                return _Maximum;
+            }
+            set
+            {
+                _Maximum = value;
+                OnPropertyChanged("Maximum");
+            }
+        }
+
+        private int _Progress = 0;
+        public  int Progress
+        {
+            get
+            {
+                return _Progress;
+            }
+            set
+            {
+                _Progress = value;
+                if (0 == _Progress % (int)(Maximum / Width) || Maximum == _Progress)
+                {
+                    OnPropertyChanged("Progress");
+                }
+            }
+        }
+
+        public List<Point[]> GridIt(Graph graph)
         {
 
-            ActiveState = States.Gridding;
-            var new_candidates = new List<Point[]>();
-            
-            maximum = Sequencer.PermutationsCount(graph.nodes.Count + 1);
-            progress = 0;
+            var candidates = new List<Point[]>();
+
+            Maximum  = Sequencer.PermutationsCount(graph.nodes.Count + 1);
+            Progress = 0;
 
             int grid_dimensions = (int)Math.Ceiling(Math.Sqrt((double)graph.nodes.Count + 1));
 
@@ -219,21 +137,20 @@ namespace Grapher.ViewModels
 
                 if (candidate_intersection_count == intersection_count)
                 {
-                    new_candidates.Add(candidate);
+                    candidates.Add(candidate);
                 }
                 else if (candidate_intersection_count < intersection_count)
                 {
-                    new_candidates.Clear();
-                    new_candidates.Add(candidate);
+                    candidates.Clear();
+                    candidates.Add(candidate);
                     intersection_count = candidate_intersection_count;
                 }
 
-                progress++;
+                Progress++;
 
             } while (Sequencer.NextPermutation(grid));
-            
-            candidates = new_candidates;
-            ActiveState = States.Layouting;
+
+            return candidates;
 
         }
 

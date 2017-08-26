@@ -42,9 +42,7 @@ namespace Grapher
             edges.Add(new Tuple<int, int, String>(from_index, to_index, label));
 
         }
-
-        public List<Point[]> candidates;
-
+        
     }
 
 }

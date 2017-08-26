@@ -45,9 +45,9 @@
         <RelativePanel
             x:Name="ProcessingGraphPanel"
             Padding="10"
-            Visibility="{x:Bind gridder.ActiveState, Converter={StaticResource VisibileIfStateIsProcessing}}"
-            Width="500"
-            Height="200">
+            Visibility="{x:Bind processor.ActiveState,Mode=OneWay, Converter={StaticResource VisibileIfStateIsProcessing}}"
+            Width="{x:Bind processor.Gridder.Width,Mode=OneWay}"
+            Height="{x:Bind processor.Gridder.Height,Mode=OneWay}">
 
             <TextBlock
                 RelativePanel.Above="LayoutProgress"
@@ -60,21 +60,29 @@
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 x:Name="LayoutProgress" 
-                Value="0" 
+                Maximum="{x:Bind processor.Gridder.Maximum,Mode=OneWay}"
+                Value="{x:Bind processor.Gridder.Progress,Mode=OneWay}"
                 Margin="0,12"
                 Height="100"/>
 
         </RelativePanel>
 
         <StackPanel 
-            Visibility="{x:Bind gridder.ActiveState, Converter={StaticResource VisibileIfStateIsLayouting}}"
-            Width="500"
-            Height="200"/>
+            Visibility="{x:Bind processor.ActiveState,Mode=OneWay, Converter={StaticResource VisibileIfStateIsLayouting}}">
+            <TextBlock>Layouting</TextBlock>
+        </StackPanel>
 
-        <Canvas 
-            x:Name="GraphCanvas"
-            Visibility="{x:Bind gridder.ActiveState, Converter={StaticResource VisibileIfStateIsDisplaying}}">
-        </Canvas>
+        <ItemsControl 
+            ItemsSource="{x:Bind processor.Layouter.Children,Mode=OneWay}"
+            Width="{x:Bind processor.Layouter.Width,Mode=OneWay}"
+            Height="{x:Bind processor.Layouter.Height,Mode=OneWay}"
+            Visibility="{x:Bind processor.ActiveState,Mode=OneWay, Converter={StaticResource VisibileIfStateIsDisplaying}}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
 
     </StackPanel>
     
