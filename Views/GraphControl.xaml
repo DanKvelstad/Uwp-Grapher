@@ -24,7 +24,7 @@
             BorderThickness="0,0,0,1"
             BorderBrush="Black">
             <TextBlock
-                x:Name="Name"
+                x:Name="HeaderLabel"
                 RelativePanel.AlignTopWithPanel="True"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignBottomWithPanel="True"

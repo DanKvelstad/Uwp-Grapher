@@ -1,14 +1,16 @@
-﻿using Grapher.ViewModels;
+﻿using Grapher.Models;
+using Grapher.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Shapes;
 
 namespace Grapher.Xaml
 {
-
+    
     public sealed partial class GraphControl : UserControl
     {
         
@@ -21,7 +23,7 @@ namespace Grapher.Xaml
             this.InitializeComponent();
         }
 
-        public void Initiate(Graph graph)
+        public void Initialize(Graph graph)
         {
             processor.Process(graph);
         }

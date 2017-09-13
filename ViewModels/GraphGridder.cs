@@ -80,7 +80,7 @@ namespace Grapher.ViewModels
             set
             {
                 _Progress = value;
-                if (0 == _Progress % (int)(Maximum / Width) || Maximum == _Progress)
+                if (0 == _Progress % (int)Math.Max(1, Maximum / Width) || Maximum == _Progress)
                 {
                     OnPropertyChanged("Progress");
                 }

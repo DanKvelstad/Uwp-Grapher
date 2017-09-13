@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Grapher.Models;
+using Grapher.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,8 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Shapes;
 
 namespace Grapher.ViewModels
 {
@@ -28,9 +35,10 @@ namespace Grapher.ViewModels
                 );
             }
         }
-        
-        public List<UIElement> Children = new List<UIElement>();
-        
+
+        public Node[] NodeViewModels;
+        public Edge[] EdgeViewModels;
+
         private double _Width = 0;
         public double Width
         {
@@ -59,9 +67,11 @@ namespace Grapher.ViewModels
             }
         }
 
+        public ObservableCollection<UIElement> Children = new ObservableCollection<UIElement>();
+
         async public void LayoutIt(Graph graph, List<Point[]> candidates)
         {
-
+            
             candidates.Sort(
                 (a, b) =>
                 {
@@ -115,112 +125,133 @@ namespace Grapher.ViewModels
                 }
             );
 
-            var nodes = new GraphNodeControl[candidates[0].Length];
-            var edges = new List<GraphEdgeControl>(graph.edges.Count);
+            NodeViewModels  = new Node[graph.nodes.Count];
+            var NodeViews   = new GraphNode[graph.nodes.Count];
+            
+            EdgeViewModels  = new Edge[graph.edges.Count];
+            var EdgeViews   = new GraphEdge[graph.edges.Count];
+            var WidestEdge  = 50.0;
+            var HighestEdge = 50.0;
 
-            // ToDo: Dont do this in GUI thread...
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                 CoreDispatcherPriority.Normal,
                 () =>
                 {
 
-                    double node_widest = 0;
-                    double node_highest = 0;
-                    for (int i = 0; i < candidates[0].Length; i++)
+                    var WidestNode  = 0.0;
+                    var HighestNode = 0.0;
+                    for (int i = 0; i < graph.nodes.Count; i++)
                     {
-                        nodes[i] = new GraphNodeControl(graph.nodes[i]);
-                        nodes[i].Grid_Point = candidates[0][i];
-                        if (node_widest < nodes[i].MinWidth)
-                        {
-                            node_widest = nodes[i].MinWidth;
-                        }
-                        if (node_highest < nodes[i].MinHeight)
-                        {
-                            node_highest = nodes[i].MinHeight;
-                        }
+                        NodeViewModels[i] = new Node();
+                        NodeViewModels[i].Label        = graph.nodes[i];
+                        NodeViewModels[i].CornerRadius = 10;
+                        NodeViewModels[i].PropertyChanged += NodeViewModel_PropertyChanged;
+                        NodeViews[i] = new GraphNode(NodeViewModels[i]);
+                        WidestNode  = Math.Max(WidestNode,  NodeViewModels[i].MinWidth);
+                        HighestNode = Math.Max(HighestNode, NodeViewModels[i].MinHeight);
                     }
-
-                    foreach (var node in nodes)
+                    
+                    var Cols = Math.Ceiling(Math.Sqrt(NodeViewModels.Count()));
+                    for (int i = 0; i < NodeViewModels.Count(); i++)
                     {
-
-                        Children.Add(node);
-                        node.Width = node_widest;
-                        node.Height = node_highest;
-                        node.Center = new Point(
-                            node.Grid_Point.X * node.Width + node.Width / 2 + node.Grid_Point.X * node.Height,
-                            node.Grid_Point.Y * node.Height + node.Height / 2 + node.Grid_Point.Y * node.Height
-                        );
-
+                        NodeViewModels[i].Width  = WidestNode;
+                        NodeViewModels[i].Height = HighestNode;
+                        NodeViewModels[i].Left   = 2 * (i % Cols) * NodeViewModels[i].Width;
+                        NodeViewModels[i].Top    = 2 * (i / Cols) * NodeViewModels[i].Height;
                     }
-
-                    double edge_widest = 0;
-                    double edge_highest = 0;
-                    foreach (var edge in graph.edges)
+                    
+                    for (int i = 0; i < graph.edges.Count; i++)
                     {
 
-                        var FromNode = Array.Find(
-                            nodes,
-                            p => 0 == p.StateName.Text.CompareTo(graph.nodes[edge.Item1])
+                        var SourceNode = Array.Find(
+                            NodeViewModels,
+                            n => 0 == n.Label.CompareTo(graph.nodes[graph.edges[i].Item1])
                         );
-                        var ToNode = Array.Find(
-                            nodes,
-                            p => 0 == p.StateName.Text.CompareTo(graph.nodes[edge.Item2])
-                        );
-
-                        var Edge = edges.Find(
-                            p => 0 == p.FromState.CompareTo(FromNode) &&
-                                 0 == p.ToState.CompareTo(ToNode)
+                        var TargetNode = Array.Find(
+                            NodeViewModels,
+                            n => 0 == n.Label.CompareTo(graph.nodes[graph.edges[i].Item2])
                         );
 
-                        if (null != Edge)
-                        {
-                            Edge.AppendToEvents(edge.Item3);
-                        }
-                        else
-                        {
-                            Edge = new GraphEdgeControl(FromNode, ToNode, edge.Item3);
-                            edges.Add(Edge);
-                            Children.Add(Edge);
-                        }
-
-                        if (edge_widest < Edge.MinWidth)
-                        {
-                            edge_widest = Edge.MinWidth;
-                        }
-                        if (edge_highest < Edge.MinHeight)
-                        {
-                            edge_highest = Edge.MinHeight;
-                        }
+                        EdgeViewModels[i] = new Edge(SourceNode, TargetNode, graph.edges[i].Item3);
+                        EdgeViews[i] = new GraphEdge(EdgeViewModels[i]);
+                        
+                        // Todo 10 is a placeholder for arrow length
+                        WidestEdge  = Math.Max(WidestEdge,  EdgeViews[i].Label.DesiredSize.Width  + 10);
+                        HighestEdge = Math.Max(HighestEdge, EdgeViews[i].Label.DesiredSize.Height + 10);
 
                     }
 
-                    foreach (var node in nodes)
-                    {
-                        node.Center = new Point(
-                            node.Grid_Point.X * node.Width + node.Width / 2 + node.Grid_Point.X * edge_widest,
-                            node.Grid_Point.Y * node.Height + node.Height / 2 + node.Grid_Point.Y * edge_highest
-                        );
-                    }
+                }
 
-                    foreach (var node in nodes)
+            );
+
+            foreach (var candidate in candidates)
+            {
+
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                    CoreDispatcherPriority.Normal,
+                    () =>
                     {
-                        if (Width < node.Center.X + node.Width / 2)
+                        for (int i = 0; i < candidate.Count(); i++)
                         {
-                            Width = node.Center.X + node.Width / 2;
-                        }
-                        if (Height < node.Center.Y + node.Height / 2)
-                        {
-                            Height = node.Center.Y + node.Height / 2;
+                            NodeViewModels[i].Left = candidate[i].X * NodeViewModels[i].Width  + candidate[i].X * WidestEdge;
+                            NodeViewModels[i].Top  = candidate[i].Y * NodeViewModels[i].Height + candidate[i].Y * HighestEdge;
                         }
                     }
+                );
 
-                    OnPropertyChanged("Children");
+                // ToDo: evaluate if this candidate is good
+                break;
+
+            }
+            
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                CoreDispatcherPriority.Normal,
+                () =>
+                {   // This must be done at the very end, 
+                    // probably even outside this scope.
+                    // We dont want to show intermediate graphs.
+                    
+                    foreach (var node in NodeViews)
+                    {
+                        Children.Add(node.NodeBorder);
+                    }
+
+                    foreach (var edge in EdgeViews)
+                    {
+                        Children.Add(edge.Baseline);
+                        Children.Add(edge.ArrowAlpha);
+                        Children.Add(edge.ArrowBravo);
+                        Children.Add(edge.Label);
+                    }
 
                 }
             );
 
         }
 
+        private async void NodeViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if( "Left"  == e.PropertyName || "Top"    == e.PropertyName ||
+                "Width" == e.PropertyName || "Height" == e.PropertyName )
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                    CoreDispatcherPriority.Normal,
+                    () =>
+                    {
+                        var WidthOfCanvas  = 0.0;
+                        var HeightOfCanvas = 0.0;
+                        foreach (var node in NodeViewModels)
+                        {
+                            WidthOfCanvas  = Math.Max(WidthOfCanvas,  node.Left + node.Width);
+                            HeightOfCanvas = Math.Max(HeightOfCanvas, node.Top  + node.Height);
+                        }
+                        Width  = WidthOfCanvas;
+                        Height = HeightOfCanvas;
+                    }
+                );
+            }
+        }
     }
 
 }

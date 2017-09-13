@@ -97,21 +97,20 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Anchor.cs" />
+    <Compile Include="ViewModels\Edge.cs" />
+    <Compile Include="ViewModels\Node.cs" />
     <Compile Include="Serialization\Xml.cs" />
     <Compile Include="ViewModels\GraphGridder.cs" />
     <Compile Include="ViewModels\GraphLayouter.cs" />
     <Compile Include="ViewModels\GraphProcessor.cs" />
-    <Compile Include="Xaml\GraphEdgeControl.xaml.cs">
-      <DependentUpon>GraphEdgeControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Models\Graph.cs" />
-    <Compile Include="Xaml\GraphControl.xaml.cs">
+    <Compile Include="Views\GraphControl.xaml.cs">
       <DependentUpon>GraphControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Xaml\GraphNodeControl.xaml.cs">
-      <DependentUpon>GraphNodeControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Xaml\MainPage.xaml.cs">
+    <Compile Include="Views\GraphEdge.cs" />
+    <Compile Include="Views\GraphNode.cs" />
+    <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,19 +136,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Xaml\GraphEdgeControl.xaml">
+    <Page Include="Views\GraphControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Xaml\GraphControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Xaml\GraphNodeControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Xaml\MainPage.xaml">
+    <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

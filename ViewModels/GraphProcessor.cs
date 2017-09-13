@@ -74,7 +74,6 @@ namespace Grapher.ViewModels
 
         public void Process(Graph graph)
         {
-
             Task.Run(() =>
                 {
                     ActiveState = States.Gridding;
@@ -82,9 +81,9 @@ namespace Grapher.ViewModels
                     ActiveState = States.Layouting;
                     Layouter.LayoutIt(graph, candidates);
                     ActiveState = States.Displaying;
+                    // ToDo: Displayer.DisplayIt
                 }
             );
-
         }
 
     }
