@@ -25,8 +25,6 @@ namespace Grapher.Views
 
         public GraphEdge(Edge Model)
         {
-
-            Model.PropertyChanged += UpdateLabel;
             
             Baseline = new Line();
             Baseline.StrokeThickness    = 2;
@@ -38,7 +36,7 @@ namespace Grapher.Views
                 new Binding()
                 {
                     Source  = Model,
-                    Path    = new PropertyPath("SourceX"),
+                    Path    = new PropertyPath("SourceActualX"),
                     Mode    = BindingMode.OneWay
                 }
             );
@@ -47,7 +45,7 @@ namespace Grapher.Views
                 new Binding()
                 {
                     Source  = Model,
-                    Path    = new PropertyPath("SourceY"),
+                    Path    = new PropertyPath("SourceActualY"),
                     Mode    = BindingMode.OneWay
                 }
             );
@@ -56,7 +54,7 @@ namespace Grapher.Views
                 new Binding()
                 {
                     Source  = Model,
-                    Path    = new PropertyPath("TargetX"),
+                    Path    = new PropertyPath("TargetActualX"),
                     Mode    = BindingMode.OneWay
                 }
             );
@@ -65,7 +63,7 @@ namespace Grapher.Views
                 new Binding()
                 {
                     Source  = Model,
-                    Path    = new PropertyPath("TargetY"),
+                    Path    = new PropertyPath("TargetActualY"),
                     Mode    = BindingMode.OneWay
                 }
             );
@@ -98,7 +96,7 @@ namespace Grapher.Views
                 new Binding()
                 {
                     Source  = Model,
-                    Path    = new PropertyPath("TargetX"),
+                    Path    = new PropertyPath("TargetActualX"),
                     Mode    = BindingMode.OneWay
                 }
             );
@@ -107,7 +105,7 @@ namespace Grapher.Views
                 new Binding()
                 {
                     Source  = Model,
-                    Path    = new PropertyPath("TargetY"),
+                    Path    = new PropertyPath("TargetActualY"),
                     Mode    = BindingMode.OneWay
                 }
             );
@@ -140,7 +138,7 @@ namespace Grapher.Views
                 new Binding()
                 {
                     Source  = Model,
-                    Path    = new PropertyPath("TargetX"),
+                    Path    = new PropertyPath("TargetActualX"),
                     Mode    = BindingMode.OneWay
                 }
             );
@@ -149,7 +147,7 @@ namespace Grapher.Views
                 new Binding()
                 {
                     Source  = Model,
-                    Path    = new PropertyPath("TargetY"),
+                    Path    = new PropertyPath("TargetActualY"),
                     Mode    = BindingMode.OneWay
                 }
             );
@@ -157,68 +155,137 @@ namespace Grapher.Views
             Label = new TextBlock();
             Label.FontSize = 13;
             Label.RenderTransform = new RotateTransform();
-            {   // Label bindings
-                Binding binding  = new Binding();
-                binding.Path     = new PropertyPath("Label");
-                binding.Source   = Model;
-                binding.Mode     = BindingMode.TwoWay;
-                BindingOperations.SetBinding(Label, TextBlock.TextProperty, binding);
-            }
-            
+            Model.PropertyChanged += Model_PropertyChanged;
+            Label.SetBinding(
+                 TextBlock.TextProperty,
+                 new Binding()
+                 {
+                     Source = Model,
+                     Path   = new PropertyPath("Label"),
+                     Mode   = BindingMode.OneWay,
+                 }
+             );
+            Label.SetBinding(
+                Canvas.LeftProperty,
+                new Binding()
+                {
+                    Source    = Model,
+                    Path      = new PropertyPath("LabelLeft"),
+                    Mode      = BindingMode.OneWay
+                }
+            );
+            Label.SetBinding(
+                Canvas.TopProperty,
+                new Binding()
+                {
+                    Source = Model,
+                    Path   = new PropertyPath("LabelTop"),
+                    Mode   = BindingMode.OneWay
+                }
+            );
+            BindingOperations.SetBinding(
+                Label.RenderTransform,
+                RotateTransform.AngleProperty,
+                new Binding()
+                {
+                    Source      = Model,
+                    Path        = new PropertyPath("Angle"),
+                    Mode        = BindingMode.OneWay,
+                    Converter   = new ConverterTextAngle()
+                }
+            );
+            BindingOperations.SetBinding(
+                Label.RenderTransform,
+                RotateTransform.CenterXProperty,
+                new Binding()
+                {
+                    Source      = Model,
+                    Path        = new PropertyPath("LabelWidth"),
+                    Mode        = BindingMode.OneWay,
+                    Converter   = new ConverterHalf()
+                }
+            );
+            BindingOperations.SetBinding(
+                Label.RenderTransform,
+                RotateTransform.CenterYProperty,
+                new Binding()
+                {
+                    Source      = Model,
+                    Path        = new PropertyPath("LabelHeight"),
+                    Mode        = BindingMode.OneWay,
+                    Converter   = new ConverterHalf()
+                }
+            );
+            Model_PropertyChanged(Model, new System.ComponentModel.PropertyChangedEventArgs("Label"));
+
         }
 
-        private void UpdateLabel(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if("Label"==e.PropertyName)
+            {
+                Label.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+                var Model = (Edge)sender;
+                Model.LabelWidth  = Label.DesiredSize.Width;
+                Model.LabelHeight = Label.DesiredSize.Height;
+            }
+        }
+        
+        public class ConverterHalf : IValueConverter
+        {
+            
+            public object Convert(object value, Type targetType, object parameter, string language)
+            {
+                return ((double)value) / 2;
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, string language)
+            {
+                return ((double)value) * 2;
+            }
+
+        }
+
+        public class ConverterTextAngle : IValueConverter
         {
 
-            if(
-                e.PropertyName.StartsWith("Source") || 
-                e.PropertyName.StartsWith("Target") ||
-                e.PropertyName == "Label"
-            )
+            public object Convert(object value, Type targetType, object parameter, string language)
             {
 
-                Label.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+                var Angle = (double)value;
 
-                var rotateTransform = (RotateTransform)Label.RenderTransform;
-                rotateTransform.Angle = Math.Atan2(Baseline.Y2 - Baseline.Y1, Baseline.X2 - Baseline.X1) * 180 / Math.PI;
-
-                Point LabelOrigin;
-
-                var ArrowOffsetX = 10.0;
-                var ArrowOffsetY = 10.0;
-
-                var Xmin = Math.Min(Baseline.X1 + ArrowOffsetX, (Baseline.X2 - ArrowOffsetX));
-                var Xdel = Math.Abs(Baseline.X1 + ArrowOffsetX - (Baseline.X2 - ArrowOffsetX)) / 2;
-                var Xabs = Xmin + Xdel;
-
-                var Ymin = Math.Min(Baseline.Y1 + ArrowOffsetY, (Baseline.Y2 - ArrowOffsetY));
-                var Ydel = Math.Abs(Baseline.Y1 + ArrowOffsetY - (Baseline.Y2 - ArrowOffsetY)) / 2;
-                var Yabs = Ymin + Ydel;
-
-                var OffsetMagnitude = Label.DesiredSize.Height / 2;
-                var OffsetAngle = (rotateTransform.Angle - 90) * Math.PI / 180;
-                var OffsetX = OffsetMagnitude * Math.Cos(OffsetAngle);
-                var OffsetY = OffsetMagnitude * Math.Sin(OffsetAngle);
-
-                var CenterX = Xabs + OffsetX;
-                var CenterY = Yabs + OffsetY;
-
-                LabelOrigin.X = CenterX - Label.DesiredSize.Width / 2;
-                LabelOrigin.Y = CenterY - Label.DesiredSize.Height / 2;
-
-                rotateTransform.CenterX = Label.DesiredSize.Width / 2;
-                rotateTransform.CenterY = Label.DesiredSize.Height / 2;
-                if (89.9 < rotateTransform.Angle || -90 > rotateTransform.Angle)
+                if (359.99 < Angle && 0.01 > Angle)
                 {
-                    rotateTransform.Angle += 180;
+                    Angle = 0;
+                }
+                else if (89.99 < Angle && 90.01 > Angle)
+                {
+                    Angle = 270;
+                }
+                else if (179.99 < Angle && 180.01 > Angle)
+                {
+                    Angle = 0;
+                }
+                else if (269.99 < Angle && 270.01 > Angle)
+                {
+                    Angle = 270;
+                }
+                else if ((90 < Angle && 180 > Angle))
+                {
+                    Angle += 180;
+                }
+                else if ((180 < Angle && 270 > Angle))
+                {
+                    Angle -= 180;
                 }
 
-                Canvas.SetLeft(Label, LabelOrigin.X);
-                Canvas.SetTop(Label, LabelOrigin.Y);
+                return Angle;
+                
+            }
 
-                //MinWidth  = Label.DesiredSize.Width + Math.Abs((ArrowOffsetX + 5) * 2);
-                //MinHeight = Label.DesiredSize.Height + Math.Abs((ArrowOffsetY + 5) * 2);
-
+            public object ConvertBack(object value, Type targetType, object parameter, string language)
+            {
+                throw new NotImplementedException();
             }
 
         }

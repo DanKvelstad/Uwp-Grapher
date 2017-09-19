@@ -28,37 +28,49 @@ namespace Grapher.ViewModels
             }
         }
 
-        private string _Label;
-        public  string Label
-        {
-            get
-            {
-                return _Label;
-            }
-            set
-            {
-                if(_Label != value)
-                {
-                    _Label = value;
-                    OnPropertyChanged("Label");
-                }
-            }
-        }
-        
         private Node   SourceNode;
         private Anchor SourceAnchor;
 
         private Node   TargetNode;
         private Anchor TargetAnchor;
 
-        public double SourceX
+        private double _SourceX;
+        public  double SourceX
+        {
+            get
+            {
+                return _SourceX;
+            }
+            private set
+            {
+                _SourceX = value;
+                OnPropertyChanged("SourceX");
+                Angle = double.NaN;
+            }
+        }
+        public  double SourceActualX
         {
             get
             {
                 return SourceAnchor.Source.X;
             }
         }
-        public double SourceY
+
+        private double _SourceY;
+        public  double SourceY
+        {
+            get
+            {
+                return _SourceY;
+            }
+            private set
+            {
+                _SourceY = value;
+                OnPropertyChanged("SourceY");
+                Angle = double.NaN;
+            }
+        }
+        public  double SourceActualY
         {
             get
             {
@@ -66,14 +78,49 @@ namespace Grapher.ViewModels
             }
         }
 
-        public double TargetX
+        private double _TargetX;
+        public  double TargetX
+        {
+            get
+            {
+                return _TargetX;
+            }
+            private set
+            {
+                if(value!=_TargetX)
+                {
+                    _TargetX = value;
+                    OnPropertyChanged("TargetX");
+                    Angle = double.NaN;
+                }
+            }
+        }
+        public double TargetActualX
         {
             get
             {
                 return TargetAnchor.Target.X;
             }
         }
-        public double TargetY
+
+        private double _TargetY;
+        public  double TargetY
+        {
+            get
+            {
+                return _TargetY;
+            }
+            private set
+            {
+                if (value != _TargetY)
+                {
+                    _TargetY = value;
+                    OnPropertyChanged("TargetY");
+                    Angle = double.NaN;
+                }
+            }
+        }
+        public  double TargetActualY
         {
             get
             {
@@ -81,6 +128,54 @@ namespace Grapher.ViewModels
             }
         }
 
+        public double _Angle;
+        public double Angle
+        {
+            get
+            {
+                return _Angle;
+            }
+            private set
+            {
+
+                if(null==SourceAnchor || null==TargetAnchor)
+                {
+                    return;
+                }
+                else if(double.IsNaN(value))
+                {
+                    _Angle = Math.Atan2(
+                        TargetActualY - SourceActualY,
+                        TargetActualX - SourceActualX
+                    ) * 180 / Math.PI;
+                    if(0>_Angle)
+                    {
+                        _Angle += 360;
+                    }
+                    OnPropertyChanged("Angle");
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+
+                LabelLeft = double.NaN;
+                LabelTop  = double.NaN;
+
+                var AngleInRadians = _Angle / 180 * Math.PI;
+                // isosceles triangle
+                // EndpointRadius = sqrt(ArrowLenght^2-(1/4)*(EndpointRadius*2)^2)
+                // EndpointRadius^2+(1/4)*(EndpointRadius*2)^2 = ArrowLenght^2
+                // ArrowLenght = sqrt(EndpointRadius^2+(1/4)*(EndpointRadius*2)^2)
+                var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
+                ArrowAlphaX = TargetX + ArrowLenght * Math.Cos(AngleInRadians - Math.PI / 4);
+                ArrowAlphaY = TargetY + ArrowLenght * Math.Sin(AngleInRadians - Math.PI / 4);
+                ArrowBravoX = TargetX + ArrowLenght * Math.Cos(AngleInRadians + Math.PI / 4);
+                ArrowBravoY = TargetY + ArrowLenght * Math.Sin(AngleInRadians + Math.PI / 4);
+
+            }
+        }
+        
         public double _ArrowAlphaX;
         public double ArrowAlphaX
         {
@@ -88,7 +183,7 @@ namespace Grapher.ViewModels
             {
                 return _ArrowAlphaX;
             }
-            set
+            private set
             {
                 _ArrowAlphaX = value;
                 OnPropertyChanged("ArrowAlphaX");
@@ -101,7 +196,7 @@ namespace Grapher.ViewModels
             {
                 return _ArrowAlphaY;
             }
-            set
+            private set
             {
                 _ArrowAlphaY = value;
                 OnPropertyChanged("ArrowAlphaY");
@@ -115,7 +210,7 @@ namespace Grapher.ViewModels
             {
                 return _ArrowBravoX;
             }
-            set
+            private set
             {
                 _ArrowBravoX = value;
                 OnPropertyChanged("ArrowBravoX");
@@ -128,10 +223,120 @@ namespace Grapher.ViewModels
             {
                 return _ArrowBravoY;
             }
-            set
+            private set
             {
                 _ArrowBravoY = value;
                 OnPropertyChanged("ArrowBravoY");
+            }
+        }
+
+        private string _Label;
+        public string Label
+        {
+            get
+            {
+                return _Label;
+            }
+            set
+            {
+                if (_Label != value)
+                {
+                    _Label = value;
+                    OnPropertyChanged("Label");
+                }
+            }
+        }
+
+        private double _LabelWidth;
+        public  double LabelWidth
+        {
+            get
+            {
+                return _LabelWidth;
+            }
+            set
+            {
+                if (_LabelWidth != value)
+                {
+                    _LabelWidth = value;
+                    OnPropertyChanged("LabelWidth");
+                    LabelLeft = double.NaN;
+                }
+            }
+        }
+
+        private double _LabelHeight;
+        public  double LabelHeight
+        {
+            get
+            {
+                return _LabelHeight;
+            }
+            set
+            {
+                if (_LabelHeight != value)
+                {
+                    _LabelHeight = value;
+                    OnPropertyChanged("LabelHeight");
+                    LabelTop = double.NaN;
+                }
+            }
+        }
+
+        private double _LabelLeft;
+        public double LabelLeft
+        {
+            get
+            {
+                return _LabelLeft;
+            }
+            private set
+            {
+                if(double.IsNaN(value))
+                {
+                    _LabelLeft = Math.Min(SourceX, TargetX) + Math.Abs(SourceX - TargetX) / 2 - LabelWidth / 2;
+                    OnPropertyChanged("LabelLeft");
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+        }
+
+        private double _LabelTop;
+        public double LabelTop
+        {
+            get
+            {
+                return _LabelTop;
+            }
+            private set
+            {
+                if(double.IsNaN(value))
+                {
+                    var EdgeCenterY = Math.Min(SourceY, TargetY) + Math.Abs(SourceY - TargetY) / 2;
+                    _LabelTop = EdgeCenterY - LabelHeight;
+                    OnPropertyChanged("LabelTop");
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+        }
+
+        public double _EndpointRadius = 10;
+        public double EndpointRadius
+        {
+            get
+            {
+                return _EndpointRadius;
+            }
+            set
+            {
+                _EndpointRadius = value;
+                OnPropertyChanged("EndpointRadius");
             }
         }
 
@@ -203,9 +408,20 @@ namespace Grapher.ViewModels
             var Anchor = sender as Anchor;
             if(null != Anchor && Anchor == SourceAnchor)
             {
-                OnPropertyChanged("SourceX");
-                OnPropertyChanged("SourceY");
-                UpdateArrow();
+
+                OnPropertyChanged("SourceActualX");
+                OnPropertyChanged("SourceActualY");
+
+                if(null!=TargetAnchor)
+                {
+                    var BaselineAngleInRadians = Math.Atan2(
+                        TargetActualY - SourceActualY,
+                        TargetActualX - SourceActualX
+                    );
+                    SourceX = SourceActualX + 2 * EndpointRadius * Math.Cos(BaselineAngleInRadians);
+                    SourceY = SourceActualY + 2 * EndpointRadius * Math.Sin(BaselineAngleInRadians);
+                }
+
             }
             else
             {
@@ -250,9 +466,23 @@ namespace Grapher.ViewModels
             var Anchor = sender as Anchor;
             if (null != Anchor && Anchor == TargetAnchor)
             {
-                OnPropertyChanged("TargetX");
-                OnPropertyChanged("TargetY");
-                UpdateArrow();
+
+                OnPropertyChanged("TargetActualX");
+                OnPropertyChanged("TargetActualY");
+
+                if(null!=SourceAnchor)
+                {
+                    
+                    var BaselineAngleInRadians = Math.Atan2(
+                        TargetActualY - SourceActualY,
+                        TargetActualX - SourceActualX
+                    );
+
+                    TargetX = TargetActualX - 2 * EndpointRadius * Math.Cos(BaselineAngleInRadians);
+                    TargetY = TargetActualY - 2 * EndpointRadius * Math.Sin(BaselineAngleInRadians);
+
+                }
+
             }
             else
             {
@@ -260,89 +490,7 @@ namespace Grapher.ViewModels
             }
 
         }
-
-        private void UpdateArrow()
-        {
-
-            if(null!=SourceAnchor && null!=TargetAnchor)
-            {
-
-                var Angle = Math.Atan2(TargetY - SourceY, TargetX - SourceX) * 180 / Math.PI;
-                double ArrowOffsetLength = 10;
-                double OffsetAngle = 3 * Math.PI / 4;
-
-                var OffsetAngleAbove = Angle * Math.PI / 180 - OffsetAngle;
-                ArrowAlphaX = TargetX + ArrowOffsetLength * Math.Cos(OffsetAngleAbove);
-                ArrowAlphaY = TargetY + ArrowOffsetLength * Math.Sin(OffsetAngleAbove);
-
-                var OffsetAngleBelow = Angle * Math.PI / 180 + OffsetAngle;
-                ArrowBravoX = TargetX + ArrowOffsetLength * Math.Cos(OffsetAngleBelow);
-                ArrowBravoY = TargetY + ArrowOffsetLength * Math.Sin(OffsetAngleBelow);
-
-            }
-
-        }
-
-        //private void UpdateLabel()
-        //{
-        //
-        //    Label.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
-        //
-        //    var rotateTransform = (RotateTransform)Label.RenderTransform;
-        //    rotateTransform.Angle = Math.Atan2(TargetY - Baseline.Y1, TargetX - SourceX) * 180 / Math.PI;
-        //
-        //    Point LabelOrigin;
-        //
-        //    var ArrowDeltaX = ArrowAbove.X2 - ArrowAlphaX;
-        //    var ArrowDeltaY = ArrowAbove.Y2 - ArrowAlphaY;
-        //    var ArrowDelta = Math.Sqrt(ArrowDeltaX * ArrowDeltaX + ArrowDeltaY * ArrowDeltaY);
-        //
-        //    var ArrowOffsetX = ArrowDelta * Math.Cos(rotateTransform.Angle * Math.PI / 180);
-        //    var ArrowOffsetY = ArrowDelta * Math.Sin(rotateTransform.Angle * Math.PI / 180);
-        //
-        //    var Xmin = Math.Min(SourceX + ArrowOffsetX, (TargetX - ArrowOffsetX));
-        //    var Xdel = Math.Abs(SourceX + ArrowOffsetX - (TargetX - ArrowOffsetX)) / 2;
-        //    var Xabs = Xmin + Xdel;
-        //
-        //    var Ymin = Math.Min(Baseline.Y1 + ArrowOffsetY, (TargetY - ArrowOffsetY));
-        //    var Ydel = Math.Abs(Baseline.Y1 + ArrowOffsetY - (TargetY - ArrowOffsetY)) / 2;
-        //    var Yabs = Ymin + Ydel;
-        //
-        //    var OffsetMagnitude = Label.DesiredSize.Height / 2;
-        //    var OffsetAngle = (rotateTransform.Angle - 90) * Math.PI / 180;
-        //    var OffsetX = OffsetMagnitude * Math.Cos(OffsetAngle);
-        //    var OffsetY = OffsetMagnitude * Math.Sin(OffsetAngle);
-        //
-        //    var CenterX = Xabs + OffsetX;
-        //    var CenterY = Yabs + OffsetY;
-        //
-        //    LabelOrigin.X = CenterX - Label.DesiredSize.Width / 2;
-        //    LabelOrigin.Y = CenterY - Label.DesiredSize.Height / 2;
-        //
-        //    rotateTransform.CenterX = Label.DesiredSize.Width / 2;
-        //    rotateTransform.CenterY = Label.DesiredSize.Height / 2;
-        //    if (89.9 < rotateTransform.Angle || -90 > rotateTransform.Angle)
-        //    {
-        //        rotateTransform.Angle += 180;
-        //    }
-        //
-        //    // Canvas.SetTop(Label, LabelOrigin.Y);
-        //    // Canvas.SetLeft(Label, LabelOrigin.X);
-        //
-        //    MinWidth = Label.DesiredSize.Width + Math.Abs((ArrowOffsetX + 5) * 2);
-        //    MinHeight = Label.DesiredSize.Height + Math.Abs((ArrowOffsetY + 5) * 2);
-        //
-        //}
-
-        //public void AppendToEvents(string EventName)
-        //{
-        //
-        //    Label += ", " + EventName;
-        //    
-        //    UpdateLabel();
-        //    
-        //}
-
+        
     }
 
 }
