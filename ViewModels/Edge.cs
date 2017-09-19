@@ -321,8 +321,11 @@ namespace Grapher.ViewModels
             {
                 if(double.IsNaN(value))
                 {
-                    var EdgeCenterX = Math.Min(SourceX, TargetX) + Math.Abs(SourceX - TargetX) / 2;
-                    _LabelLeft = EdgeCenterX - LabelWidth / 2;
+                    var Center  = Math.Min(SourceX, TargetX);
+                    Center     += Math.Abs(SourceX - TargetX) / 2;
+                    Center     -= LabelWidth / 2;
+                    var Offset  = LabelHeight / 2 * Math.Sin(Angle);
+                    _LabelLeft = Center + Offset;
                     OnPropertyChanged("LabelLeft");
                 }
                 else
@@ -343,8 +346,11 @@ namespace Grapher.ViewModels
             {
                 if(double.IsNaN(value))
                 {
-                    var EdgeCenterY = Math.Min(SourceY, TargetY) + Math.Abs(SourceY - TargetY) / 2;
-                    _LabelTop = EdgeCenterY - LabelHeight / 2;
+                    var Center  = Math.Min(SourceY, TargetY);
+                    Center     += Math.Abs(SourceY - TargetY) / 2;
+                    Center     -= LabelHeight / 2;
+                    var Offset  = LabelHeight / 2 * Math.Cos(Angle);
+                    _LabelTop   = Center - Offset;
                     OnPropertyChanged("LabelTop");
                 }
                 else
