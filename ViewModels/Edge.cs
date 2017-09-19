@@ -95,7 +95,7 @@ namespace Grapher.ViewModels
                 }
             }
         }
-        public double TargetActualX
+        public  double TargetActualX
         {
             get
             {
@@ -128,8 +128,8 @@ namespace Grapher.ViewModels
             }
         }
 
-        public double _Angle;
-        public double Angle
+        private double _Angle;
+        public  double Angle
         {
             get
             {
@@ -144,40 +144,35 @@ namespace Grapher.ViewModels
                 }
                 else if(double.IsNaN(value))
                 {
+
                     _Angle = Math.Atan2(
                         TargetActualY - SourceActualY,
                         TargetActualX - SourceActualX
-                    ) * 180 / Math.PI;
+                    );
                     if(0>_Angle)
                     {
-                        _Angle += 360;
+                        _Angle += 2 * Math.PI;
                     }
                     OnPropertyChanged("Angle");
+
+                    LabelLeft   = double.NaN;
+                    LabelTop    = double.NaN;
+                    ArrowAlphaX = double.NaN;
+                    ArrowAlphaY = double.NaN;
+                    ArrowBravoX = double.NaN;
+                    ArrowBravoY = double.NaN;
+
                 }
                 else
                 {
                     throw new ArgumentException();
                 }
 
-                LabelLeft = double.NaN;
-                LabelTop  = double.NaN;
-
-                var AngleInRadians = _Angle / 180 * Math.PI;
-                // isosceles triangle
-                // EndpointRadius = sqrt(ArrowLenght^2-(1/4)*(EndpointRadius*2)^2)
-                // EndpointRadius^2+(1/4)*(EndpointRadius*2)^2 = ArrowLenght^2
-                // ArrowLenght = sqrt(EndpointRadius^2+(1/4)*(EndpointRadius*2)^2)
-                var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
-                ArrowAlphaX = TargetX + ArrowLenght * Math.Cos(AngleInRadians - Math.PI / 4);
-                ArrowAlphaY = TargetY + ArrowLenght * Math.Sin(AngleInRadians - Math.PI / 4);
-                ArrowBravoX = TargetX + ArrowLenght * Math.Cos(AngleInRadians + Math.PI / 4);
-                ArrowBravoY = TargetY + ArrowLenght * Math.Sin(AngleInRadians + Math.PI / 4);
-
             }
         }
-        
-        public double _ArrowAlphaX;
-        public double ArrowAlphaX
+
+        private double _ArrowAlphaX;
+        public  double ArrowAlphaX
         {
             get
             {
@@ -185,12 +180,20 @@ namespace Grapher.ViewModels
             }
             private set
             {
-                _ArrowAlphaX = value;
-                OnPropertyChanged("ArrowAlphaX");
+                if(double.IsNaN(value))
+                {
+                    var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
+                    _ArrowAlphaX = TargetX + ArrowLenght * Math.Cos(Angle - Math.PI / 4);
+                    OnPropertyChanged("ArrowAlphaX");
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
             }
         }
-        public double _ArrowAlphaY;
-        public double ArrowAlphaY
+        private double _ArrowAlphaY;
+        public  double ArrowAlphaY
         {
             get
             {
@@ -198,13 +201,21 @@ namespace Grapher.ViewModels
             }
             private set
             {
-                _ArrowAlphaY = value;
-                OnPropertyChanged("ArrowAlphaY");
+                if (double.IsNaN(value))
+                {
+                    var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
+                    _ArrowAlphaY = TargetY + ArrowLenght * Math.Sin(Angle - Math.PI / 4);
+                    OnPropertyChanged("ArrowAlphaY");
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
             }
         }
-        
-        public double _ArrowBravoX;
-        public double ArrowBravoX
+
+        private double _ArrowBravoX;
+        public  double ArrowBravoX
         {
             get
             {
@@ -212,12 +223,20 @@ namespace Grapher.ViewModels
             }
             private set
             {
-                _ArrowBravoX = value;
-                OnPropertyChanged("ArrowBravoX");
+                if (double.IsNaN(value))
+                {
+                    var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
+                    _ArrowBravoX = TargetX + ArrowLenght * Math.Cos(Angle + Math.PI / 4);
+                    OnPropertyChanged("ArrowBravoX");
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
             }
         }
-        public double _ArrowBravoY;
-        public double ArrowBravoY
+        private double _ArrowBravoY;
+        public  double ArrowBravoY
         {
             get
             {
@@ -225,13 +244,21 @@ namespace Grapher.ViewModels
             }
             private set
             {
-                _ArrowBravoY = value;
-                OnPropertyChanged("ArrowBravoY");
+                if (double.IsNaN(value))
+                {
+                    var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
+                    _ArrowBravoY = TargetY + ArrowLenght * Math.Sin(Angle + Math.PI / 4);
+                    OnPropertyChanged("ArrowBravoY");
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
             }
         }
 
         private string _Label;
-        public string Label
+        public  string Label
         {
             get
             {
@@ -284,7 +311,7 @@ namespace Grapher.ViewModels
         }
 
         private double _LabelLeft;
-        public double LabelLeft
+        public  double LabelLeft
         {
             get
             {
@@ -294,7 +321,8 @@ namespace Grapher.ViewModels
             {
                 if(double.IsNaN(value))
                 {
-                    _LabelLeft = Math.Min(SourceX, TargetX) + Math.Abs(SourceX - TargetX) / 2 - LabelWidth / 2;
+                    var EdgeCenterX = Math.Min(SourceX, TargetX) + Math.Abs(SourceX - TargetX) / 2;
+                    _LabelLeft = EdgeCenterX - LabelWidth / 2;
                     OnPropertyChanged("LabelLeft");
                 }
                 else
@@ -305,7 +333,7 @@ namespace Grapher.ViewModels
         }
 
         private double _LabelTop;
-        public double LabelTop
+        public  double LabelTop
         {
             get
             {
@@ -316,7 +344,7 @@ namespace Grapher.ViewModels
                 if(double.IsNaN(value))
                 {
                     var EdgeCenterY = Math.Min(SourceY, TargetY) + Math.Abs(SourceY - TargetY) / 2;
-                    _LabelTop = EdgeCenterY - LabelHeight;
+                    _LabelTop = EdgeCenterY - LabelHeight / 2;
                     OnPropertyChanged("LabelTop");
                 }
                 else
@@ -326,8 +354,8 @@ namespace Grapher.ViewModels
             }
         }
 
-        public double _EndpointRadius = 10;
-        public double EndpointRadius
+        private double _EndpointRadius = 10;
+        public  double EndpointRadius
         {
             get
             {

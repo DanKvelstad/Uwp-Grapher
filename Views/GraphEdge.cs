@@ -216,7 +216,10 @@ namespace Grapher.Views
                     Converter   = new ConverterHalf()
                 }
             );
-            Model_PropertyChanged(Model, new System.ComponentModel.PropertyChangedEventArgs("Label"));
+            Model_PropertyChanged(
+                Model, 
+                new System.ComponentModel.PropertyChangedEventArgs("Label")
+            );
 
         }
 
@@ -252,7 +255,7 @@ namespace Grapher.Views
             public object Convert(object value, Type targetType, object parameter, string language)
             {
 
-                var Angle = (double)value;
+                var Angle = (double)value * 180 / Math.PI;
 
                 if (359.99 < Angle && 0.01 > Angle)
                 {

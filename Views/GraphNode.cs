@@ -112,12 +112,12 @@ namespace Grapher.Views
                 {
                     Label.Text = SenderNode.Label;
                     Label.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-                    // ToDo: this should be MinWidth and MinHeight!
                     NodeBorder.MinWidth  = NodeBorder.BorderThickness.Left + Label.DesiredSize.Width  + NodeBorder.BorderThickness.Right;
                     NodeBorder.MinHeight = NodeBorder.BorderThickness.Top  + Label.DesiredSize.Height + NodeBorder.BorderThickness.Bottom;
                 }
             }
         }
+
     }
 
     class ConvertDoubleToCornerRadius : IValueConverter
