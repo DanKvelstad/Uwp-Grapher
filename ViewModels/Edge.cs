@@ -16,17 +16,6 @@ namespace Grapher.ViewModels
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private async void OnPropertyChanged(string info)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                    CoreDispatcherPriority.Normal,
-                    () => handler(this, new PropertyChangedEventArgs(info))
-                );
-            }
-        }
 
         private Node   SourceNode;
         private Anchor SourceAnchor;
@@ -44,7 +33,7 @@ namespace Grapher.ViewModels
             private set
             {
                 _SourceX = value;
-                OnPropertyChanged("SourceX");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceX"));
                 Angle = double.NaN;
             }
         }
@@ -52,7 +41,14 @@ namespace Grapher.ViewModels
         {
             get
             {
-                return SourceAnchor.Source.X;
+                if(null==SourceAnchor)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return SourceAnchor.Source.X;
+                }
             }
         }
 
@@ -66,7 +62,7 @@ namespace Grapher.ViewModels
             private set
             {
                 _SourceY = value;
-                OnPropertyChanged("SourceY");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceY"));
                 Angle = double.NaN;
             }
         }
@@ -74,7 +70,14 @@ namespace Grapher.ViewModels
         {
             get
             {
-                return SourceAnchor.Source.Y;
+                if (null == SourceAnchor)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return SourceAnchor.Source.Y;
+                }
             }
         }
 
@@ -90,7 +93,7 @@ namespace Grapher.ViewModels
                 if(value!=_TargetX)
                 {
                     _TargetX = value;
-                    OnPropertyChanged("TargetX");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetX"));
                     Angle = double.NaN;
                 }
             }
@@ -99,7 +102,14 @@ namespace Grapher.ViewModels
         {
             get
             {
-                return TargetAnchor.Target.X;
+                if (null == TargetAnchor)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return TargetAnchor.Target.X;
+                }
             }
         }
 
@@ -115,7 +125,7 @@ namespace Grapher.ViewModels
                 if (value != _TargetY)
                 {
                     _TargetY = value;
-                    OnPropertyChanged("TargetY");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetY"));
                     Angle = double.NaN;
                 }
             }
@@ -124,7 +134,14 @@ namespace Grapher.ViewModels
         {
             get
             {
-                return TargetAnchor.Target.Y;
+                if (null == SourceAnchor)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return TargetAnchor.Target.Y;
+                }
             }
         }
 
@@ -153,7 +170,7 @@ namespace Grapher.ViewModels
                     {
                         _Angle += 2 * Math.PI;
                     }
-                    OnPropertyChanged("Angle");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Angle"));
 
                     LabelLeft   = double.NaN;
                     LabelTop    = double.NaN;
@@ -161,6 +178,8 @@ namespace Grapher.ViewModels
                     ArrowAlphaY = double.NaN;
                     ArrowBravoX = double.NaN;
                     ArrowBravoY = double.NaN;
+                    MinWidth    = double.NaN;
+                    MinHeight   = double.NaN;
 
                 }
                 else
@@ -168,6 +187,48 @@ namespace Grapher.ViewModels
                     throw new ArgumentException();
                 }
 
+            }
+        }
+
+        private double _MinWidth;
+        public  double MinWidth
+        {
+            private set
+            {
+                if (double.IsNaN(value))
+                {
+                    _MinWidth  = (LabelWidth + 4 * EndpointRadius) * Math.Cos(Angle);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinWidth"));
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+            get
+            {
+                return _MinWidth;
+            }
+        }
+
+        private double _MinHeight;
+        public  double MinHeight
+        {
+            private set
+            {
+                if (double.IsNaN(value))
+                {
+                    _MinHeight = (LabelHeight + 4 * EndpointRadius) * Math.Sin(Angle);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinHeight"));
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+            get
+            {
+                return _MinHeight;
             }
         }
 
@@ -184,7 +245,7 @@ namespace Grapher.ViewModels
                 {
                     var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
                     _ArrowAlphaX = TargetX + ArrowLenght * Math.Cos(Angle - Math.PI / 4);
-                    OnPropertyChanged("ArrowAlphaX");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ArrowAlphaX"));
                 }
                 else
                 {
@@ -205,7 +266,7 @@ namespace Grapher.ViewModels
                 {
                     var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
                     _ArrowAlphaY = TargetY + ArrowLenght * Math.Sin(Angle - Math.PI / 4);
-                    OnPropertyChanged("ArrowAlphaY");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ArrowAlphaY"));
                 }
                 else
                 {
@@ -227,7 +288,7 @@ namespace Grapher.ViewModels
                 {
                     var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
                     _ArrowBravoX = TargetX + ArrowLenght * Math.Cos(Angle + Math.PI / 4);
-                    OnPropertyChanged("ArrowBravoX");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ArrowBravoX"));
                 }
                 else
                 {
@@ -248,7 +309,7 @@ namespace Grapher.ViewModels
                 {
                     var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
                     _ArrowBravoY = TargetY + ArrowLenght * Math.Sin(Angle + Math.PI / 4);
-                    OnPropertyChanged("ArrowBravoY");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ArrowBravoY"));
                 }
                 else
                 {
@@ -269,7 +330,7 @@ namespace Grapher.ViewModels
                 if (_Label != value)
                 {
                     _Label = value;
-                    OnPropertyChanged("Label");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Label"));
                 }
             }
         }
@@ -286,8 +347,10 @@ namespace Grapher.ViewModels
                 if (_LabelWidth != value)
                 {
                     _LabelWidth = value;
-                    OnPropertyChanged("LabelWidth");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LabelWidth"));
                     LabelLeft = double.NaN;
+                    MinWidth  = double.NaN;
+                    MinHeight = double.NaN;
                 }
             }
         }
@@ -304,8 +367,10 @@ namespace Grapher.ViewModels
                 if (_LabelHeight != value)
                 {
                     _LabelHeight = value;
-                    OnPropertyChanged("LabelHeight");
-                    LabelTop = double.NaN;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LabelHeight"));
+                    LabelTop  = double.NaN;
+                    MinWidth  = double.NaN;
+                    MinHeight = double.NaN;
                 }
             }
         }
@@ -326,7 +391,7 @@ namespace Grapher.ViewModels
                     Center     -= LabelWidth / 2;
                     var Offset  = LabelHeight / 2 * Math.Sin(Angle);
                     _LabelLeft = Center + Offset;
-                    OnPropertyChanged("LabelLeft");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LabelLeft"));
                 }
                 else
                 {
@@ -351,7 +416,7 @@ namespace Grapher.ViewModels
                     Center     -= LabelHeight / 2;
                     var Offset  = LabelHeight / 2 * Math.Cos(Angle);
                     _LabelTop   = Center - Offset;
-                    OnPropertyChanged("LabelTop");
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LabelTop"));
                 }
                 else
                 {
@@ -370,70 +435,55 @@ namespace Grapher.ViewModels
             set
             {
                 _EndpointRadius = value;
-                OnPropertyChanged("EndpointRadius");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EndpointRadius"));
+                MinHeight = double.NaN;
+                MinWidth  = double.NaN;
             }
         }
 
         public Edge(Node Source, Node Target, String Label)
         {
 
-            SourceNode                       = Source;
-            SourceNode.PropertyChanged      += SourceNodeChanged;
-            SourceAnchor                     = Source.GetAnchorRelativeTo(Target);
-            if (null != SourceAnchor)
-            {
-                SourceAnchor.PropertyChanged += SourceAnchorChanged;
-                SourceAnchorChanged(SourceAnchor, null);
-            }
+            this.SourceNode = Source;
+            this.TargetNode = Target;
+            this.Label      = Label;
 
-            TargetNode                       = Target;
-            TargetNode.PropertyChanged      += TargetNodeChanged;
-            TargetAnchor                     = Target.GetAnchorRelativeTo(Source);
-            if(null != TargetAnchor)
-            {
-                TargetAnchor.PropertyChanged += TargetAnchorChanged;
-                TargetAnchorChanged(TargetAnchor, null);
-            }
-
-            this.Label = Label;
-
+            SourceNode.PropertyChanged += NodeChanged;            
+            TargetNode.PropertyChanged += NodeChanged;
+            
         }
         
         public void Dispose()
         {
-            SourceNode.PropertyChanged -= SourceNodeChanged;
-            TargetNode.PropertyChanged -= TargetNodeChanged;
+            SourceNode.PropertyChanged -= NodeChanged;
+            TargetNode.PropertyChanged -= NodeChanged;
             // ToDo think about the anchor callbacks!
         }
 
-        private void SourceNodeChanged(object sender, PropertyChangedEventArgs e)
+        private void NodeChanged(object sender, PropertyChangedEventArgs e)
         {
-
-            var Source = sender as Node;
-            if (null != Source && Source == SourceNode)
+            
+            if("Left"==e.PropertyName || "Top" == e.PropertyName)
             {
-                if("Left"==e.PropertyName || "Top" == e.PropertyName)
+
+                if(null != SourceAnchor)
                 {
-                    if(null != SourceAnchor)
-                    {
-                        SourceAnchor.PropertyChanged -= SourceAnchorChanged;
-                    }
-                    SourceAnchor = SourceNode.GetAnchorRelativeTo(TargetNode);
-                    if (null != SourceAnchor)
-                    {
-                        SourceAnchor.PropertyChanged += SourceAnchorChanged;
-                        SourceAnchorChanged(SourceAnchor, null);
-                    }
-                    // SourceNode will call Anchor changed, so dont do that here
-                    // SourceAnchorChanged(SourceAnchor, null);
+                    SourceAnchor.PropertyChanged -= SourceAnchorChanged;
                 }
-                // else the node has not moved and we don't need to reevaluate the anchor
-            }
-            else
-            {
-                throw new ArgumentException();
-            }
+                SourceAnchor = SourceNode.GetAnchorRelativeTo(TargetNode);
+                SourceAnchor.PropertyChanged += SourceAnchorChanged;
+                SourceAnchorChanged(SourceAnchor, null);
 
+                if (null != TargetAnchor)
+                {
+                    TargetAnchor.PropertyChanged -= TargetAnchorChanged;
+                }
+                TargetAnchor = TargetNode.GetAnchorRelativeTo(SourceNode);
+                TargetAnchor.PropertyChanged += TargetAnchorChanged;
+                TargetAnchorChanged(TargetAnchor, null);
+
+            }
+            
         }
 
         private void SourceAnchorChanged(object sender, PropertyChangedEventArgs e)
@@ -443,8 +493,8 @@ namespace Grapher.ViewModels
             if(null != Anchor && Anchor == SourceAnchor)
             {
 
-                OnPropertyChanged("SourceActualX");
-                OnPropertyChanged("SourceActualY");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceActualX"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceActualY"));
 
                 if(null!=TargetAnchor)
                 {
@@ -463,37 +513,7 @@ namespace Grapher.ViewModels
             }
 
         }
-
-        private void TargetNodeChanged(object sender, PropertyChangedEventArgs e)
-        {
-
-            var Target = sender as Node;
-            if (null != Target && Target == TargetNode)
-            {
-                if ("Left" == e.PropertyName || "Top" == e.PropertyName)
-                {
-                    if (null != TargetAnchor)
-                    {
-                        TargetAnchor.PropertyChanged -= TargetAnchorChanged;
-                    }
-                    TargetAnchor = TargetNode.GetAnchorRelativeTo(SourceNode);
-                    if (null != TargetAnchor)
-                    {
-                        TargetAnchor.PropertyChanged += TargetAnchorChanged;
-                        TargetAnchorChanged(TargetAnchor, null);
-                    }
-                    // TargetNode will call Anchor changed, so dont do that here
-                    // TargetAnchorChanged(TargetAnchor, null);
-                }
-                // else the node has not moved and we don't need to reevaluate the anchor
-            }
-            else
-            {
-                throw new ArgumentException();
-            }
-
-        }
-
+        
         private void TargetAnchorChanged(object sender, PropertyChangedEventArgs e)
         {
 
@@ -501,8 +521,8 @@ namespace Grapher.ViewModels
             if (null != Anchor && Anchor == TargetAnchor)
             {
 
-                OnPropertyChanged("TargetActualX");
-                OnPropertyChanged("TargetActualY");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetActualX"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetActualY"));
 
                 if(null!=SourceAnchor)
                 {

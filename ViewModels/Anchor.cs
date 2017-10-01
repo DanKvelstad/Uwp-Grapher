@@ -11,17 +11,6 @@ namespace Grapher.ViewModels
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private async void OnPropertyChanged(string info)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                    CoreDispatcherPriority.Normal,
-                    () => handler(this, new PropertyChangedEventArgs(info))
-                );
-            }
-        }
 
         private Point _HalfDuplex;
         private Point _SourceFullDuplex;
@@ -34,21 +23,18 @@ namespace Grapher.ViewModels
             _SourceFullDuplex   = SourceFullDuplex;
             _TargetFullDuplex   = TargetFullDuplex;
 
-            if (SourceActivated && TargetActivated)
+            if(SourceActivated)
             {
-                Source = _SourceFullDuplex;
-                Target = _TargetFullDuplex;
+                SourceActivated = false;
+                var Ignore = Source;
             }
-            else if(SourceActivated)
-            {
-                Source = _HalfDuplex;
-            }
-            else if (TargetActivated)
-            {
-                Target = _HalfDuplex;
-            }
-            // else neither
 
+            if (TargetActivated)
+            {
+                TargetActivated = false;
+                var Ignore = Target;
+            }
+            
         }
         
         private bool  SourceActivated = false;
@@ -57,26 +43,25 @@ namespace Grapher.ViewModels
         {
             private set
             {
-                if(_Source != value)
-                {
-                    _Source = value;
-                    SourceActivated = true;
-                    OnPropertyChanged("Source");
-                }
+                _Source         = value;
+                SourceActivated = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Source"));
             }
             get
             {
-                if (TargetActivated)
+                if(!SourceActivated)
                 {
-                    Source = _SourceFullDuplex;
-                    Target = _TargetFullDuplex;
-                    return _Source;
+                    if (TargetActivated)
+                    {
+                        Source = _SourceFullDuplex;
+                        Target = _TargetFullDuplex;
+                    }
+                    else
+                    {
+                        Source = _HalfDuplex;
+                    }
                 }
-                else
-                {
-                    Source = _HalfDuplex;
-                    return _Source;
-                }
+                return _Source;
             }
         }
 
@@ -86,26 +71,25 @@ namespace Grapher.ViewModels
         {
             private set
             {
-                if(_Target != value)
-                {
-                    _Target = value;
-                    TargetActivated = true;
-                    OnPropertyChanged("Target");
-                }
+                _Target         = value;
+                TargetActivated = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Target"));
             }
             get
             {
-                if(SourceActivated)
+                if(!TargetActivated)
                 {
-                    Source = _SourceFullDuplex;
-                    Target = _TargetFullDuplex;
-                    return _Target;
+                    if (SourceActivated)
+                    {
+                        Target = _TargetFullDuplex;
+                        Source = _SourceFullDuplex;
+                    }
+                    else
+                    {
+                        Target = _HalfDuplex;
+                    }
                 }
-                else
-                {
-                    Target = _HalfDuplex;
-                    return _Target;
-                }
+                return _Target;
             }
         }
 

@@ -52,7 +52,7 @@
             <TextBlock
                 RelativePanel.Above="LayoutProgress"
                 RelativePanel.AlignHorizontalCenterWith="LayoutProgress">
-                Progress of layouting
+                Gridding...
             </TextBlock>
 
             <ProgressBar 
@@ -60,8 +60,8 @@
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignRightWithPanel="True"
                 x:Name="LayoutProgress" 
-                Maximum="{x:Bind processor.Gridder.Maximum,Mode=OneWay}"
-                Value="{x:Bind processor.Gridder.Progress,Mode=OneWay}"
+                Maximum="{x:Bind processor.Gridder.ProgressMaximum,Mode=OneWay}"
+                Value="{x:Bind processor.Gridder.ProgressCurrent,Mode=OneWay}"
                 Margin="0,12"
                 Height="100"/>
 

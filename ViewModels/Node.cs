@@ -12,18 +12,7 @@ namespace Grapher.Models
     {
 
         public  event PropertyChangedEventHandler PropertyChanged;
-        private async void OnPropertyChanged(string info)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                    CoreDispatcherPriority.Normal,
-                    () => handler(this, new PropertyChangedEventArgs(info))
-                );
-            }
-        }
-
+        
         private string _Label;
         public  string Label
         {
@@ -34,7 +23,7 @@ namespace Grapher.Models
             set
             {
                 _Label = value;
-                OnPropertyChanged("Label");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Label"));
             }
         }
 
@@ -48,7 +37,7 @@ namespace Grapher.Models
             set
             {
                 _CornerRadius = value;
-                OnPropertyChanged("CornerRadius");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CornerRadius"));
                 if (null != _AnchorTopLeft)
                 {
                     AnchorTopLeft = new Anchor();
@@ -78,7 +67,7 @@ namespace Grapher.Models
             set
             {
                 _MinWidth = value;
-                OnPropertyChanged("MinWidth");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinWidth"));
                 if (null != _AnchorTop)
                 {
                     AnchorTop = new Anchor();
@@ -112,7 +101,7 @@ namespace Grapher.Models
             set
             {
                 _Width = value;
-                OnPropertyChanged("Width");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Width"));
                 if(null!=_AnchorTop)
                 {
                     AnchorTop = new Anchor();
@@ -146,7 +135,7 @@ namespace Grapher.Models
             set
             {
                 _MinHeight = value;
-                OnPropertyChanged("MinHeight");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinHeight"));
                 if (null != _AnchorLeft)
                 {
                     AnchorLeft = new Anchor();
@@ -180,7 +169,7 @@ namespace Grapher.Models
             set
             {
                 _Height = value;
-                OnPropertyChanged("Height");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Height"));
                 if (null != _AnchorLeft)
                 {
                     AnchorLeft = new Anchor();
@@ -213,9 +202,12 @@ namespace Grapher.Models
             }
             set
             {
-                InvalidateAnchors();
-                _Left = value;
-                OnPropertyChanged("Left");
+                if(value!=_Left)
+                {
+                    InvalidateAnchors();
+                    _Left = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Left"));
+                }
             }
         }
 
@@ -228,9 +220,12 @@ namespace Grapher.Models
             }
             set
             {
-                InvalidateAnchors();
-                _Top = value;
-                OnPropertyChanged("Top");
+                if(value!=_Top)
+                {
+                    InvalidateAnchors();
+                    _Top = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Top"));
+                }
             }
         }
         
@@ -278,7 +273,7 @@ namespace Grapher.Models
                 }
                 else
                 {
-                    return null;
+                    throw new Exception();
                 }
             }
         }
@@ -309,7 +304,7 @@ namespace Grapher.Models
                         new Point(Left, Top + Height / 2 - 10)
                     );
                 }
-                OnPropertyChanged("AnchorLeft");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AnchorLeft"));
             }
             get
             {
@@ -336,7 +331,7 @@ namespace Grapher.Models
                         new Point(Left + CornerRadius, Top)
                     );
                 }
-                OnPropertyChanged("AnchorTopLeft");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AnchorTopLeft"));
             }
             get
             {
@@ -362,7 +357,7 @@ namespace Grapher.Models
                         new Point(Left + Width / 2 + 10, Top)
                     );
                 }
-                OnPropertyChanged("AnchorTop");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AnchorTop"));
             }
             get
             {
@@ -389,7 +384,7 @@ namespace Grapher.Models
                         new Point(Left + Width, Top + CornerRadius)
                     );
                 }
-                OnPropertyChanged("AnchorTopRight");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AnchorTopRight"));
             }
             get
             {
@@ -415,7 +410,7 @@ namespace Grapher.Models
                         new Point(Left + Width, Top + Height / 2 + 10)
                     );
                 }
-                OnPropertyChanged("AnchorRight");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AnchorRight"));
             }
             get
             {
@@ -442,7 +437,7 @@ namespace Grapher.Models
                         new Point(Left + Width - CornerRadius, Top + Height)
                     );
                 }
-                OnPropertyChanged("AnchorBottomRight");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AnchorBottomRight"));
             }
             get
             {
@@ -468,7 +463,7 @@ namespace Grapher.Models
                         new Point(Left + Width / 2 - 10, Top + Height)
                     );
                 }
-                OnPropertyChanged("AnchorBottom");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AnchorBottom"));
             }
             get
             {
@@ -495,7 +490,7 @@ namespace Grapher.Models
                         new Point(Left, Top + Height - CornerRadius)
                     );
                 }
-                OnPropertyChanged("AnchorBottomLeft");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AnchorBottomLeft"));
             }
             get
             {

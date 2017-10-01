@@ -25,7 +25,7 @@ namespace Grapher.Xaml
 
         public void Initialize(Graph graph)
         {
-            processor.Process(graph);
+            processor.ProcessAsync(graph);
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

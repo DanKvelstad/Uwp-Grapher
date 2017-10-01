@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation;
 using Windows.UI.Core;
 
 namespace Grapher.ViewModels
@@ -13,18 +14,7 @@ namespace Grapher.ViewModels
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private async void OnPropertyChanged(string info)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                    CoreDispatcherPriority.Normal,
-                    () => handler(this, new PropertyChangedEventArgs(info))
-                );
-            }
-        }
-
+        
         private GraphGridder _Gridder = new GraphGridder();
         public  GraphGridder Gridder
         {
@@ -68,22 +58,18 @@ namespace Grapher.ViewModels
             set
             {
                 _ActiveState = value;
-                OnPropertyChanged("ActiveState");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ActiveState"));
             }
         }
 
-        public void Process(Graph graph)
+        public async void ProcessAsync(Graph graph)
         {
-            Task.Run(() =>
-                {
-                    ActiveState = States.Gridding;
-                    var candidates = Gridder.GridIt(graph);
-                    ActiveState = States.Layouting;
-                    Layouter.LayoutIt(graph, candidates);
-                    ActiveState = States.Displaying;
-                    // ToDo: Displayer.DisplayIt
-                }
-            );
+            ActiveState = States.Gridding;
+            var candidates = await Gridder.GridItAsync(graph);
+            ActiveState = States.Layouting;
+            await Layouter.LayoutIt(graph, candidates);
+            ActiveState = States.Displaying;
+            // ToDo: Displayer.DisplayIt
         }
 
     }
