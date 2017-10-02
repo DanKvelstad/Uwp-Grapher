@@ -1,9 +1,7 @@
 ﻿using Grapher.ViewModels;
 using System;
 using System.ComponentModel;
-using Windows.ApplicationModel.Core;
 using Windows.Foundation;
-using Windows.UI.Core;
 
 namespace Grapher.Models
 {
@@ -14,7 +12,7 @@ namespace Grapher.Models
         public  event PropertyChangedEventHandler PropertyChanged;
         
         private string _Label;
-        public  string Label
+        public  string  Label
         {
             get
             {
@@ -28,7 +26,7 @@ namespace Grapher.Models
         }
 
         private double _CornerRadius = 0;
-        public  double CornerRadius
+        public  double  CornerRadius
         {
             get
             {
@@ -58,7 +56,7 @@ namespace Grapher.Models
         }
 
         private double _MinWidth;
-        public double MinWidth
+        public  double  MinWidth
         {
             get
             {
@@ -92,7 +90,7 @@ namespace Grapher.Models
         }
 
         private double _Width;
-        public  double Width
+        public  double  Width
         {
             get
             {
@@ -126,7 +124,7 @@ namespace Grapher.Models
         }
 
         private double _MinHeight;
-        public double MinHeight
+        public  double  MinHeight
         {
             get
             {
@@ -160,7 +158,7 @@ namespace Grapher.Models
         }
 
         private double _Height;
-        public double Height
+        public  double  Height
         {
             get
             {
@@ -194,7 +192,7 @@ namespace Grapher.Models
         }
 
         private double _Left;
-        public  double Left
+        public  double  Left
         {
             get
             {
@@ -212,7 +210,7 @@ namespace Grapher.Models
         }
 
         private double _Top;
-        public  double Top
+        public  double  Top
         {
             get
             {
@@ -291,7 +289,7 @@ namespace Grapher.Models
         }
         
         public  Anchor _AnchorLeft;
-        public  Anchor AnchorLeft
+        public  Anchor  AnchorLeft
         {
             private set
             {
@@ -317,7 +315,7 @@ namespace Grapher.Models
         }
         
         public  Anchor _AnchorTopLeft;
-        public  Anchor AnchorTopLeft
+        public  Anchor  AnchorTopLeft
         {
             private set
             {
@@ -344,7 +342,7 @@ namespace Grapher.Models
         }
 
         public  Anchor _AnchorTop;
-        public  Anchor AnchorTop
+        public  Anchor  AnchorTop
         {
             private set
             {
@@ -370,7 +368,7 @@ namespace Grapher.Models
         }
 
         public  Anchor _AnchorTopRight;
-        public  Anchor AnchorTopRight
+        public  Anchor  AnchorTopRight
         {
             private set
             {
@@ -397,7 +395,7 @@ namespace Grapher.Models
         }
 
         public  Anchor _AnchorRight;
-        public  Anchor AnchorRight
+        public  Anchor  AnchorRight
         {
             private set
             {
@@ -423,7 +421,7 @@ namespace Grapher.Models
         }
 
         public  Anchor _AnchorBottomRight;
-        public  Anchor AnchorBottomRight
+        public  Anchor  AnchorBottomRight
         {
             private set
             {
@@ -450,7 +448,7 @@ namespace Grapher.Models
         }
 
         public  Anchor _AnchorBottom;
-        public  Anchor AnchorBottom
+        public  Anchor  AnchorBottom
         {
             private set
             {
@@ -476,7 +474,7 @@ namespace Grapher.Models
         }
 
         public  Anchor _AnchorBottomLeft;
-        public  Anchor AnchorBottomLeft
+        public  Anchor  AnchorBottomLeft
         {
             private set
             {

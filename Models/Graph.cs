@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Windows.Foundation;
 
 namespace Grapher
 {
@@ -8,8 +7,8 @@ namespace Grapher
     public class Graph
     {
 
-        public List<String>                     nodes;
-        public List<Tuple<String, String, String>>    edges;
+        public List<String>                         nodes;
+        public List<Tuple<String, String, String>>  edges;
 
         public Graph()
         {
@@ -24,7 +23,6 @@ namespace Grapher
 
         public void EmplaceEdge(String from, String to, String label)
         {
-
             edges.Add(
                 new Tuple<String, String, String>(
                     from, 
@@ -32,7 +30,6 @@ namespace Grapher
                     label
                 )
             );
-
         }
         
     }
