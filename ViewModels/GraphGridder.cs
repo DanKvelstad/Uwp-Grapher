@@ -1,4 +1,5 @@
 ﻿using Grapher.Algorithms;
+using Grapher.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -85,46 +86,34 @@ namespace Grapher.ViewModels
         public async Task<List<Point[]>> GridItAsync(Graph graph)
         {
 
-            var candidates = new List<Point[]>();
+            var grid                = new Grid(graph);
+            var candidates          = new List<Point[]>();
 
-            int grid_dimensions = (int)Math.Ceiling(Math.Sqrt(graph.nodes.Count));
-            int[] grid = new int[grid_dimensions * grid_dimensions];
-            for (int i = 0; i < grid.Length; i++)
-            {
-                grid[i] = i;
-            }
-
-            var edges_array = graph.edges.ToArray();
-
-            var PermutationCount = Sequencer.PermutationsCount(grid.Count());
-                ProgressCurrent  = 0;
-                ProgressMaximum  = 100;
-            var ProgressStep     = PermutationCount / 100;
-            if(0 >= ProgressStep)
-            {
-                ProgressStep    = 1;
-                ProgressMaximum = 1;
-            }
+            var PermutationCount    = grid.PermutationsCount();
+                ProgressCurrent     = 0;
+                ProgressMaximum     = 100;
+            var ProgressStep        = Math.Ceiling(PermutationCount / 100.0);
             
             var intersection_count = int.MaxValue;
             for (ProgressCurrent = 0; ProgressCurrent < ProgressMaximum; ProgressCurrent++)
             {
-
                 await Task.Run(
                     new Action(
                         () =>
                         {
                             for (int i = 0; i < ProgressStep; i++)
                             {
-                                ProcessPermutation(
-                                    graph, 
-                                    grid, 
-                                    grid_dimensions, 
-                                    edges_array, 
-                                    candidates,
-                                    ref intersection_count
-                                );
-                                if (!Sequencer.NextPermutation(grid))
+                                if (grid.intersection_count == intersection_count)
+                                {
+                                    candidates.Add((Point[])grid.candidate.Clone());
+                                }
+                                else if (grid.intersection_count < intersection_count)
+                                {
+                                    candidates.Clear();
+                                    candidates.Add((Point[])grid.candidate.Clone());
+                                    intersection_count = grid.intersection_count;
+                                }
+                                if (!grid.Next())
                                 {
                                     return;
                                 }
@@ -132,7 +121,6 @@ namespace Grapher.ViewModels
                         }
                     )
                 );
-                
             }
             
             if(0>=candidates.Count)
@@ -142,48 +130,6 @@ namespace Grapher.ViewModels
 
             return candidates;
 
-        }
-
-        private void ProcessPermutation(Graph graph, int[] grid, int grid_dimensions, Tuple<int, int, string>[] edges_array, List<Point[]> candidates, ref int intersection_count)
-        {
-
-            var candidate = new Point[graph.nodes.Count];
-            for (int i = 0; i < candidate.Length; i++)
-            {
-                candidate[i].X = grid[i] % grid_dimensions;
-                candidate[i].Y = grid[i] / grid_dimensions;
-            }
-
-            int candidate_intersection_count = 0;
-            for (int i = 0; i < edges_array.Length; i++)
-            {
-                for (int j = i + 1; j < edges_array.Length; j++)
-                {
-                    if (
-                         LinearAlgebra.Intersection(
-                             candidate[edges_array[i].Item1],
-                             candidate[edges_array[i].Item2],
-                             candidate[edges_array[j].Item1],
-                             candidate[edges_array[j].Item2]
-                         )
-                     )
-                    {
-                        candidate_intersection_count++;
-                    }
-                }
-            }
-
-            if (candidate_intersection_count == intersection_count)
-            {
-                candidates.Add(candidate);
-            }
-            else if (candidate_intersection_count < intersection_count)
-            {
-                candidates.Clear();
-                candidates.Add(candidate);
-                intersection_count = candidate_intersection_count;
-            }
-            
         }
 
     }

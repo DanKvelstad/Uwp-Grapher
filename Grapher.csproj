@@ -93,10 +93,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Algorithms\LinearAlgebra.cs" />
-    <Compile Include="Algorithms\Sequencer.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Grid.cs" />
     <Compile Include="ViewModels\Anchor.cs" />
     <Compile Include="ViewModels\Edge.cs" />
     <Compile Include="ViewModels\Node.cs" />
