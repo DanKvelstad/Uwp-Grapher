@@ -78,8 +78,20 @@ namespace Grapher.ViewModels
                     int a_cost = 0;
                     foreach (var edge in graph.edges)
                     {
-                        var p1 = a[edge.Item1];
-                        var p2 = a[edge.Item2];
+                        var from_index = graph.nodes.FindIndex(
+                            (x) =>
+                            {
+                                return x == edge.Item1;
+                            }
+                        );
+                        var to_index = graph.nodes.FindIndex(
+                            (x) =>
+                            {
+                                return x == edge.Item2;
+                            }
+                        );
+                        var p1 = a[from_index];
+                        var p2 = a[to_index];
                         var dx = p1.X - p2.X;
                         var dy = p1.Y - p2.Y;
                         a_cost += (int)Math.Round(Math.Sqrt(dx * dx + dy * dy));
@@ -88,8 +100,20 @@ namespace Grapher.ViewModels
                     int b_cost = 0;
                     foreach (var edge in graph.edges)
                     {
-                        var p1 = b[edge.Item1];
-                        var p2 = b[edge.Item2];
+                        var from_index = graph.nodes.FindIndex(
+                            (x) =>
+                            {
+                                return x == edge.Item1;
+                            }
+                        );
+                        var to_index = graph.nodes.FindIndex(
+                            (x) =>
+                            {
+                                return x == edge.Item2;
+                            }
+                        );
+                        var p1 = b[from_index];
+                        var p2 = b[to_index];
                         var dx = p1.X - p2.X;
                         var dy = p1.Y - p2.Y;
                         b_cost += (int)Math.Round(Math.Sqrt(dx * dx + dy * dy));
@@ -157,14 +181,25 @@ namespace Grapher.ViewModels
             EdgeViews       = new GraphEdge[graph.edges.Count];
             for (int i = 0; i < graph.edges.Count; i++)
             {
-
+                var from_index = graph.nodes.FindIndex(
+                    (x) =>
+                    {
+                        return x == graph.edges[i].Item1;
+                    }
+                );
+                var to_index = graph.nodes.FindIndex(
+                    (x) =>
+                    {
+                        return x == graph.edges[i].Item2;
+                    }
+                );
                 var SourceNode = Array.Find(
                     NodeViewModels,
-                    n => 0 == n.Label.CompareTo(graph.nodes[graph.edges[i].Item1])
+                    n => 0 == n.Label.CompareTo(graph.nodes[from_index])
                 );
                 var TargetNode = Array.Find(
                     NodeViewModels,
-                    n => 0 == n.Label.CompareTo(graph.nodes[graph.edges[i].Item2])
+                    n => 0 == n.Label.CompareTo(graph.nodes[to_index])
                 );
 
                 EdgeViewModels[i] = new Edge(SourceNode, TargetNode, graph.edges[i].Item3);

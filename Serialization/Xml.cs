@@ -42,8 +42,8 @@ namespace Grapher.Serialization
                     new XElement(
                         "edge", 
                         new XAttribute("label",  edge.Item3),
-                        new XAttribute("source", ToSerialize.nodes[edge.Item1]),
-                        new XAttribute("target", ToSerialize.nodes[edge.Item2])
+                        new XAttribute("source", edge.Item1),
+                        new XAttribute("target", edge.Item2)
                     )
                 );
             }

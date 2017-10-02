@@ -31,10 +31,26 @@ namespace Grapher.Models
             edges_array = new Tuple<int, int>[graph.edges.Count];
             for(int i = 0; i < graph.edges.Count; i++)
             {
-                edges_array[i] = new Tuple<int, int>(
-                    graph.edges[i].Item1,
-                    graph.edges[i].Item2
+
+                var from_index = graph.nodes.FindIndex(
+                    (x) =>
+                    {
+                        return x == graph.edges[i].Item1;
+                    }
                 );
+
+                var to_index = graph.nodes.FindIndex(
+                    (x) =>
+                    {
+                        return x == graph.edges[i].Item2;
+                    }
+                );
+
+                edges_array[i] = new Tuple<int, int>(
+                    from_index,
+                    to_index
+                );
+
             }
 
             candidate = new Point[graph.nodes.Count];
