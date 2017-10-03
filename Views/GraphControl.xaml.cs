@@ -23,7 +23,7 @@ namespace Grapher.Xaml
             this.InitializeComponent();
         }
 
-        public void Initialize(Graph graph)
+        public void Initialize(GraphModel graph)
         {
             processor.ProcessAsync(graph);
         }

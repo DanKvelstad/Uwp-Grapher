@@ -15,6 +15,22 @@ namespace Grapher.ViewModels
     public class Edge : INotifyPropertyChanged, IDisposable
     {
 
+        EdgeModel Model;
+
+        public Edge(EdgeModel Model, Node Source, Node Target)
+        {
+
+            this.Model = Model;
+
+            this.SourceNode = Source;
+            this.TargetNode = Target;
+            this.Label      = Model.Label;
+
+            SourceNode.PropertyChanged += NodeChanged;
+            TargetNode.PropertyChanged += NodeChanged;
+
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Node   SourceNode;
@@ -23,16 +39,15 @@ namespace Grapher.ViewModels
         private Node   TargetNode;
         private Anchor TargetAnchor;
 
-        private double _SourceX;
         public  double SourceX
         {
             get
             {
-                return _SourceX;
+                return Model.SourceX;
             }
             private set
             {
-                _SourceX = value;
+                Model.SourceX = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceX"));
                 Angle = double.NaN;
             }
@@ -52,16 +67,15 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _SourceY;
         public  double SourceY
         {
             get
             {
-                return _SourceY;
+                return Model.SourceY;
             }
             private set
             {
-                _SourceY = value;
+                Model.SourceY = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceY"));
                 Angle = double.NaN;
             }
@@ -81,18 +95,17 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _TargetX;
         public  double TargetX
         {
             get
             {
-                return _TargetX;
+                return Model.TargetX;
             }
             private set
             {
-                if(value!=_TargetX)
+                if(value!=Model.TargetX)
                 {
-                    _TargetX = value;
+                    Model.TargetX = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetX"));
                     Angle = double.NaN;
                 }
@@ -113,18 +126,17 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _TargetY;
         public  double TargetY
         {
             get
             {
-                return _TargetY;
+                return Model.TargetY;
             }
             private set
             {
-                if (value != _TargetY)
+                if (value != Model.TargetY)
                 {
-                    _TargetY = value;
+                    Model.TargetY = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetY"));
                     Angle = double.NaN;
                 }
@@ -145,12 +157,11 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _Angle;
         public  double Angle
         {
             get
             {
-                return _Angle;
+                return Model.Angle;
             }
             private set
             {
@@ -162,13 +173,13 @@ namespace Grapher.ViewModels
                 else if(double.IsNaN(value))
                 {
 
-                    _Angle = Math.Atan2(
+                    Model.Angle = Math.Atan2(
                         TargetActualY - SourceActualY,
                         TargetActualX - SourceActualX
                     );
-                    if(0>_Angle)
+                    if(0>Model.Angle)
                     {
-                        _Angle += 2 * Math.PI;
+                        Model.Angle += 2 * Math.PI;
                     }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Angle"));
 
@@ -190,14 +201,13 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _MinWidth;
         public  double MinWidth
         {
             private set
             {
                 if (double.IsNaN(value))
                 {
-                    _MinWidth  = (LabelWidth + 4 * EndpointRadius) * Math.Cos(Angle);
+                    Model.MinWidth  = (LabelWidth + 4 * EndpointRadius) * Math.Cos(Angle);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinWidth"));
                 }
                 else
@@ -207,18 +217,17 @@ namespace Grapher.ViewModels
             }
             get
             {
-                return _MinWidth;
+                return Model.MinWidth;
             }
         }
 
-        private double _MinHeight;
         public  double MinHeight
         {
             private set
             {
                 if (double.IsNaN(value))
                 {
-                    _MinHeight = (LabelHeight + 4 * EndpointRadius) * Math.Sin(Angle);
+                    Model.MinHeight = (LabelHeight + 4 * EndpointRadius) * Math.Sin(Angle);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinHeight"));
                 }
                 else
@@ -228,23 +237,22 @@ namespace Grapher.ViewModels
             }
             get
             {
-                return _MinHeight;
+                return Model.MinHeight;
             }
         }
 
-        private double _ArrowAlphaX;
         public  double ArrowAlphaX
         {
             get
             {
-                return _ArrowAlphaX;
+                return Model.ArrowAlphaX;
             }
             private set
             {
                 if(double.IsNaN(value))
                 {
                     var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
-                    _ArrowAlphaX = TargetX + ArrowLenght * Math.Cos(Angle - Math.PI / 4);
+                    Model.ArrowAlphaX = TargetX + ArrowLenght * Math.Cos(Angle - Math.PI / 4);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ArrowAlphaX"));
                 }
                 else
@@ -253,19 +261,18 @@ namespace Grapher.ViewModels
                 }
             }
         }
-        private double _ArrowAlphaY;
         public  double ArrowAlphaY
         {
             get
             {
-                return _ArrowAlphaY;
+                return Model.ArrowAlphaY;
             }
             private set
             {
                 if (double.IsNaN(value))
                 {
                     var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
-                    _ArrowAlphaY = TargetY + ArrowLenght * Math.Sin(Angle - Math.PI / 4);
+                    Model.ArrowAlphaY = TargetY + ArrowLenght * Math.Sin(Angle - Math.PI / 4);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ArrowAlphaY"));
                 }
                 else
@@ -275,19 +282,18 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _ArrowBravoX;
         public  double ArrowBravoX
         {
             get
             {
-                return _ArrowBravoX;
+                return Model.ArrowBravoX;
             }
             private set
             {
                 if (double.IsNaN(value))
                 {
                     var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
-                    _ArrowBravoX = TargetX + ArrowLenght * Math.Cos(Angle + Math.PI / 4);
+                    Model.ArrowBravoX = TargetX + ArrowLenght * Math.Cos(Angle + Math.PI / 4);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ArrowBravoX"));
                 }
                 else
@@ -296,19 +302,18 @@ namespace Grapher.ViewModels
                 }
             }
         }
-        private double _ArrowBravoY;
         public  double ArrowBravoY
         {
             get
             {
-                return _ArrowBravoY;
+                return Model.ArrowBravoY;
             }
             private set
             {
                 if (double.IsNaN(value))
                 {
                     var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
-                    _ArrowBravoY = TargetY + ArrowLenght * Math.Sin(Angle + Math.PI / 4);
+                    Model.ArrowBravoY = TargetY + ArrowLenght * Math.Sin(Angle + Math.PI / 4);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ArrowBravoY"));
                 }
                 else
@@ -318,35 +323,33 @@ namespace Grapher.ViewModels
             }
         }
 
-        private string _Label;
         public  string Label
         {
             get
             {
-                return _Label;
+                return Model.Label;
             }
             set
             {
-                if (_Label != value)
+                if (Model.Label != value)
                 {
-                    _Label = value;
+                    Model.Label = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Label"));
                 }
             }
         }
 
-        private double _LabelWidth;
         public  double LabelWidth
         {
             get
             {
-                return _LabelWidth;
+                return Model.LabelWidth;
             }
             set
             {
-                if (_LabelWidth != value)
+                if (Model.LabelWidth != value)
                 {
-                    _LabelWidth = value;
+                    Model.LabelWidth = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LabelWidth"));
                     LabelLeft = double.NaN;
                     MinWidth  = double.NaN;
@@ -355,18 +358,17 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _LabelHeight;
         public  double LabelHeight
         {
             get
             {
-                return _LabelHeight;
+                return Model.LabelHeight;
             }
             set
             {
-                if (_LabelHeight != value)
+                if (Model.LabelHeight != value)
                 {
-                    _LabelHeight = value;
+                    Model.LabelHeight = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LabelHeight"));
                     LabelTop  = double.NaN;
                     MinWidth  = double.NaN;
@@ -375,12 +377,11 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _LabelLeft;
         public  double LabelLeft
         {
             get
             {
-                return _LabelLeft;
+                return Model.LabelLeft;
             }
             private set
             {
@@ -390,7 +391,7 @@ namespace Grapher.ViewModels
                     Center     += Math.Abs(SourceX - TargetX) / 2;
                     Center     -= LabelWidth / 2;
                     var Offset  = LabelHeight / 2 * Math.Sin(Angle);
-                    _LabelLeft = Center + Offset;
+                    Model.LabelLeft = Center + Offset;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LabelLeft"));
                 }
                 else
@@ -400,12 +401,11 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _LabelTop;
         public  double LabelTop
         {
             get
             {
-                return _LabelTop;
+                return Model.LabelTop;
             }
             private set
             {
@@ -415,7 +415,7 @@ namespace Grapher.ViewModels
                     Center     += Math.Abs(SourceY - TargetY) / 2;
                     Center     -= LabelHeight / 2;
                     var Offset  = LabelHeight / 2 * Math.Cos(Angle);
-                    _LabelTop   = Center - Offset;
+                    Model.LabelTop   = Center - Offset;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LabelTop"));
                 }
                 else
@@ -425,34 +425,21 @@ namespace Grapher.ViewModels
             }
         }
 
-        private double _EndpointRadius = 10;
         public  double EndpointRadius
         {
             get
             {
-                return _EndpointRadius;
+                return Model.EndpointRadius;
             }
             set
             {
-                _EndpointRadius = value;
+                Model.EndpointRadius = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EndpointRadius"));
                 MinHeight = double.NaN;
                 MinWidth  = double.NaN;
             }
         }
 
-        public Edge(Node Source, Node Target, String Label)
-        {
-
-            this.SourceNode = Source;
-            this.TargetNode = Target;
-            this.Label      = Label;
-
-            SourceNode.PropertyChanged += NodeChanged;            
-            TargetNode.PropertyChanged += NodeChanged;
-            
-        }
-        
         public void Dispose()
         {
             SourceNode.PropertyChanged -= NodeChanged;

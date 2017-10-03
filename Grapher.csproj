@@ -96,7 +96,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\EdgeModel.cs" />
     <Compile Include="Models\Grid.cs" />
+    <Compile Include="Models\NodeModel.cs" />
     <Compile Include="ViewModels\Anchor.cs" />
     <Compile Include="ViewModels\Edge.cs" />
     <Compile Include="ViewModels\Node.cs" />
@@ -104,7 +106,7 @@
     <Compile Include="ViewModels\GraphGridder.cs" />
     <Compile Include="ViewModels\GraphLayouter.cs" />
     <Compile Include="ViewModels\GraphProcessor.cs" />
-    <Compile Include="Models\Graph.cs" />
+    <Compile Include="Models\GraphModel.cs" />
     <Compile Include="Views\GraphControl.xaml.cs">
       <DependentUpon>GraphControl.xaml</DependentUpon>
     </Compile>

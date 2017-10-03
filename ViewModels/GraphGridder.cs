@@ -83,7 +83,7 @@ namespace Grapher.ViewModels
             }
         }
 
-        public async Task<List<Point[]>> GridItAsync(Graph graph)
+        public async Task<List<Point[]>> GridItAsync(GraphModel graph)
         {
 
             var grid                = new Grid(graph);

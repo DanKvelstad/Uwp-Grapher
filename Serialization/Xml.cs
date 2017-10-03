@@ -15,7 +15,7 @@ namespace Grapher.Serialization
     public static class Serializor
     {
 
-        public static void SerializeAsXml(Graph ToSerialize, Stream Output)
+        public static void SerializeAsXml(GraphModel ToSerialize, Stream Output)
         {
 
             var doc = new XDocument();
@@ -41,9 +41,9 @@ namespace Grapher.Serialization
                 edges.Add(
                     new XElement(
                         "edge", 
-                        new XAttribute("label",  edge.Item3),
-                        new XAttribute("source", edge.Item1),
-                        new XAttribute("target", edge.Item2)
+                        new XAttribute("label",  edge.Label),
+                        new XAttribute("source", edge.Source),
+                        new XAttribute("target", edge.Target)
                     )
                 );
             }
@@ -70,13 +70,13 @@ namespace Grapher.Serialization
 
         }
 
-        private static Graph DeserializeAsXml(Stream Input)
+        private static GraphModel DeserializeAsXml(Stream Input)
         {
 
             try
             {
 
-                var Result = new Graph();
+                var Result = new GraphModel();
 
                 var doc = XDocument.Load(Input);
                 var graph = doc.Element("graph");
@@ -104,7 +104,7 @@ namespace Grapher.Serialization
             
         }
 
-        public static async Task<Graph> Deserialize(IStorageFile File)
+        public static async Task<GraphModel> Deserialize(IStorageFile File)
         {
 
             if(".xml"==File.FileType)

@@ -54,7 +54,7 @@ namespace Grapher.ViewModels
             }
         }
 
-        public async void ProcessAsync(Graph graph)
+        public async void ProcessAsync(GraphModel graph)
         {
             ActiveState = States.Gridding;
             var candidates = await Gridder.GridItAsync(graph);

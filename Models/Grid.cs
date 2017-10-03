@@ -18,7 +18,7 @@ namespace Grapher.Models
         public Point[]      candidate;
         public int          intersection_count;
 
-        public Grid(Graph graph)
+        public Grid(GraphModel graph)
         {
 
             dimensions = (int)Math.Ceiling(Math.Sqrt(graph.nodes.Count));
@@ -35,14 +35,14 @@ namespace Grapher.Models
                 var from_index = graph.nodes.FindIndex(
                     (x) =>
                     {
-                        return x == graph.edges[i].Item1;
+                        return x.Label == graph.edges[i].Source;
                     }
                 );
 
                 var to_index = graph.nodes.FindIndex(
                     (x) =>
                     {
-                        return x == graph.edges[i].Item2;
+                        return x.Label == graph.edges[i].Target;
                     }
                 );
 

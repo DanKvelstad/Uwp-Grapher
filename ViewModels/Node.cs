@@ -9,219 +9,217 @@ namespace Grapher.Models
     public class Node : INotifyPropertyChanged
     {
 
+        public NodeModel Model;
+        public Node(NodeModel Model)
+        {
+            this.Model = Model;
+        }
+
         public  event PropertyChangedEventHandler PropertyChanged;
         
-        private string _Label;
         public  string  Label
         {
             get
             {
-                return _Label;
+                return Model.Label;
             }
             set
             {
-                _Label = value;
+                Model.Label = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Label"));
             }
         }
 
-        private double _CornerRadius = 0;
         public  double  CornerRadius
         {
             get
             {
-                return _CornerRadius;
+                return Model.CornerRadius;
             }
             set
             {
-                _CornerRadius = value;
+                Model.CornerRadius = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CornerRadius"));
-                if (null != _AnchorTopLeft)
+                if (null != Model.AnchorTopLeft)
                 {
                     AnchorTopLeft = new Anchor();
                 }
-                if (null != _AnchorTopRight)
+                if (null != Model.AnchorTopRight)
                 {
                     AnchorTopRight = new Anchor();
                 }
-                if (null != _AnchorBottomRight)
+                if (null != Model.AnchorBottomRight)
                 {
                     AnchorBottomRight = new Anchor();
                 }
-                if (null != _AnchorBottomLeft)
+                if (null != Model.AnchorBottomLeft)
                 {
                     AnchorBottomLeft = new Anchor();
                 }
             }
         }
 
-        private double _MinWidth;
         public  double  MinWidth
         {
             get
             {
-                return _MinWidth;
+                return Model.MinWidth;
             }
             set
             {
-                _MinWidth = value;
+                Model.MinWidth = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinWidth"));
-                if (null != _AnchorTop)
+                if (null != Model.AnchorTop)
                 {
                     AnchorTop = new Anchor();
                 }
-                if (null != _AnchorTopRight)
+                if (null != Model.AnchorTopRight)
                 {
                     AnchorTopRight = new Anchor();
                 }
-                if (null != _AnchorRight)
+                if (null != Model.AnchorRight)
                 {
                     AnchorRight = new Anchor();
                 }
-                if (null != _AnchorBottomRight)
+                if (null != Model.AnchorBottomRight)
                 {
                     AnchorBottomRight = new Anchor();
                 }
-                if (null != _AnchorBottom)
+                if (null != Model.AnchorBottom)
                 {
                     AnchorBottom = new Anchor();
                 }
             }
         }
 
-        private double _Width;
         public  double  Width
         {
             get
             {
-                return _Width;
+                return Model.Width;
             }
             set
             {
-                _Width = value;
+                Model.Width = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Width"));
-                if(null!=_AnchorTop)
+                if(null!=Model.AnchorTop)
                 {
                     AnchorTop = new Anchor();
                 }
-                if (null != _AnchorTopRight)
+                if (null != Model.AnchorTopRight)
                 {
                     AnchorTopRight = new Anchor();
                 }
-                if (null != _AnchorRight)
+                if (null != Model.AnchorRight)
                 {
                     AnchorRight = new Anchor();
                 }
-                if (null != _AnchorBottomRight)
+                if (null != Model.AnchorBottomRight)
                 {
                     AnchorBottomRight = new Anchor();
                 }
-                if (null != _AnchorBottom)
+                if (null != Model.AnchorBottom)
                 {
                     AnchorBottom = new Anchor();
                 }
             }
         }
 
-        private double _MinHeight;
         public  double  MinHeight
         {
             get
             {
-                return _MinHeight;
+                return Model.MinHeight;
             }
             set
             {
-                _MinHeight = value;
+                Model.MinHeight = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinHeight"));
-                if (null != _AnchorLeft)
+                if (null != Model.AnchorLeft)
                 {
                     AnchorLeft = new Anchor();
                 }
-                if (null != _AnchorRight)
+                if (null != Model.AnchorRight)
                 {
                     AnchorRight = new Anchor();
                 }
-                if (null != _AnchorBottomRight)
+                if (null != Model.AnchorBottomRight)
                 {
                     AnchorBottomRight = new Anchor();
                 }
-                if (null != _AnchorBottom)
+                if (null != Model.AnchorBottom)
                 {
                     AnchorBottom = new Anchor();
                 }
-                if (null != _AnchorBottomLeft)
+                if (null != Model.AnchorBottomLeft)
                 {
                     AnchorBottomLeft = new Anchor();
                 }
             }
         }
 
-        private double _Height;
         public  double  Height
         {
             get
             {
-                return _Height;
+                return Model.Height;
             }
             set
             {
-                _Height = value;
+                Model.Height = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Height"));
-                if (null != _AnchorLeft)
+                if (null != Model.AnchorLeft)
                 {
                     AnchorLeft = new Anchor();
                 }
-                if (null != _AnchorRight)
+                if (null != Model.AnchorRight)
                 {
                     AnchorRight = new Anchor();
                 }
-                if (null != _AnchorBottomRight)
+                if (null != Model.AnchorBottomRight)
                 {
                     AnchorBottomRight = new Anchor();
                 }
-                if (null != _AnchorBottom)
+                if (null != Model.AnchorBottom)
                 {
                     AnchorBottom = new Anchor();
                 }
-                if (null != _AnchorBottomLeft)
+                if (null != Model.AnchorBottomLeft)
                 {
                     AnchorBottomLeft = new Anchor();
                 }
             }
         }
 
-        private double _Left;
         public  double  Left
         {
             get
             {
-                return _Left;
+                return Model.Left;
             }
             set
             {
-                if(value!=_Left)
+                if(value!=Model.Left)
                 {
                     InvalidateAnchors();
-                    _Left = value;
+                    Model.Left = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Left"));
                 }
             }
         }
 
-        private double _Top;
         public  double  Top
         {
             get
             {
-                return _Top;
+                return Model.Top;
             }
             set
             {
-                if(value!=_Top)
+                if(value!=Model.Top)
                 {
                     InvalidateAnchors();
-                    _Top = value;
+                    Model.Top = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Top"));
                 }
             }
@@ -287,16 +285,15 @@ namespace Grapher.Models
             AnchorBottom        = null;
             AnchorBottomLeft    = null;
         }
-        
-        public  Anchor _AnchorLeft;
+
         public  Anchor  AnchorLeft
         {
             private set
             {
-                _AnchorLeft = value;
-                if ( null != _AnchorLeft )
+                Model.AnchorLeft = value;
+                if ( null != Model.AnchorLeft )
                 {
-                    _AnchorLeft.Set(
+                    Model.AnchorLeft.Set(
                         new Point(Left, Top + Height / 2),
                         new Point(Left, Top + Height / 2 + 10),
                         new Point(Left, Top + Height / 2 - 10)
@@ -306,23 +303,22 @@ namespace Grapher.Models
             }
             get
             {
-                if(null==_AnchorLeft)
+                if(null==Model.AnchorLeft)
                 {
                     AnchorLeft = new Anchor();
                 }
-                return _AnchorLeft;
+                return Model.AnchorLeft;
             }
         }
-        
-        public  Anchor _AnchorTopLeft;
+
         public  Anchor  AnchorTopLeft
         {
             private set
             {
-                _AnchorTopLeft = value;
-                if (null != _AnchorTopLeft)
+                Model.AnchorTopLeft = value;
+                if (null != Model.AnchorTopLeft)
                 {
-                    _AnchorTopLeft.Set(
+                    Model.AnchorTopLeft.Set(
                         new Point(Left + CornerRadius * ( 1 + Math.Cos(225*Math.PI/180) ),
                                   Top  + CornerRadius * ( 1 + Math.Sin(225*Math.PI/180) )),
                         new Point(Left, Top + CornerRadius),
@@ -333,23 +329,22 @@ namespace Grapher.Models
             }
             get
             {
-                if (null == _AnchorTopLeft)
+                if (null == Model.AnchorTopLeft)
                 {
                     AnchorTopLeft = new Anchor();
                 }
-                return _AnchorTopLeft;
+                return Model.AnchorTopLeft;
             }
         }
 
-        public  Anchor _AnchorTop;
         public  Anchor  AnchorTop
         {
             private set
             {
-                _AnchorTop = value;
-                if (null != _AnchorTop)
+                Model.AnchorTop = value;
+                if (null != Model.AnchorTop)
                 {
-                    _AnchorTop.Set(
+                    Model.AnchorTop.Set(
                         new Point(Left + Width / 2, Top),
                         new Point(Left + Width / 2 - 10, Top),
                         new Point(Left + Width / 2 + 10, Top)
@@ -359,23 +354,22 @@ namespace Grapher.Models
             }
             get
             {
-                if (null == _AnchorTop)
+                if (null == Model.AnchorTop)
                 {
                     AnchorTop = new Anchor();
                 }
-                return _AnchorTop;
+                return Model.AnchorTop;
             }
         }
 
-        public  Anchor _AnchorTopRight;
         public  Anchor  AnchorTopRight
         {
             private set
             {
-                _AnchorTopRight = value;
-                if (null != _AnchorTopRight)
+                Model.AnchorTopRight = value;
+                if (null != Model.AnchorTopRight)
                 {
-                    _AnchorTopRight.Set(
+                    Model.AnchorTopRight.Set(
                         new Point(Left + Width + CornerRadius * ( -1 + Math.Cos(315 * Math.PI / 180) ),
                                   Top          + CornerRadius * (  1 + Math.Sin(315 * Math.PI / 180) )),
                         new Point(Left + Width - CornerRadius, Top),
@@ -386,23 +380,22 @@ namespace Grapher.Models
             }
             get
             {
-                if (null == _AnchorTopRight)
+                if (null == Model.AnchorTopRight)
                 {
                     AnchorTopRight = new Anchor();
                 }
-                return _AnchorTopRight;
+                return Model.AnchorTopRight;
             }
         }
 
-        public  Anchor _AnchorRight;
         public  Anchor  AnchorRight
         {
             private set
             {
-                _AnchorRight = value;
-                if (null != _AnchorRight)
+                Model.AnchorRight = value;
+                if (null != Model.AnchorRight)
                 {
-                    _AnchorRight.Set(
+                    Model.AnchorRight.Set(
                         new Point(Left + Width, Top + Height / 2),
                         new Point(Left + Width, Top + Height / 2 - 10),
                         new Point(Left + Width, Top + Height / 2 + 10)
@@ -412,23 +405,22 @@ namespace Grapher.Models
             }
             get
             {
-                if (null == _AnchorRight)
+                if (null == Model.AnchorRight)
                 {
                     AnchorRight = new Anchor();
                 }
-                return _AnchorRight;
+                return Model.AnchorRight;
             }
         }
 
-        public  Anchor _AnchorBottomRight;
         public  Anchor  AnchorBottomRight
         {
             private set
             {
-                _AnchorBottomRight = value;
-                if (null != _AnchorBottomRight)
+                Model.AnchorBottomRight = value;
+                if (null != Model.AnchorBottomRight)
                 {
-                    _AnchorBottomRight.Set(
+                    Model.AnchorBottomRight.Set(
                         new Point(Left + Width + CornerRadius * (-1 + Math.Cos(45 * Math.PI / 180)),
                                   Top + Height + CornerRadius * (-1 + Math.Sin(45 * Math.PI / 180))),
                         new Point(Left + Width, Top + Height - CornerRadius),
@@ -439,23 +431,22 @@ namespace Grapher.Models
             }
             get
             {
-                if (null == _AnchorBottomRight)
+                if (null == Model.AnchorBottomRight)
                 {
                     AnchorBottomRight = new Anchor();
                 }
-                return _AnchorBottomRight;
+                return Model.AnchorBottomRight;
             }
         }
 
-        public  Anchor _AnchorBottom;
         public  Anchor  AnchorBottom
         {
             private set
             {
-                _AnchorBottom = value;
-                if (null != _AnchorBottom)
+                Model.AnchorBottom = value;
+                if (null != Model.AnchorBottom)
                 {
-                    _AnchorBottom.Set(
+                    Model.AnchorBottom.Set(
                         new Point(Left + Width / 2, Top + Height),
                         new Point(Left + Width / 2 + 10, Top + Height),
                         new Point(Left + Width / 2 - 10, Top + Height)
@@ -465,23 +456,22 @@ namespace Grapher.Models
             }
             get
             {
-                if (null == _AnchorBottom)
+                if (null == Model.AnchorBottom)
                 {
                     AnchorBottom = new Anchor();
                 }
-                return _AnchorBottom;
+                return Model.AnchorBottom;
             }
         }
 
-        public  Anchor _AnchorBottomLeft;
         public  Anchor  AnchorBottomLeft
         {
             private set
             {
-                _AnchorBottomLeft = value;
-                if (null != _AnchorBottomLeft)
+                Model.AnchorBottomLeft = value;
+                if (null != Model.AnchorBottomLeft)
                 {
-                    _AnchorBottomLeft.Set(
+                    Model.AnchorBottomLeft.Set(
                         new Point(Left + CornerRadius * (1 + Math.Cos(135 * Math.PI / 180)),
                                   Top + Height + CornerRadius * (-1 + Math.Sin(135 * Math.PI / 180))),
                         new Point(Left + CornerRadius, Top + Height),
@@ -492,11 +482,11 @@ namespace Grapher.Models
             }
             get
             {
-                if (null == _AnchorBottomLeft)
+                if (null == Model.AnchorBottomLeft)
                 {
                     AnchorBottomLeft = new Anchor();
                 }
-                return _AnchorBottomLeft;
+                return Model.AnchorBottomLeft;
             }
         }
 

@@ -65,7 +65,7 @@ namespace Grapher.ViewModels
 
         public ObservableCollection<UIElement> Children = new ObservableCollection<UIElement>();
 
-        public async Task LayoutIt(Graph graph, List<Point[]> candidates)
+        public async Task LayoutIt(GraphModel graph, List<Point[]> candidates)
         {
 
             await Task.Run(
@@ -81,13 +81,13 @@ namespace Grapher.ViewModels
                         var from_index = graph.nodes.FindIndex(
                             (x) =>
                             {
-                                return x == edge.Item1;
+                                return x.Label == edge.Source;
                             }
                         );
                         var to_index = graph.nodes.FindIndex(
                             (x) =>
                             {
-                                return x == edge.Item2;
+                                return x.Label == edge.Target;
                             }
                         );
                         var p1 = a[from_index];
@@ -103,13 +103,13 @@ namespace Grapher.ViewModels
                         var from_index = graph.nodes.FindIndex(
                             (x) =>
                             {
-                                return x == edge.Item1;
+                                return x.Label == edge.Source;
                             }
                         );
                         var to_index = graph.nodes.FindIndex(
                             (x) =>
                             {
-                                return x == edge.Item2;
+                                return x.Label == edge.Target;
                             }
                         );
                         var p1 = b[from_index];
@@ -158,8 +158,8 @@ namespace Grapher.ViewModels
             for (int i = 0; i < graph.nodes.Count; i++)
             {
 
-                NodeViewModels[i] = new Node();
-                NodeViewModels[i].Label            = graph.nodes[i];
+                NodeViewModels[i] = new Node(graph.nodes[i]);
+                NodeViewModels[i].Label            = graph.nodes[i].Label;
                 NodeViewModels[i].CornerRadius     = 10;
                 NodeViewModels[i].PropertyChanged += NodeViewModel_PropertyChanged;
 
@@ -184,25 +184,33 @@ namespace Grapher.ViewModels
                 var from_index = graph.nodes.FindIndex(
                     (x) =>
                     {
-                        return x == graph.edges[i].Item1;
+                        return x.Label == graph.edges[i].Source;
                     }
                 );
                 var to_index = graph.nodes.FindIndex(
                     (x) =>
                     {
-                        return x == graph.edges[i].Item2;
+                        return x.Label == graph.edges[i].Target;
                     }
                 );
                 var SourceNode = Array.Find(
                     NodeViewModels,
-                    n => 0 == n.Label.CompareTo(graph.nodes[from_index])
+                    n => 0 == n.Label.CompareTo(graph.nodes[from_index].Label)
                 );
                 var TargetNode = Array.Find(
                     NodeViewModels,
-                    n => 0 == n.Label.CompareTo(graph.nodes[to_index])
+                    n => 0 == n.Label.CompareTo(graph.nodes[to_index].Label)
+                );
+                var Model = graph.edges.Find(
+                    (EdgeModel n) =>
+                    {
+                        return  0 == n.Label.CompareTo(graph.edges[i].Label)    &&
+                                0 == n.Source.CompareTo(SourceNode.Label)       &&
+                                0 == n.Target.CompareTo(TargetNode.Label)       ;
+                    }
                 );
 
-                EdgeViewModels[i] = new Edge(SourceNode, TargetNode, graph.edges[i].Item3);
+                EdgeViewModels[i] = new Edge(Model, SourceNode, TargetNode);
 
                 EdgeViews[i] = new GraphEdge(EdgeViewModels[i]);
                 Children.Add(EdgeViews[i].Baseline);
