@@ -1,41 +1,34 @@
 ﻿using Grapher.Models;
-using Grapher.Views;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.Foundation;
-using Windows.UI;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
 
 namespace Grapher.ViewModels
 {
 
-    class GraphLayouter : INotifyPropertyChanged
+    public class GraphLayouter : INotifyPropertyChanged
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string info)
+
+        private string _Label;
+        public string Label
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+            get
+            {
+                return _Label;
+            }
+            set
+            {
+                _Label = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Label"));
+            }
         }
 
-        public Node[]       NodeViewModels;
-        public GraphNode[]  NodeViews;
-
-        public Edge[]       EdgeViewModels;
-        public GraphEdge[]  EdgeViews;
-
-        private double _Width = 0;
+        private double _Width = 500;
         public double Width
         {
             get
@@ -45,11 +38,11 @@ namespace Grapher.ViewModels
             set
             {
                 _Width = value;
-                OnPropertyChanged("Width");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Width"));
             }
         }
 
-        public double _Height = 0;
+        public double _Height = 200;
         public double Height
         {
             get
@@ -59,213 +52,213 @@ namespace Grapher.ViewModels
             set
             {
                 _Height = value;
-                OnPropertyChanged("Height");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Height"));
+            }
+        }
+        
+        private int _ProgressMaximum;
+        public  int ProgressMaximum
+        {
+            get
+            {
+                return _ProgressMaximum;
+            }
+            private set
+            {
+                if (value > Width)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                _ProgressMaximum = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProgressMaximum"));
             }
         }
 
-        public ObservableCollection<UIElement> Children = new ObservableCollection<UIElement>();
+        private int _ProgressCurrent;
+        public  int ProgressCurrent
+        {
+            get
+            {
+                return _ProgressCurrent;
+            }
+            private set
+            {
+                if(value>ProgressMaximum)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                _ProgressCurrent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProgressCurrent"));
+            }
+        }
 
-        public async Task LayoutIt(GraphModel graph, List<Point[]> candidates)
+        public async Task<List<Point[]>> GridItAsync(GraphModel graph)
         {
 
-            await Task.Run(
+            var grid                = new Grid(graph);
+            var candidates          = new List<Point[]>();
+
+            Label = "Gridding (1/2)";
+
+            var PermutationCount    = grid.PermutationsCount();
+                ProgressCurrent     = 0;
+                ProgressMaximum     = 100;
+            var ProgressStep        = (int)Math.Ceiling(PermutationCount / 100.0);
+            
+            var intersection_count = int.MaxValue;
+            for (ProgressCurrent = 0; ProgressCurrent < ProgressMaximum; ProgressCurrent++)
+            {
+                await Task.Run(
+                    new Action(
+                        () =>
+                        {
+                            for (int i = 0; i < ProgressStep; i++)
+                            {
+                                if (grid.intersection_count == intersection_count)
+                                {
+                                    candidates.Add((Point[])grid.candidate.Clone());
+                                }
+                                else if (grid.intersection_count < intersection_count)
+                                {
+                                    candidates.Clear();
+                                    candidates.Add((Point[])grid.candidate.Clone());
+                                    intersection_count = grid.intersection_count;
+                                }
+                                if (!grid.Next())
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                    )
+                );
+            }
+            
+            if(0>=candidates.Count)
+            {
+                throw new Exception("Could not grid graph, candidates is zero");
+            }
+
+            Label = "Evaluating (2/2)";
+
+            PermutationCount = (int)Math.Ceiling(candidates.Count * Math.Log(candidates.Count));
+            ProgressCurrent  = 0;
+            ProgressMaximum  = 100;
+            ProgressStep     = (int)Math.Ceiling(PermutationCount / 100.0);
+
+            int ProgressIndex = 0;
+            var Sorting = Task.Run(
                 new Action(() =>
                 {
                     candidates.Sort(
                         (a, b) =>
-                {
-
-                    int a_cost = 0;
-                    foreach (var edge in graph.edges)
-                    {
-                        var from_index = graph.nodes.FindIndex(
-                            (x) =>
-                            {
-                                return x.Label == edge.Source;
-                            }
-                        );
-                        var to_index = graph.nodes.FindIndex(
-                            (x) =>
-                            {
-                                return x.Label == edge.Target;
-                            }
-                        );
-                        var p1 = a[from_index];
-                        var p2 = a[to_index];
-                        var dx = p1.X - p2.X;
-                        var dy = p1.Y - p2.Y;
-                        a_cost += (int)Math.Round(Math.Sqrt(dx * dx + dy * dy));
-                    }
-
-                    int b_cost = 0;
-                    foreach (var edge in graph.edges)
-                    {
-                        var from_index = graph.nodes.FindIndex(
-                            (x) =>
-                            {
-                                return x.Label == edge.Source;
-                            }
-                        );
-                        var to_index = graph.nodes.FindIndex(
-                            (x) =>
-                            {
-                                return x.Label == edge.Target;
-                            }
-                        );
-                        var p1 = b[from_index];
-                        var p2 = b[to_index];
-                        var dx = p1.X - p2.X;
-                        var dy = p1.Y - p2.Y;
-                        b_cost += (int)Math.Round(Math.Sqrt(dx * dx + dy * dy));
-                    }
-
-                    if (a_cost < b_cost)
-                    {   // a precedes b in the sort order
-                        return -1;
-                    }
-                    else if (a_cost > b_cost)
-                    {   // a follows the b in the sort order
-                        return 1;
-                    }
-                    else
-                    {   // a and b occur in the same position in the sort order
-                        for (var i = 0; i < a.Length; i++)
                         {
-                            var da = (int)Math.Round(Math.Sqrt(a[i].X * a[i].X + a[i].Y * a[i].Y));
-                            var db = (int)Math.Round(Math.Sqrt(b[i].X * b[i].X + b[i].Y * b[i].Y));
-                            if (da < db)
+                            
+                            Volatile.Write(
+                                ref ProgressIndex, 
+                                Volatile.Read(ref ProgressIndex) + 1
+                            );
+
+                            int a_cost = 0;
+                            foreach (var edge in graph.edges)
                             {
+                                var from_index = graph.nodes.FindIndex(
+                                    (x) =>
+                                    {
+                                        return x.Label == edge.Source;
+                                    }
+                                );
+                                var to_index = graph.nodes.FindIndex(
+                                    (x) =>
+                                    {
+                                        return x.Label == edge.Target;
+                                    }
+                                );
+                                var p1 = a[from_index];
+                                var p2 = a[to_index];
+                                var dx = p1.X - p2.X;
+                                var dy = p1.Y - p2.Y;
+                                a_cost += (int)Math.Round(Math.Sqrt(dx * dx + dy * dy));
+                            }
+
+                            int b_cost = 0;
+                            foreach (var edge in graph.edges)
+                            {
+                                var from_index = graph.nodes.FindIndex(
+                                    (x) =>
+                                    {
+                                        return x.Label == edge.Source;
+                                    }
+                                );
+                                var to_index = graph.nodes.FindIndex(
+                                    (x) =>
+                                    {
+                                        return x.Label == edge.Target;
+                                    }
+                                );
+                                var p1 = b[from_index];
+                                var p2 = b[to_index];
+                                var dx = p1.X - p2.X;
+                                var dy = p1.Y - p2.Y;
+                                b_cost += (int)Math.Round(Math.Sqrt(dx * dx + dy * dy));
+                            }
+
+                            if (a_cost < b_cost)
+                            {   // a precedes b in the sort order
                                 return -1;
                             }
-                            else if (da > db)
-                            {
+                            else if (a_cost > b_cost)
+                            {   // a follows the b in the sort order
                                 return 1;
                             }
-                        }
-                        return 0;
-                    }
+                            else
+                            {   // a and b occur in the same position in the sort order
+                                for (var i = 0; i < a.Length; i++)
+                                {
+                                    var da = (int)Math.Round(Math.Sqrt(a[i].X * a[i].X + a[i].Y * a[i].Y));
+                                    var db = (int)Math.Round(Math.Sqrt(b[i].X * b[i].X + b[i].Y * b[i].Y));
+                                    if (da < db)
+                                    {
+                                        return -1;
+                                    }
+                                    else if (da > db)
+                                    {
+                                        return 1;
+                                    }
+                                }
+                                return 0;
+                            }
 
-                }
+                        }
                     );
                 })
             );
 
-            NodeViewModels  = new Node[graph.nodes.Count];
-            NodeViews       = new GraphNode[graph.nodes.Count];
-            
-            var WidestNode  = 0.0;
-            var HighestNode = 0.0;
-            for (int i = 0; i < graph.nodes.Count; i++)
+            while(!Sorting.IsCompleted)
             {
-
-                NodeViewModels[i] = new Node(graph.nodes[i]);
-                NodeViewModels[i].Label            = graph.nodes[i].Label;
-                NodeViewModels[i].CornerRadius     = 10;
-                NodeViewModels[i].PropertyChanged += NodeViewModel_PropertyChanged;
-
-                NodeViews[i] = new GraphNode(NodeViewModels[i]);
-                Children.Add(NodeViews[i].NodeBorder);
-
-                WidestNode  = Math.Max(WidestNode,  NodeViewModels[i].MinWidth);
-                HighestNode = Math.Max(HighestNode, NodeViewModels[i].MinHeight);
-                
-            }
-
-            for (int i = 0; i < NodeViewModels.Count(); i++)
-            {
-                NodeViewModels[i].Width  = WidestNode;
-                NodeViewModels[i].Height = HighestNode;
-            }
-            
-            EdgeViewModels  = new Edge[graph.edges.Count];
-            EdgeViews       = new GraphEdge[graph.edges.Count];
-            for (int i = 0; i < graph.edges.Count; i++)
-            {
-                var from_index = graph.nodes.FindIndex(
-                    (x) =>
-                    {
-                        return x.Label == graph.edges[i].Source;
-                    }
-                );
-                var to_index = graph.nodes.FindIndex(
-                    (x) =>
-                    {
-                        return x.Label == graph.edges[i].Target;
-                    }
-                );
-                var SourceNode = Array.Find(
-                    NodeViewModels,
-                    n => 0 == n.Label.CompareTo(graph.nodes[from_index].Label)
-                );
-                var TargetNode = Array.Find(
-                    NodeViewModels,
-                    n => 0 == n.Label.CompareTo(graph.nodes[to_index].Label)
-                );
-                var Model = graph.edges.Find(
-                    (EdgeModel n) =>
-                    {
-                        return  0 == n.Label.CompareTo(graph.edges[i].Label)    &&
-                                0 == n.Source.CompareTo(SourceNode.Label)       &&
-                                0 == n.Target.CompareTo(TargetNode.Label)       ;
-                    }
-                );
-
-                EdgeViewModels[i] = new Edge(Model, SourceNode, TargetNode);
-
-                EdgeViews[i] = new GraphEdge(EdgeViewModels[i]);
-                Children.Add(EdgeViews[i].Baseline);
-                Children.Add(EdgeViews[i].ArrowAlpha);
-                Children.Add(EdgeViews[i].ArrowBravo);
-                Children.Add(EdgeViews[i].Label);
-
-            }
-
-            foreach (var candidate in candidates)
-            {
-
-                for (int i = 0; i < candidate.Count(); i++)
+                if(_ProgressCurrent<ProgressMaximum)
                 {
-                    NodeViewModels[i].Left = candidate[i].X * (2 * NodeViewModels[i].Width );
-                    NodeViewModels[i].Top  = candidate[i].Y * (2 * NodeViewModels[i].Height);
+                    while (Volatile.Read(ref ProgressIndex) > ProgressStep)
+                    {
+                        ProgressCurrent++;
+                        Volatile.Write(
+                            ref ProgressIndex,
+                            Volatile.Read(ref ProgressIndex) - ProgressStep
+                        );
+                    }
+                    await Task.Delay(10);
                 }
-
-                var WidestEdge  = 0.0;
-                var HighestEdge = 0.0;
-                foreach (var Edge in EdgeViewModels)
+                else
                 {
-                    WidestEdge  = Math.Max(WidestEdge,  Edge.MinWidth);
-                    HighestEdge = Math.Max(HighestEdge, Edge.MinHeight);
+                    Sorting.Wait();
                 }
-                
-                for (int i = 0; i < candidate.Count(); i++)
-                {
-                    NodeViewModels[i].Left = candidate[i].X * (NodeViewModels[i].Width  + WidestEdge);
-                    NodeViewModels[i].Top  = candidate[i].Y * (NodeViewModels[i].Height + HighestEdge);
-                }
-                
-                // ToDo: evaluate if this candidate is good
-                break;
-
             }
-            
+            Sorting.Wait();
+
+            return candidates;
+
         }
 
-        private void NodeViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if( "Left"  == e.PropertyName || "Top"    == e.PropertyName ||
-                "Width" == e.PropertyName || "Height" == e.PropertyName )
-            {
-                var WidthOfCanvas  = 0.0;
-                var HeightOfCanvas = 0.0;
-                foreach (var node in NodeViewModels)
-                {
-                    WidthOfCanvas  = Math.Max(WidthOfCanvas,  node.Left + node.Width);
-                    HeightOfCanvas = Math.Max(HeightOfCanvas, node.Top  + node.Height);
-                }
-                Width  = WidthOfCanvas;
-                Height = HeightOfCanvas;
-            }
-        }
     }
 
 }

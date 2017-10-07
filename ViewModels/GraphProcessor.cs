@@ -7,8 +7,8 @@ namespace Grapher.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
         
-        private GraphGridder _Gridder = new GraphGridder();
-        public  GraphGridder Gridder
+        private GraphLayouter _Gridder = new GraphLayouter();
+        public  GraphLayouter Gridder
         {
             private set
             {
@@ -20,8 +20,8 @@ namespace Grapher.ViewModels
             }
         }
 
-        private GraphLayouter _Layouter = new GraphLayouter();
-        public GraphLayouter Layouter
+        private GraphPresenter _Layouter = new GraphPresenter();
+        public GraphPresenter Layouter
         {
             private set
             {
@@ -37,7 +37,6 @@ namespace Grapher.ViewModels
         {
             Uninitiated,
             Gridding,
-            Layouting,
             Displaying
         }
         private States _ActiveState = States.Uninitiated;
@@ -58,10 +57,8 @@ namespace Grapher.ViewModels
         {
             ActiveState = States.Gridding;
             var candidates = await Gridder.GridItAsync(graph);
-            ActiveState = States.Layouting;
-            await Layouter.LayoutIt(graph, candidates);
             ActiveState = States.Displaying;
-            // ToDo: Displayer.DisplayIt
+            Layouter.LayoutIt(graph, candidates);
         }
 
     }

@@ -19,17 +19,21 @@ namespace Grapher
 
         public void EmplaceNode(String text)
         {
-            var Node = new NodeModel();
-            Node.Label = text;
+            var Node = new NodeModel()
+            {
+                Label = text
+            };
             nodes.Add(Node);
         }
 
         public void EmplaceEdge(String from, String to, String label)
         {
-            var Edge = new EdgeModel();
-            Edge.Label = label;
-            Edge.Source = from;
-            Edge.Target = to;
+            var Edge = new EdgeModel()
+            {
+                Label  = label,
+                Source = from,
+                Target = to
+            };
             edges.Add(Edge);
         }
 

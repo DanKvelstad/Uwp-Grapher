@@ -9,7 +9,6 @@
 
     <UserControl.Resources>
         <local:ConverterVisibileIfStateIsProcessing x:Key="VisibileIfStateIsProcessing"/>
-        <local:ConverterVisibileIfStateIsLayouting x:Key="VisibileIfStateIsLayouting"/>
         <local:ConverterVisibileIfStateIsDisplaying x:Key="VisibileIfStateIsDisplaying"/>
     </UserControl.Resources>
 
@@ -41,7 +40,7 @@
                 <SymbolIcon Symbol="Clear"/>
             </Button>
         </RelativePanel>
-        
+
         <RelativePanel
             x:Name="ProcessingGraphPanel"
             Padding="10"
@@ -51,8 +50,8 @@
 
             <TextBlock
                 RelativePanel.Above="LayoutProgress"
-                RelativePanel.AlignHorizontalCenterWith="LayoutProgress">
-                Gridding...
+                RelativePanel.AlignHorizontalCenterWith="LayoutProgress"
+                Text="{x:Bind processor.Gridder.Label,Mode=OneWay}">
             </TextBlock>
 
             <ProgressBar 
@@ -66,11 +65,6 @@
                 Height="100"/>
 
         </RelativePanel>
-
-        <StackPanel 
-            Visibility="{x:Bind processor.ActiveState,Mode=OneWay, Converter={StaticResource VisibileIfStateIsLayouting}}">
-            <TextBlock>Layouting</TextBlock>
-        </StackPanel>
 
         <ItemsControl 
             ItemsSource="{x:Bind processor.Layouter.Children,Mode=OneWay}"

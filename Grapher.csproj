@@ -103,8 +103,8 @@
     <Compile Include="ViewModels\Edge.cs" />
     <Compile Include="ViewModels\Node.cs" />
     <Compile Include="Serialization\Xml.cs" />
-    <Compile Include="ViewModels\GraphGridder.cs" />
     <Compile Include="ViewModels\GraphLayouter.cs" />
+    <Compile Include="ViewModels\GraphPresenter.cs" />
     <Compile Include="ViewModels\GraphProcessor.cs" />
     <Compile Include="Models\GraphModel.cs" />
     <Compile Include="Views\GraphControl.xaml.cs">
