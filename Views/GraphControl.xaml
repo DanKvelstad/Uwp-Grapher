@@ -17,29 +17,22 @@
         Orientation="Vertical"
         BorderThickness="1"
         BorderBrush="Black">
-        
-        <RelativePanel
-            Background="{ThemeResource SystemControlForegroundAccentBrush}"
-            BorderThickness="0,0,0,1"
-            BorderBrush="Black">
-            <TextBlock
-                x:Name="HeaderLabel"
-                RelativePanel.AlignTopWithPanel="True"
-                RelativePanel.AlignLeftWithPanel="True"
-                RelativePanel.AlignBottomWithPanel="True"
-                VerticalAlignment="Center"
-                Padding="10,0,10,0"
-                FontSize="15">
-                Header
-            </TextBlock>
-            <Button
-                x:Name="CloseButton"
-                RelativePanel.AlignTopWithPanel="True"
-                RelativePanel.AlignRightWithPanel="True"
-                Click="CloseButton_Click">
-                <SymbolIcon Symbol="Clear"/>
-            </Button>
-        </RelativePanel>
+
+        <StackPanel.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem Text="Save as" Click="MenuFlyoutItem_SaveAs"/>
+                <MenuFlyoutItem Text="Delete" Click="MenuFlyoutItem_Delete"/>
+            </MenuFlyout>
+        </StackPanel.ContextFlyout>
+
+        <TextBlock
+            x:Name="HeaderLabel"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Padding="10,0,10,0"
+            FontSize="20">
+            Header
+        </TextBlock>
 
         <RelativePanel
             x:Name="ProcessingGraphPanel"
@@ -73,7 +66,8 @@
             Visibility="{x:Bind processor.ActiveState,Mode=OneWay, Converter={StaticResource VisibileIfStateIsDisplaying}}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas/>
+                    <Canvas Background="Transparent">
+                    </Canvas>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace Grapher.Serialization
 {
@@ -15,7 +16,7 @@ namespace Grapher.Serialization
     public static class Serializor
     {
 
-        public static void SerializeAsXml(GraphModel ToSerialize, Stream Output)
+        public static void SerializeAsXml(GraphModel ToSerialize, IOutputStream Output)
         {
 
             var doc = new XDocument();
@@ -29,7 +30,7 @@ namespace Grapher.Serialization
                 nodes.Add(
                     new XElement(
                         "node", 
-                        new XAttribute("label", node)
+                        new XAttribute("label", node.Label)
                     )
                 );
             }
@@ -66,7 +67,7 @@ namespace Grapher.Serialization
             //    );
             //}
             
-            doc.Save(Output);
+            doc.Save(Output.AsStreamForWrite());
 
         }
 
