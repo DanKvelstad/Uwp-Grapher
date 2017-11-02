@@ -53,16 +53,16 @@
     <Compile Include="Models\EdgeModel.cs" />
     <Compile Include="Models\Grid.cs" />
     <Compile Include="Models\NodeModel.cs" />
-    <Compile Include="ViewModels\Anchor.cs" />
-    <Compile Include="ViewModels\Edge.cs" />
-    <Compile Include="ViewModels\Node.cs" />
+    <Compile Include="ViewModels\AnchorViewModel.cs" />
+    <Compile Include="ViewModels\EdgeViewModel.cs" />
+    <Compile Include="ViewModels\GraphViewModel.cs" />
+    <Compile Include="ViewModels\NodeViewModel.cs" />
     <Compile Include="Serialization\Xml.cs" />
     <Compile Include="ViewModels\GraphLayouter.cs" />
     <Compile Include="ViewModels\GraphPresenter.cs" />
-    <Compile Include="ViewModels\GraphProcessor.cs" />
     <Compile Include="Models\GraphModel.cs" />
-    <Compile Include="Views\GraphControl.xaml.cs">
-      <DependentUpon>GraphControl.xaml</DependentUpon>
+    <Compile Include="Views\GraphView.xaml.cs">
+      <DependentUpon>GraphView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GraphEdge.cs" />
     <Compile Include="Views\GraphNode.cs" />
@@ -92,7 +92,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\GraphControl.xaml">
+    <Page Include="Views\GraphView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

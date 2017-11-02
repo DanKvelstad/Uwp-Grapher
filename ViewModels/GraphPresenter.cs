@@ -23,7 +23,7 @@ namespace Grapher.ViewModels
         public Node[]       NodeViewModels;
         public GraphNode[]  NodeViews;
 
-        public Edge[]       EdgeViewModels;
+        public EdgeViewModel[]       EdgeViewModels;
         public GraphEdge[]  EdgeViews;
 
         private double _Width = 0;
@@ -86,7 +86,7 @@ namespace Grapher.ViewModels
                 NodeViewModels[i].Height = HighestNode;
             }
             
-            EdgeViewModels  = new Edge[graph.edges.Count];
+            EdgeViewModels  = new EdgeViewModel[graph.edges.Count];
             EdgeViews       = new GraphEdge[graph.edges.Count];
             for (int i = 0; i < graph.edges.Count; i++)
             {
@@ -119,7 +119,7 @@ namespace Grapher.ViewModels
                     }
                 );
 
-                EdgeViewModels[i] = new Edge(Model, SourceNode, TargetNode);
+                EdgeViewModels[i] = new EdgeViewModel(Model, SourceNode, TargetNode);
 
                 EdgeViews[i] = new GraphEdge(EdgeViewModels[i]);
                 Children.Add(EdgeViews[i].Baseline);

@@ -10,6 +10,7 @@ namespace Grapher
 
         public List<NodeModel> nodes;
         public List<EdgeModel> edges;
+        public string Label = "Anonymous";
 
         public GraphModel()
         {

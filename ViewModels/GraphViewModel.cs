@@ -1,19 +1,46 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Grapher.ViewModels
 {
-    class GraphProcessor : INotifyPropertyChanged
+    class GraphViewModel : INotifyPropertyChanged
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
-        private GraphLayouter _Gridder = new GraphLayouter();
-        public  GraphLayouter Gridder
+
+        private GraphModel _Model;
+        public GraphModel Model
         {
+            get
+            {
+                return _Model;
+            }
             private set
             {
-                _Gridder = value;
+                _Model = value;
             }
+        }
+
+        public string Label
+        {
+            get
+            {
+                return Model.Label;
+            }
+            set
+            {
+                Model.Label = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Label"));
+            }
+        }
+
+        private GraphLayouter _Gridder = new GraphLayouter();
+        public GraphLayouter Gridder
+        {
             get
             {
                 return _Gridder;
@@ -23,10 +50,6 @@ namespace Grapher.ViewModels
         private GraphPresenter _Layouter = new GraphPresenter();
         public GraphPresenter Layouter
         {
-            private set
-            {
-                _Layouter = value;
-            }
             get
             {
                 return _Layouter;
@@ -53,12 +76,13 @@ namespace Grapher.ViewModels
             }
         }
 
-        public async void ProcessAsync(GraphModel graph)
+        public async void ProcessAsync(GraphModel Model)
         {
+            this.Model = Model;
             ActiveState = States.Gridding;
-            var candidates = await Gridder.GridItAsync(graph);
+            var candidates = await Gridder.GridItAsync(this.Model);
             ActiveState = States.Displaying;
-            Layouter.LayoutIt(graph, candidates);
+            Layouter.LayoutIt(this.Model, candidates);
         }
 
     }

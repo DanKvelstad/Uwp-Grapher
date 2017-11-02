@@ -42,19 +42,19 @@ namespace Grapher.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CornerRadius"));
                 if (null != Model.AnchorTopLeft)
                 {
-                    AnchorTopLeft = new Anchor();
+                    AnchorTopLeft = new AnchorViewModel();
                 }
                 if (null != Model.AnchorTopRight)
                 {
-                    AnchorTopRight = new Anchor();
+                    AnchorTopRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottomRight)
                 {
-                    AnchorBottomRight = new Anchor();
+                    AnchorBottomRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottomLeft)
                 {
-                    AnchorBottomLeft = new Anchor();
+                    AnchorBottomLeft = new AnchorViewModel();
                 }
             }
         }
@@ -71,23 +71,23 @@ namespace Grapher.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinWidth"));
                 if (null != Model.AnchorTop)
                 {
-                    AnchorTop = new Anchor();
+                    AnchorTop = new AnchorViewModel();
                 }
                 if (null != Model.AnchorTopRight)
                 {
-                    AnchorTopRight = new Anchor();
+                    AnchorTopRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorRight)
                 {
-                    AnchorRight = new Anchor();
+                    AnchorRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottomRight)
                 {
-                    AnchorBottomRight = new Anchor();
+                    AnchorBottomRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottom)
                 {
-                    AnchorBottom = new Anchor();
+                    AnchorBottom = new AnchorViewModel();
                 }
             }
         }
@@ -104,23 +104,23 @@ namespace Grapher.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Width"));
                 if(null!=Model.AnchorTop)
                 {
-                    AnchorTop = new Anchor();
+                    AnchorTop = new AnchorViewModel();
                 }
                 if (null != Model.AnchorTopRight)
                 {
-                    AnchorTopRight = new Anchor();
+                    AnchorTopRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorRight)
                 {
-                    AnchorRight = new Anchor();
+                    AnchorRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottomRight)
                 {
-                    AnchorBottomRight = new Anchor();
+                    AnchorBottomRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottom)
                 {
-                    AnchorBottom = new Anchor();
+                    AnchorBottom = new AnchorViewModel();
                 }
             }
         }
@@ -137,23 +137,23 @@ namespace Grapher.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MinHeight"));
                 if (null != Model.AnchorLeft)
                 {
-                    AnchorLeft = new Anchor();
+                    AnchorLeft = new AnchorViewModel();
                 }
                 if (null != Model.AnchorRight)
                 {
-                    AnchorRight = new Anchor();
+                    AnchorRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottomRight)
                 {
-                    AnchorBottomRight = new Anchor();
+                    AnchorBottomRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottom)
                 {
-                    AnchorBottom = new Anchor();
+                    AnchorBottom = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottomLeft)
                 {
-                    AnchorBottomLeft = new Anchor();
+                    AnchorBottomLeft = new AnchorViewModel();
                 }
             }
         }
@@ -170,23 +170,23 @@ namespace Grapher.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Height"));
                 if (null != Model.AnchorLeft)
                 {
-                    AnchorLeft = new Anchor();
+                    AnchorLeft = new AnchorViewModel();
                 }
                 if (null != Model.AnchorRight)
                 {
-                    AnchorRight = new Anchor();
+                    AnchorRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottomRight)
                 {
-                    AnchorBottomRight = new Anchor();
+                    AnchorBottomRight = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottom)
                 {
-                    AnchorBottom = new Anchor();
+                    AnchorBottom = new AnchorViewModel();
                 }
                 if (null != Model.AnchorBottomLeft)
                 {
-                    AnchorBottomLeft = new Anchor();
+                    AnchorBottomLeft = new AnchorViewModel();
                 }
             }
         }
@@ -225,7 +225,7 @@ namespace Grapher.Models
             }
         }
         
-        public Anchor GetAnchorRelativeTo(Node Other)
+        public AnchorViewModel GetAnchorRelativeTo(Node Other)
         {
             if (Left < Other.Left)
             {
@@ -286,7 +286,7 @@ namespace Grapher.Models
             AnchorBottomLeft    = null;
         }
 
-        public  Anchor  AnchorLeft
+        public  AnchorViewModel  AnchorLeft
         {
             private set
             {
@@ -305,13 +305,13 @@ namespace Grapher.Models
             {
                 if(null==Model.AnchorLeft)
                 {
-                    AnchorLeft = new Anchor();
+                    AnchorLeft = new AnchorViewModel();
                 }
                 return Model.AnchorLeft;
             }
         }
 
-        public  Anchor  AnchorTopLeft
+        public  AnchorViewModel  AnchorTopLeft
         {
             private set
             {
@@ -331,13 +331,13 @@ namespace Grapher.Models
             {
                 if (null == Model.AnchorTopLeft)
                 {
-                    AnchorTopLeft = new Anchor();
+                    AnchorTopLeft = new AnchorViewModel();
                 }
                 return Model.AnchorTopLeft;
             }
         }
 
-        public  Anchor  AnchorTop
+        public  AnchorViewModel  AnchorTop
         {
             private set
             {
@@ -356,13 +356,13 @@ namespace Grapher.Models
             {
                 if (null == Model.AnchorTop)
                 {
-                    AnchorTop = new Anchor();
+                    AnchorTop = new AnchorViewModel();
                 }
                 return Model.AnchorTop;
             }
         }
 
-        public  Anchor  AnchorTopRight
+        public  AnchorViewModel  AnchorTopRight
         {
             private set
             {
@@ -382,13 +382,13 @@ namespace Grapher.Models
             {
                 if (null == Model.AnchorTopRight)
                 {
-                    AnchorTopRight = new Anchor();
+                    AnchorTopRight = new AnchorViewModel();
                 }
                 return Model.AnchorTopRight;
             }
         }
 
-        public  Anchor  AnchorRight
+        public  AnchorViewModel  AnchorRight
         {
             private set
             {
@@ -407,13 +407,13 @@ namespace Grapher.Models
             {
                 if (null == Model.AnchorRight)
                 {
-                    AnchorRight = new Anchor();
+                    AnchorRight = new AnchorViewModel();
                 }
                 return Model.AnchorRight;
             }
         }
 
-        public  Anchor  AnchorBottomRight
+        public  AnchorViewModel  AnchorBottomRight
         {
             private set
             {
@@ -433,13 +433,13 @@ namespace Grapher.Models
             {
                 if (null == Model.AnchorBottomRight)
                 {
-                    AnchorBottomRight = new Anchor();
+                    AnchorBottomRight = new AnchorViewModel();
                 }
                 return Model.AnchorBottomRight;
             }
         }
 
-        public  Anchor  AnchorBottom
+        public  AnchorViewModel  AnchorBottom
         {
             private set
             {
@@ -458,13 +458,13 @@ namespace Grapher.Models
             {
                 if (null == Model.AnchorBottom)
                 {
-                    AnchorBottom = new Anchor();
+                    AnchorBottom = new AnchorViewModel();
                 }
                 return Model.AnchorBottom;
             }
         }
 
-        public  Anchor  AnchorBottomLeft
+        public  AnchorViewModel  AnchorBottomLeft
         {
             private set
             {
@@ -484,7 +484,7 @@ namespace Grapher.Models
             {
                 if (null == Model.AnchorBottomLeft)
                 {
-                    AnchorBottomLeft = new Anchor();
+                    AnchorBottomLeft = new AnchorViewModel();
                 }
                 return Model.AnchorBottomLeft;
             }

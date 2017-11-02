@@ -5,12 +5,12 @@ using System.ComponentModel;
 namespace Grapher.ViewModels
 {
 
-    public class Edge : INotifyPropertyChanged, IDisposable
+    public class EdgeViewModel : INotifyPropertyChanged, IDisposable
     {
 
         EdgeModel Model;
 
-        public Edge(EdgeModel Model, Node Source, Node Target)
+        public EdgeViewModel(EdgeModel Model, Node Source, Node Target)
         {
 
             this.Model = Model;
@@ -27,10 +27,10 @@ namespace Grapher.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Node   SourceNode;
-        private Anchor SourceAnchor;
+        private AnchorViewModel SourceAnchor;
 
         private Node   TargetNode;
-        private Anchor TargetAnchor;
+        private AnchorViewModel TargetAnchor;
 
         public  double SourceX
         {
@@ -469,7 +469,7 @@ namespace Grapher.ViewModels
         private void SourceAnchorChanged(object sender, PropertyChangedEventArgs e)
         {
 
-            var Anchor = sender as Anchor;
+            var Anchor = sender as AnchorViewModel;
             if(null != Anchor && Anchor == SourceAnchor)
             {
 
@@ -497,7 +497,7 @@ namespace Grapher.ViewModels
         private void TargetAnchorChanged(object sender, PropertyChangedEventArgs e)
         {
 
-            var Anchor = sender as Anchor;
+            var Anchor = sender as AnchorViewModel;
             if (null != Anchor && Anchor == TargetAnchor)
             {
 

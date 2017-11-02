@@ -9,23 +9,21 @@ using Windows.UI.Xaml.Data;
 namespace Grapher.Xaml
 {
 
-    public sealed partial class GraphControl : UserControl
+    public sealed partial class GraphView : UserControl
     {
         
         public delegate void ValueChangedEventHandler(object sender, EventArgs e);
         public event ValueChangedEventHandler CloseGraphControlEvent;
-        GraphProcessor processor = new GraphProcessor();
-        GraphModel Graph;
+        GraphViewModel ViewModel = new GraphViewModel();
 
-        public GraphControl()
+        public GraphView()
         {
             this.InitializeComponent();
         }
 
-        public void Initialize(GraphModel graph)
+        public void Initialize(GraphModel Model)
         {
-            Graph = graph;
-            processor.ProcessAsync(graph);
+            ViewModel.ProcessAsync(Model);
         }
         
         private void MenuFlyoutItem_Delete(object sender, RoutedEventArgs e)
@@ -50,7 +48,7 @@ namespace Grapher.Xaml
                     switch (File.FileType)
                     {
                         case ".xml":
-                            Serializor.SerializeAsXml(Graph, outputStream);
+                            Serializor.SerializeAsXml(ViewModel.Model, outputStream);
                             break;
                         case ".cpp":
                             break;
@@ -77,7 +75,7 @@ namespace Grapher.Xaml
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            if (GraphProcessor.States.Gridding == (GraphProcessor.States)value)
+            if (GraphViewModel.States.Gridding == (GraphViewModel.States)value)
             {
                 return Visibility.Visible;
             }
@@ -96,7 +94,7 @@ namespace Grapher.Xaml
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            if (GraphProcessor.States.Displaying == (GraphProcessor.States)value)
+            if (GraphViewModel.States.Displaying == (GraphViewModel.States)value)
             {
                 return Visibility.Visible;
             }

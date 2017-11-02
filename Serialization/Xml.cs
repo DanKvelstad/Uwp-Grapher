@@ -81,6 +81,7 @@ namespace Grapher.Serialization
 
                 var doc = XDocument.Load(Input);
                 var graph = doc.Element("graph");
+                Result.Label = graph.Attribute("label").Value;
                 foreach (var Element in graph.Element("nodes").Elements())
                 {
                     Result.EmplaceNode(Element.Attribute("label").Value);

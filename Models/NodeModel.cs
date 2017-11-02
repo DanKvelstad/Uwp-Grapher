@@ -14,14 +14,14 @@ namespace Grapher.Models
         public double Height;
         public double Left;
         public double Top;
-        public Anchor AnchorLeft;
-        public Anchor AnchorTopLeft;
-        public Anchor AnchorTop;
-        public Anchor AnchorTopRight;
-        public Anchor AnchorRight;
-        public Anchor AnchorBottomRight;
-        public Anchor AnchorBottom;
-        public Anchor AnchorBottomLeft;
+        public AnchorViewModel AnchorLeft;
+        public AnchorViewModel AnchorTopLeft;
+        public AnchorViewModel AnchorTop;
+        public AnchorViewModel AnchorTopRight;
+        public AnchorViewModel AnchorRight;
+        public AnchorViewModel AnchorBottomRight;
+        public AnchorViewModel AnchorBottom;
+        public AnchorViewModel AnchorBottomLeft;
 
     }
 

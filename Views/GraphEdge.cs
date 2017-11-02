@@ -23,7 +23,7 @@ namespace Grapher.Views
         public Line         ArrowBravo;
         public TextBlock    Label;
 
-        public GraphEdge(Edge Model)
+        public GraphEdge(EdgeViewModel Model)
         {
             
             Baseline = new Line();
@@ -228,7 +228,7 @@ namespace Grapher.Views
             if("Label"==e.PropertyName)
             {
                 Label.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
-                var Model = (Edge)sender;
+                var Model = (EdgeViewModel)sender;
                 Model.LabelWidth  = Label.DesiredSize.Width;
                 Model.LabelHeight = Label.DesiredSize.Height;
             }

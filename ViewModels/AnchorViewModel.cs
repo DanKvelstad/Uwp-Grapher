@@ -7,7 +7,7 @@ using System;
 namespace Grapher.ViewModels
 {
 
-    public class Anchor : INotifyPropertyChanged
+    public class AnchorViewModel : INotifyPropertyChanged
     {
 
         public event PropertyChangedEventHandler PropertyChanged;

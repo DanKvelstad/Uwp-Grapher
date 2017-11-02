@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 namespace Grapher
 {
 
-    public class GraphControls : ObservableCollection<GraphControl>
+    public class GraphControls : ObservableCollection<GraphView>
     {
         public GraphControls()
         {
@@ -57,7 +57,7 @@ namespace Grapher
                         }
                         else
                         {
-                            var GraphContr = new GraphControl();
+                            var GraphContr = new GraphView();
                             (Resources["Graphs"] as GraphControls).Add(GraphContr);
                             GraphContr.CloseGraphControlEvent += (sender2, e2) => (Resources["Graphs"] as GraphControls).Remove(GraphContr);
                             GraphContr.Initialize(graph);
