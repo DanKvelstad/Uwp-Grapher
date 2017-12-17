@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<graph index="0">
+  <nodes>
+    <node label="s0" />
+    <node label="s2" />
+    <node label="s1" />
+  </nodes>
+  <edges>
+    <edge label="e0" source="s0" target="s1" />
+    <edge label="e0" source="s1" target="s2" />
+    <edge label="e0" source="s2" target="s0" />
+  </edges>
+</graph>
