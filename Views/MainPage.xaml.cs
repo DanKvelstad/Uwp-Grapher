@@ -1,6 +1,4 @@
-﻿using Grapher.Xaml;
-using System;
-using System.Collections.ObjectModel;
+﻿using System;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -9,19 +7,59 @@ using Windows.UI.Xaml.Controls;
 namespace Grapher
 {
 
-    public class GraphControls : ObservableCollection<GraphView>
+    public class GraphStageSelector : DataTemplateSelector
     {
-        public GraphControls()
+
+        public DataTemplate Stage1Template
         {
+            get;
+            set;
+        }
+
+        public DataTemplate Stage2Template
+        {
+            get;
+            set;
+        }
+
+        public DataTemplate Stage3Template
+        {
+            get;
+            set;
+        }
+
+        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+        {
+
+            if (item is ViewModels.Graphs.Stage1GraphViewModel)
+            {
+                return Stage1Template;
+            }
+            else if (item is ViewModels.Graphs.Stage2GraphViewModel)
+            {
+                return Stage2Template;
+            }
+            else if (item is ViewModels.Graphs.Stage3GraphViewModel)
+            {
+                return Stage3Template;
+            }
+            else
+            {
+                return base.SelectTemplateCore(item, container);
+            }
+
         }
     }
 
     public sealed partial class MainPage : Page
     {
 
+        private ViewModels.MainViewModel main;
+
         public MainPage()
         {
-            this.InitializeComponent();
+            main = new ViewModels.MainViewModel();
+            InitializeComponent();
         }
 
         private void Grid_DragOver(object sender, DragEventArgs e)
@@ -31,42 +69,21 @@ namespace Grapher
 
         private async void Grid_Drop(object sender, DragEventArgs e)
         {
-
-            ContentDialog Dialog = new ContentDialog
-            {
-                Title = "Error opening file",
-                Content = "Verify that it is a valid file for this program.",
-                CloseButtonText = "Ok"
-            };
-
             if (e.DataView.Contains(StandardDataFormats.StorageItems))
             {
                 foreach(var item in await e.DataView.GetStorageItemsAsync())
                 {
-                    var File = item as IStorageFile;
-                    if(null == File)
+                    if (item is IStorageFile File)
                     {
-                        await Dialog.ShowAsync();
-                    }
-                    else
-                    {
-                        var graph = await Serialization.Serializor.Deserialize(File);
-                        if (null == graph)
+                        if(!await main.OpenAsync(File))
                         {
-                            await Dialog.ShowAsync();
-                        }
-                        else
-                        {
-                            var GraphContr = new GraphView();
-                            (Resources["Graphs"] as GraphControls).Add(GraphContr);
-                            GraphContr.CloseGraphControlEvent += (sender2, e2) => (Resources["Graphs"] as GraphControls).Remove(GraphContr);
-                            GraphContr.Initialize(graph);
+                            //Error
                         }
                     }
                 }
             }
-
         }
 
     }
+
 }

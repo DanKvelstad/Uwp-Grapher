@@ -5,49 +5,102 @@
     xmlns:local="using:Grapher"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:xaml="using:Grapher.Xaml"
-    mc:Ignorable="d">
-    
+    mc:Ignorable="d"
+    AllowDrop="True" 
+    DragOver="Grid_DragOver"
+    Drop="Grid_Drop">
+
     <Page.Resources>
-        <local:GraphControls x:Key="Graphs"/>
+        <DataTemplate x:Key="Stage1">
+            <RelativePanel Width="{Binding Width, Mode=TwoWay}"
+                           Height="{Binding Height, Mode=TwoWay}"
+                           Padding="10">
+                <TextBlock RelativePanel.AlignLeftWithPanel="True"
+                           RelativePanel.AlignRightWithPanel="True"
+                           RelativePanel.AlignTopWithPanel="True"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           Text="{Binding Label}"/>
+                <StackPanel RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignVerticalCenterWithPanel="True"
+                            Orientation="Vertical">
+                    <TextBlock Text="Gridding (1/2)"
+                               HorizontalAlignment="Center"/>
+                    <ProgressBar Maximum="{Binding ProgressMaximum, Mode=OneWay}"
+                                 Value="{Binding ProgressCurrent, Mode=OneWay}"
+                                 Margin="0,12"
+                                 Height="100"/>
+                </StackPanel>
+            </RelativePanel>
+        </DataTemplate>
+        <DataTemplate x:Key="Stage2">
+            <RelativePanel Width="{Binding Width, Mode=TwoWay}"
+                           Height="{Binding Height, Mode=TwoWay}"
+                           Padding="10">
+                <TextBlock RelativePanel.AlignLeftWithPanel="True"
+                           RelativePanel.AlignRightWithPanel="True"
+                           RelativePanel.AlignTopWithPanel="True"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           Text="{Binding Label}"/>
+                <StackPanel RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignVerticalCenterWithPanel="True"
+                            Orientation="Vertical">
+                    <TextBlock Text="Sorting (2/2)"
+                               HorizontalAlignment="Center"/>
+                    <ProgressBar Maximum="{Binding ProgressMaximum, Mode=OneWay}"
+                                 Value="{Binding ProgressCurrent, Mode=OneWay}"
+                                 Margin="0,12"
+                                 Height="100"/>
+                </StackPanel>
+            </RelativePanel>
+        </DataTemplate>
+        <DataTemplate x:Key="Stage3">
+            <RelativePanel Padding="10">
+                <TextBlock x:Name="Header"
+                           RelativePanel.AlignLeftWithPanel="True"
+                           RelativePanel.AlignRightWithPanel="True"
+                           RelativePanel.AlignTopWithPanel="True"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           Text="{Binding Label}"/>
+                <ItemsControl ItemsSource="{Binding Children, Mode=OneWay}"
+                              RelativePanel.Below="Header"
+                              RelativePanel.AlignLeftWithPanel="True"
+                              RelativePanel.AlignRightWithPanel="True"
+                              RelativePanel.AlignBottomWithPanel="True">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="{Binding Width, Mode=TwoWay}"
+                                    Height="{Binding Height, Mode=TwoWay}"
+                                    Background="Transparent"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </RelativePanel>
+        </DataTemplate>
+        <local:GraphStageSelector x:Key="GraphStageSelector" 
+                                  Stage1Template="{StaticResource Stage1}"
+                                  Stage2Template="{StaticResource Stage2}"
+                                  Stage3Template="{StaticResource Stage3}"/>
     </Page.Resources>
     
-    <Hub
-        AllowDrop="True" 
-        DragOver="Grid_DragOver" 
-        Drop="Grid_Drop"
-        Margin="20">
-
-        <HubSection Header="Getting Started">
-            <DataTemplate>
-                <TextBlock 
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="20">
-                        Drop a file containing a statemachine here
-                    </TextBlock>
-            </DataTemplate>
-        </HubSection>
-        <HubSection Margin="0">
-            <DataTemplate>
-                <ListView 
-                    ItemsSource="{StaticResource Graphs}"
-                    SelectionMode="None">
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"></StackPanel>
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="5"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
-            </DataTemplate>
-        </HubSection>
-
-    </Hub>
-    
+    <ListView ItemsSource="{x:Bind main.GraphViewModels}"
+              ItemTemplateSelector="{StaticResource GraphStageSelector}"
+              SelectionMode="None">
+        <ListView.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+        </ListView.ItemsPanel>
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+        </ListView.ItemContainerStyle>
+    </ListView>
+        
 </Page>

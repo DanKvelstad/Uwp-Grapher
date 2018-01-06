@@ -1,10 +1,6 @@
 ﻿using Grapher.Algorithms;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Foundation;
 
 namespace Grapher.Models
 {
@@ -15,14 +11,15 @@ namespace Grapher.Models
         private int[]       grid;
         Tuple<int, int>[]   edges_array;
 
-        public Point[]      candidate;
-        public int          intersection_count;
+        public Point[]      Candidate;
+        public int          Intersection_count;
 
         public Grid(GraphModel graph)
         {
 
             dimensions = (int)Math.Ceiling(Math.Sqrt(graph.nodes.Count));
-            grid       = new int[dimensions * dimensions];
+
+            grid = new int[dimensions * dimensions];
             for (int i = 0; i < grid.Length; i++)
             {
                 grid[i] = i;
@@ -53,7 +50,7 @@ namespace Grapher.Models
 
             }
 
-            candidate = new Point[graph.nodes.Count];
+            Candidate = new Point[graph.nodes.Count];
 
             Process();
 
@@ -68,12 +65,12 @@ namespace Grapher.Models
         private void Process()
         {
 
-            intersection_count = 0;
+            Intersection_count = 0;
 
-            for (int i = 0; i < candidate.Length; i++)
+            for (int i = 0; i < Candidate.Length; i++)
             {
-                candidate[i].X = grid[i] % dimensions;
-                candidate[i].Y = grid[i] / dimensions;
+                Candidate[i].X = grid[i] % dimensions;
+                Candidate[i].Y = grid[i] / dimensions;
             }
 
             for (int i = 0; i < edges_array.Length; i++)
@@ -82,14 +79,14 @@ namespace Grapher.Models
                 {
                     if (
                          LinearAlgebra.Intersection(
-                             candidate[edges_array[i].Item1],
-                             candidate[edges_array[i].Item2],
-                             candidate[edges_array[j].Item1],
-                             candidate[edges_array[j].Item2]
+                             Candidate[edges_array[i].Item1],
+                             Candidate[edges_array[i].Item2],
+                             Candidate[edges_array[j].Item1],
+                             Candidate[edges_array[j].Item2]
                          )
                      )
                     {
-                        intersection_count++;
+                        Intersection_count++;
                     }
                 }
             }
@@ -116,8 +113,8 @@ namespace Grapher.Models
                 {
                     grid[i] = i;
                 }
-                intersection_count = int.MaxValue;
-                candidate = null;
+                Intersection_count = int.MaxValue;
+                Candidate = null;
                 return false;
             }
             

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Foundation;
-
-namespace Grapher.Algorithms
+﻿namespace Grapher.Algorithms
 {
 
     static class LinearAlgebra
@@ -16,15 +9,15 @@ namespace Grapher.Algorithms
 
             // https://en.wikipedia.org/wiki/line%E2%80%93line_intersection
 
-            var denominator = (ts.X - tt.X) * (os.Y - ot.Y) - (ts.Y - tt.Y) * (os.X - ot.X);
+            double denominator = (ts.X - tt.X) * (os.Y - ot.Y) - (ts.Y - tt.Y) * (os.X - ot.X);
 
             if (-0.001 < denominator && 0.001 > denominator)
             {   // "When the two lines are parallel or coincident the denominator is zero"
 
-                // |  |   |
+                // |      
                 // |  |   ||
                 // |  ||  ||
-                // |   |  |
+                // |   |  
 
                 if (ts == os && tt == ot)
                 {   // They are the same segment in the same different directions

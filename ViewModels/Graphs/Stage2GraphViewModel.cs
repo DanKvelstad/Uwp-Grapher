@@ -1,67 +1,37 @@
-﻿using Grapher.Models;
+﻿using Grapher.Algorithms;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Foundation;
 
-namespace Grapher.ViewModels
+namespace Grapher.ViewModels.Graphs
 {
-
-    public class GraphLayouter : INotifyPropertyChanged
+    public class Stage2GraphViewModel : GraphViewModel
     {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private string _Label;
-        public string Label
+        public Stage2GraphViewModel(Stage1GraphViewModel PreviousStage) : base(PreviousStage)
+        {
+            Candidates = PreviousStage.Candidates;
+            stage      = Stages.Stage2;
+        }
+        public List<Point[]> Candidates
         {
             get
             {
-                return _Label;
+                return candidates;
             }
-            set
+            private set
             {
-                _Label = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Label"));
+                candidates = value;
             }
         }
+        private List<Point[]> candidates;
 
-        private double _Width = 500;
-        public double Width
-        {
-            get
-            {
-                return _Width;
-            }
-            set
-            {
-                _Width = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Width"));
-            }
-        }
 
-        public double _Height = 200;
-        public double Height
+        public int ProgressMaximum
         {
             get
             {
-                return _Height;
-            }
-            set
-            {
-                _Height = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Height"));
-            }
-        }
-        
-        private int _ProgressMaximum;
-        public  int ProgressMaximum
-        {
-            get
-            {
-                return _ProgressMaximum;
+                return progressMaximum;
             }
             private set
             {
@@ -69,106 +39,61 @@ namespace Grapher.ViewModels
                 {
                     throw new ArgumentOutOfRangeException();
                 }
-                _ProgressMaximum = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProgressMaximum"));
+                progressMaximum = value;
+                OnPropertyChanged(nameof(ProgressMaximum));
             }
         }
+        private int progressMaximum;
 
-        private int _ProgressCurrent;
-        public  int ProgressCurrent
+        public int ProgressCurrent
         {
             get
             {
-                return _ProgressCurrent;
+                return progressCurrent;
             }
             private set
             {
-                if(value>ProgressMaximum)
+                if (value > ProgressMaximum)
                 {
                     throw new ArgumentOutOfRangeException();
                 }
-                _ProgressCurrent = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ProgressCurrent"));
+                progressCurrent = value;
+                OnPropertyChanged(nameof(ProgressCurrent));
             }
         }
+        private int progressCurrent;
 
-        public async Task<List<Point[]>> GridItAsync(GraphModel graph)
+        public override async void Process()
         {
 
-            var grid                = new Grid(graph);
-            var candidates          = new List<Point[]>();
-
-            Label = "Gridding (1/2)";
-
-            var PermutationCount    = grid.PermutationsCount();
-                ProgressCurrent     = 0;
-                ProgressMaximum     = 100;
-            var ProgressStep        = (int)Math.Ceiling(PermutationCount / 100.0);
-            
-            var intersection_count = int.MaxValue;
-            for (ProgressCurrent = 0; ProgressCurrent < ProgressMaximum; ProgressCurrent++)
-            {
-                await Task.Run(
-                    new Action(
-                        () =>
-                        {
-                            for (int i = 0; i < ProgressStep; i++)
-                            {
-                                if (grid.intersection_count == intersection_count)
-                                {
-                                    candidates.Add((Point[])grid.candidate.Clone());
-                                }
-                                else if (grid.intersection_count < intersection_count)
-                                {
-                                    candidates.Clear();
-                                    candidates.Add((Point[])grid.candidate.Clone());
-                                    intersection_count = grid.intersection_count;
-                                }
-                                if (!grid.Next())
-                                {
-                                    return;
-                                }
-                            }
-                        }
-                    )
-                );
-            }
-            
-            if(0>=candidates.Count)
-            {
-                throw new Exception("Could not grid graph, candidates is zero");
-            }
-
-            Label = "Evaluating (2/2)";
-
-            PermutationCount = (int)Math.Ceiling(candidates.Count * Math.Log(candidates.Count));
-            ProgressCurrent  = 0;
-            ProgressMaximum  = 100;
-            ProgressStep     = (int)Math.Ceiling(PermutationCount / 100.0);
+            var PermutationCount = (int)Math.Ceiling(Candidates.Count * Math.Log(Candidates.Count));
+            ProgressCurrent = 0;
+            ProgressMaximum = 100;
+            var ProgressStep = (int)Math.Ceiling(PermutationCount / 100.0);
 
             int ProgressIndex = 0;
             var Sorting = Task.Run(
                 new Action(() =>
                 {
-                    candidates.Sort(
+                    Candidates.Sort(
                         (a, b) =>
                         {
-                            
+
                             Volatile.Write(
-                                ref ProgressIndex, 
+                                ref ProgressIndex,
                                 Volatile.Read(ref ProgressIndex) + 1
                             );
 
                             int a_cost = 0;
-                            foreach (var edge in graph.edges)
+                            foreach (var edge in Model.edges)
                             {
-                                var from_index = graph.nodes.FindIndex(
+                                var from_index = Model.nodes.FindIndex(
                                     (x) =>
                                     {
                                         return x.Label == edge.Source;
                                     }
                                 );
-                                var to_index = graph.nodes.FindIndex(
+                                var to_index = Model.nodes.FindIndex(
                                     (x) =>
                                     {
                                         return x.Label == edge.Target;
@@ -182,15 +107,15 @@ namespace Grapher.ViewModels
                             }
 
                             int b_cost = 0;
-                            foreach (var edge in graph.edges)
+                            foreach (var edge in Model.edges)
                             {
-                                var from_index = graph.nodes.FindIndex(
+                                var from_index = Model.nodes.FindIndex(
                                     (x) =>
                                     {
                                         return x.Label == edge.Source;
                                     }
                                 );
-                                var to_index = graph.nodes.FindIndex(
+                                var to_index = Model.nodes.FindIndex(
                                     (x) =>
                                     {
                                         return x.Label == edge.Target;
@@ -234,9 +159,9 @@ namespace Grapher.ViewModels
                 })
             );
 
-            while(!Sorting.IsCompleted)
+            while (!Sorting.IsCompleted)
             {
-                if(_ProgressCurrent<ProgressMaximum)
+                if (progressCurrent < ProgressMaximum)
                 {
                     while (Volatile.Read(ref ProgressIndex) > ProgressStep)
                     {
@@ -255,10 +180,9 @@ namespace Grapher.ViewModels
             }
             Sorting.Wait();
 
-            return candidates;
+            Stage = Stages.Stage3;
 
         }
 
     }
-
 }

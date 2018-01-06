@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Grapher
+namespace Grapher.Models
 {
 
     public class GraphModel
