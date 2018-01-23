@@ -17,7 +17,7 @@ namespace Grapher.ViewModels
 
         public MainViewModel()
         {
-            Model.Graphs.CollectionChanged    += GraphsModels_CollectionChanged;
+            Model.GraphModels.CollectionChanged    += GraphsModels_CollectionChanged;
             GraphViewModels.CollectionChanged += GraphsViewModels_CollectionChanged;
         }
 
@@ -159,14 +159,14 @@ namespace Grapher.ViewModels
 
         public async Task<bool> OpenAsync(IStorageFile File)
         {
-            var Graph = await Serialization.Serializor.Deserialize(File);
-            if (null == Graph)
+            var graphModel = await Serialization.Serializor.Deserialize(File);
+            if (null == graphModel)
             {
                 return false;
             }
             else
             {
-                Model.Graphs.Add(Graph);
+                Model.GraphModels.Add(graphModel);
                 return true;
             }
         }

@@ -12,7 +12,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.15063.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -48,15 +48,18 @@
   <ItemGroup>
     <Compile Include="Algorithms\Line.cs" />
     <Compile Include="Algorithms\LinearAlgebra.cs" />
+    <Compile Include="Algorithms\PermutationArray.cs" />
     <Compile Include="Algorithms\Point.cs" />
+    <Compile Include="Algorithms\Web.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\EdgeModel.cs" />
-    <Compile Include="Algorithms\Grid.cs" />
     <Compile Include="Models\MainModel.cs" />
+    <Compile Include="Models\NodeAnchorModel.cs" />
+    <Compile Include="Models\NodeAnchorsModel.cs" />
     <Compile Include="Models\NodeModel.cs" />
-    <Compile Include="ViewModels\AnchorViewModel.cs" />
+    <Compile Include="Models\NodesDimensionsModel.cs" />
     <Compile Include="ViewModels\EdgeViewModel.cs" />
     <Compile Include="ViewModels\Graphs\Stage1GraphViewModel.cs" />
     <Compile Include="ViewModels\Graphs\GraphViewModel.cs" />
@@ -67,7 +70,6 @@
     <Compile Include="Serialization\Xml.cs" />
     <Compile Include="Models\GraphModel.cs" />
     <Compile Include="Views\GraphEdge.cs" />
-    <Compile Include="Views\GraphNode.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

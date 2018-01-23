@@ -17,42 +17,42 @@ namespace Grapher.Models
         public Grid(GraphModel graph)
         {
 
-            dimensions = (int)Math.Ceiling(Math.Sqrt(graph.nodes.Count));
-
-            grid = new int[dimensions * dimensions];
-            for (int i = 0; i < grid.Length; i++)
-            {
-                grid[i] = i;
-            }
-
-            edges_array = new Tuple<int, int>[graph.edges.Count];
-            for(int i = 0; i < graph.edges.Count; i++)
-            {
-
-                var from_index = graph.nodes.FindIndex(
-                    (x) =>
-                    {
-                        return x.Label == graph.edges[i].Source;
-                    }
-                );
-
-                var to_index = graph.nodes.FindIndex(
-                    (x) =>
-                    {
-                        return x.Label == graph.edges[i].Target;
-                    }
-                );
-
-                edges_array[i] = new Tuple<int, int>(
-                    from_index,
-                    to_index
-                );
-
-            }
-
-            Candidate = new Point[graph.nodes.Count];
-
-            Process();
+//            dimensions = (int)Math.Ceiling(Math.Sqrt(graph.Nodes.Count));
+//
+//            grid = new int[dimensions * dimensions];
+//            for (int i = 0; i < grid.Length; i++)
+//            {
+//                grid[i] = i;
+//            }
+//
+//            edges_array = new Tuple<int, int>[graph.Edges.Count];
+//            for(int i = 0; i < graph.Edges.Count; i++)
+//            {
+//
+//                var from_index = graph.Nodes.FindIndex(
+//                    (x) =>
+//                    {
+//                        return x.Label == graph.Edges[i].Source;
+//                    }
+//                );
+//
+//                var to_index = graph.Nodes.FindIndex(
+//                    (x) =>
+//                    {
+//                        return x.Label == graph.Edges[i].Target;
+//                    }
+//                );
+//
+//                edges_array[i] = new Tuple<int, int>(
+//                    from_index,
+//                    to_index
+//                );
+//
+//            }
+//
+//            Candidate = new Point[graph.Nodes.Count];
+//
+//            Process();
 
         }
         

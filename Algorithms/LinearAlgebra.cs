@@ -1,11 +1,18 @@
-﻿namespace Grapher.Algorithms
+﻿using Grapher.Models;
+
+namespace Grapher.Algorithms
 {
 
     static class LinearAlgebra
     {
 
-        public static bool Intersection(Point ts, Point tt, Point os, Point ot)
+        public static bool Intersection(EdgeModel alpha, EdgeModel bravo, int index)
         {
+
+            Point ts = alpha.Source;
+            Point tt = alpha.Target;
+            Point os = bravo.Source;
+            Point ot = bravo.Target;
 
             // https://en.wikipedia.org/wiki/line%E2%80%93line_intersection
 

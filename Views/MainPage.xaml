@@ -11,6 +11,31 @@
     Drop="Grid_Drop">
 
     <Page.Resources>
+        
+        <DataTemplate x:Key="Node">
+            <Border BorderThickness="2"
+                    BorderBrush="Black"
+                    CornerRadius="{Binding CornerRadius, Mode=OneWay}"
+                    Padding="10"
+                    Canvas.Left="{Binding Left, Mode=OneWay}"
+                    Canvas.Top="{Binding Top, Mode=OneWay}"
+                    Width="{Binding Width, Mode=OneWay}"
+                    Height="{Binding Height, Mode=OneWay}"
+                    MinWidth="{Binding MinWidth, Mode=TwoWay}"
+                    MinHeight="{Binding MinHeight, Mode=TwoWay}"
+                    SizeChanged="SetMinimumToDesiredSize">
+                <TextBlock Text="{Binding Label, Mode=TwoWay}"
+                           FontSize="15"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="Edge"/>
+        <local:GraphElementSelector x:Key="GraphElementSelector" 
+                                    NodeTemplate="{StaticResource Node}"
+                                    EdgeTemplate="{StaticResource Edge}"/>
+
         <DataTemplate x:Key="Stage1">
             <RelativePanel Width="{Binding Width, Mode=TwoWay}"
                            Height="{Binding Height, Mode=TwoWay}"
@@ -70,7 +95,8 @@
                               RelativePanel.Below="Header"
                               RelativePanel.AlignLeftWithPanel="True"
                               RelativePanel.AlignRightWithPanel="True"
-                              RelativePanel.AlignBottomWithPanel="True">
+                              RelativePanel.AlignBottomWithPanel="True"
+                              ItemTemplateSelector="{StaticResource GraphElementSelector}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas Width="{Binding Width, Mode=TwoWay}"

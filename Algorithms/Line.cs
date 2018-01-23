@@ -1,10 +1,11 @@
 ﻿namespace Grapher.Algorithms
 {
-    class Line
+
+    public class Line
     {
 
-        Point Alpha;
-        Point Bravo;
+        public Point Alpha;
+        public Point Bravo;
 
     }
 }

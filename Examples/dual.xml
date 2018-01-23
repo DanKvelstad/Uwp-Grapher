@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<graph label="dual"
+       debug="true">
+  <nodes>
+    <node label="A state"/>
+    <node label="Me is another state"/>
+    <node label="s0"/>
+    <node label="I am also a state, but with a long name"/>
+  </nodes>
+  <edges>
+  </edges>
+</graph>

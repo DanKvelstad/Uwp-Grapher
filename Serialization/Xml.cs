@@ -25,7 +25,7 @@ namespace Grapher.Serialization
 
             graph.Add(new XElement("nodes"));
             var nodes = graph.Element("nodes");
-            foreach (var node in ToSerialize.nodes)
+            foreach (var node in ToSerialize.Nodes)
             {
                 nodes.Add(
                     new XElement(
@@ -37,7 +37,7 @@ namespace Grapher.Serialization
 
             graph.Add(new XElement("edges"));
             var edges = graph.Element("edges");
-            foreach (var edge in ToSerialize.edges)
+            foreach (var edge in ToSerialize.Edges)
             {
                 edges.Add(
                     new XElement(
@@ -82,17 +82,33 @@ namespace Grapher.Serialization
                 var doc = XDocument.Load(Input);
                 var graph = doc.Element("graph");
                 Result.Label = graph.Attribute("label").Value;
+                if(null==graph.Attribute("debug"))
+                {
+                    Result.Debug = false;
+                }
+                else
+                {
+                    Result.Debug = "true"==graph.Attribute("debug").Value;
+                }
                 foreach (var Element in graph.Element("nodes").Elements())
                 {
-                    Result.EmplaceNode(Element.Attribute("label").Value);
+                    Result.Nodes.Add(
+                        new NodeModel()
+                        {
+                            Label = Element.Attribute("label").Value
+                        }
+                    );
                 }
 
                 foreach (var edge in graph.Element("edges").Elements())
                 {
-                    Result.EmplaceEdge(
-                        edge.Attribute("source").Value,
-                        edge.Attribute("target").Value,
-                        edge.Attribute("label").Value
+                    Result.Edges.Add(
+                        new EdgeModel()
+                        {
+                            Label  = edge.Attribute("label").Value,
+                            SourceAnchors = Result.Nodes.ToList().Find(n => n.Label == edge.Attribute("source").Value).Anchors,
+                            TargetAnchors = Result.Nodes.ToList().Find(n => n.Label == edge.Attribute("target").Value).Anchors
+                        }
                     );
                 }
 

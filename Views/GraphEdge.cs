@@ -25,12 +25,14 @@ namespace Grapher.Views
 
         public GraphEdge(EdgeViewModel Model)
         {
-            
-            Baseline = new Line();
-            Baseline.StrokeThickness    = 2;
-            Baseline.Stroke             = new SolidColorBrush(Colors.Black);
-            Baseline.StrokeStartLineCap = PenLineCap.Round;
-            Baseline.StrokeEndLineCap   = PenLineCap.Triangle;
+
+            Baseline = new Line
+            {
+                StrokeThickness = 2,
+                Stroke = new SolidColorBrush(Colors.Black),
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Triangle
+            };
             Baseline.SetBinding(
                 Line.X1Property,
                 new Binding()
@@ -110,11 +112,13 @@ namespace Grapher.Views
                 }
             );
 
-            ArrowBravo = new Line();
-            ArrowBravo.StrokeThickness      = 2;
-            ArrowBravo.Stroke               = new SolidColorBrush(Colors.Black);
-            ArrowBravo.StrokeStartLineCap   = PenLineCap.Round;
-            ArrowBravo.StrokeEndLineCap     = PenLineCap.Triangle;
+            ArrowBravo = new Line
+            {
+                StrokeThickness = 2,
+                Stroke = new SolidColorBrush(Colors.Black),
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Triangle
+            };
             ArrowBravo.SetBinding(
                 Line.X1Property,
                 new Binding()
