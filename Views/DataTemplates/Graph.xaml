@@ -1,0 +1,89 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Grapher.Views.DataTemplates">
+
+    <local:GraphElementSelector x:Key="GraphElementSelector" 
+                                    NodeTemplate="{StaticResource Node}"
+                                    EdgeTemplate="{StaticResource Edge}"/>
+    
+    <DataTemplate x:Key="Stage1">
+        <RelativePanel Width="{Binding Width, Mode=TwoWay}"
+                       Height="{Binding Height, Mode=TwoWay}"
+                       Padding="10">
+            <TextBlock RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       HorizontalAlignment="Center"
+                       FontSize="20"
+                       Text="{Binding Label}"/>
+            <StackPanel RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignVerticalCenterWithPanel="True"
+                        Orientation="Vertical">
+                <TextBlock Text="Gridding (1/2)"
+                           HorizontalAlignment="Center"/>
+                <ProgressBar Maximum="{Binding ProgressMaximum, Mode=OneWay}"
+                             Value="{Binding ProgressCurrent, Mode=OneWay}"
+                             Margin="0,12"
+                             Height="100"/>
+            </StackPanel>
+        </RelativePanel>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="Stage2">
+        <RelativePanel Width="{Binding Width, Mode=TwoWay}"
+                       Height="{Binding Height, Mode=TwoWay}"
+                       Padding="10">
+            <TextBlock RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       HorizontalAlignment="Center"
+                       FontSize="20"
+                       Text="{Binding Label}"/>
+            <StackPanel RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignVerticalCenterWithPanel="True"
+                        Orientation="Vertical">
+                <TextBlock Text="Sorting (2/2)"
+                           HorizontalAlignment="Center"/>
+                <ProgressBar Maximum="{Binding ProgressMaximum, Mode=OneWay}"
+                             Value="{Binding ProgressCurrent, Mode=OneWay}"
+                             Margin="0,12"
+                             Height="100"/>
+            </StackPanel>
+        </RelativePanel>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="Stage3">
+        <RelativePanel Padding="10">
+            <TextBlock x:Name="Header"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       HorizontalAlignment="Center"
+                       FontSize="20"
+                       Text="{Binding Label}"/>
+            <ItemsControl ItemsSource="{Binding Children, Mode=OneWay}"
+                          RelativePanel.Below="Header"
+                          RelativePanel.AlignLeftWithPanel="True"
+                          RelativePanel.AlignRightWithPanel="True"
+                          RelativePanel.AlignBottomWithPanel="True"
+                          ItemTemplateSelector="{StaticResource GraphElementSelector}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="{Binding Width, Mode=TwoWay}"
+                                Height="{Binding Height, Mode=TwoWay}"
+                                Background="Transparent"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </RelativePanel>
+    </DataTemplate>
+
+    <local:GraphStageSelector x:Key="GraphStageSelector" 
+                              Stage1Template="{StaticResource Stage1}"
+                              Stage2Template="{StaticResource Stage2}"
+                              Stage3Template="{StaticResource Stage3}"/>
+
+</ResourceDictionary>

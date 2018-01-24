@@ -61,14 +61,16 @@
     <Compile Include="Models\NodeModel.cs" />
     <Compile Include="Models\NodesDimensionsModel.cs" />
     <Compile Include="ViewModels\EdgeViewModel.cs" />
-    <Compile Include="ViewModels\Graphs\Stage1GraphViewModel.cs" />
-    <Compile Include="ViewModels\Graphs\GraphViewModel.cs" />
-    <Compile Include="ViewModels\Graphs\Stage2GraphViewModel.cs" />
-    <Compile Include="ViewModels\Graphs\Stage3GraphViewModel.cs" />
+    <Compile Include="ViewModels\Graph\Stage1GraphViewModel.cs" />
+    <Compile Include="ViewModels\Graph\GraphViewModel.cs" />
+    <Compile Include="ViewModels\Graph\Stage2GraphViewModel.cs" />
+    <Compile Include="ViewModels\Graph\Stage3GraphViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NodeViewModel.cs" />
     <Compile Include="Serialization\Xml.cs" />
     <Compile Include="Models\GraphModel.cs" />
+    <Compile Include="Views\DataTemplates\GraphElementSelector.cs" />
+    <Compile Include="Views\DataTemplates\GraphSelector.cs" />
     <Compile Include="Views\GraphEdge.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -96,6 +98,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\DataTemplates\GraphElements.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\DataTemplates\Graph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -105,6 +117,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.2.3</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
