@@ -1,38 +1,14 @@
 ﻿<Page
-    x:Class="Grapher.MainPage"
+    x:Class="Grapher.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Grapher"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    AllowDrop="True" 
-    DragOver="Grid_DragOver"
-    Drop="Grid_Drop">
+    xmlns:local="using:Grapher.Views">
 
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="DataTemplates/GraphElements.xaml"/>
-                <ResourceDictionary Source="DataTemplates/Graph.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
-    
-    <ListView ItemsSource="{x:Bind main.GraphViewModels}"
-              ItemTemplateSelector="{StaticResource GraphStageSelector}"
-              SelectionMode="None">
-        <ListView.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel Orientation="Horizontal"/>
-            </ItemsPanelTemplate>
-        </ListView.ItemsPanel>
-        <ListView.ItemContainerStyle>
-            <Style TargetType="ListViewItem">
-                <Setter Property="Padding" Value="5"/>
-                <Setter Property="BorderThickness" Value="0"/>
-            </Style>
-        </ListView.ItemContainerStyle>
-    </ListView>
-        
+    <local:GraphPanelUserControl x:Name="graphPanel"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"/>
+
 </Page>

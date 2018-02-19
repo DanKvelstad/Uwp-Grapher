@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 
 namespace Grapher.Models
@@ -9,9 +9,7 @@ namespace Grapher.Models
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public bool Debug { get; set; }
-
+        
         public string Label
         {
             get
@@ -27,69 +25,158 @@ namespace Grapher.Models
                 );
             }
         }
-        private string label = "Anonymous";
-
-        public double Width
+        private string label;
+        
+        public ObservableCollection<NodeModel> NodeModels
         {
             get
             {
-                return width;
-            }
-        }
-        public double width = 200;
-
-        public double Height
-        {
-            get
-            {
-                return height;
-            }
-        }
-        private double height = 200;
-
-        public ObservableCollection<NodeModel> Nodes
-        {
-            get
-            {
-                if (null == nodes)
+                if (null == nodeModels)
                 {
-                    Nodes = new ObservableCollection<NodeModel>();
+                    NodeModels = new ObservableCollection<NodeModel>();
                 }
-                return nodes;
+                return nodeModels;
             }
             private set
             {
-                nodes                 = value;
-                NodesDimensions.Nodes = nodes;
+
+                if (null != nodeModels)
+                {
+                    nodeModels.CollectionChanged -= GridPlacementService.Nodes_CollectionChanged;
+                    nodeModels.CollectionChanged -= GraphGridToPixelService.Nodes_CollectionChanged;
+                    nodeModels.CollectionChanged -= Dimensions.Nodes_CollectionChanged;
+                    Dimensions.Nodes              = null;
+                }
+
+                nodeModels = value;
+
+                if (null != nodeModels)
+                {
+                    Dimensions.Nodes              = nodeModels;
+                    nodeModels.CollectionChanged += Dimensions.Nodes_CollectionChanged;
+                    nodeModels.CollectionChanged += GraphGridToPixelService.Nodes_CollectionChanged;
+                    nodeModels.CollectionChanged += GridPlacementService.Nodes_CollectionChanged;
+                }
+
             }
         }
-        private ObservableCollection<NodeModel> nodes;
+        private ObservableCollection<NodeModel> nodeModels;
 
-        private NodesDimensionsModel NodesDimensions
+        public ObservableCollection<EdgeModel> EdgeModels
         {
             get
             {
-                if(null == nodesDimensions)
+                if (null == edgeModels)
                 {
-                    nodesDimensions = new NodesDimensionsModel();
+                    edgeModels = new ObservableCollection<EdgeModel>();
                 }
-                return nodesDimensions;
+                return edgeModels;
+            }
+            set
+            {
+
+                if (null != edgeModels)
+                {
+                    edgeModels.CollectionChanged -= Dimensions.Edges_CollectionChanged;
+                    Dimensions.Edges              = null;
+                }
+
+                edgeModels = value;
+
+                if (null != edgeModels)
+                {
+                    Dimensions.Edges              = edgeModels;
+                    edgeModels.CollectionChanged += Dimensions.Edges_CollectionChanged;
+                }
+
             }
         }
-        private NodesDimensionsModel nodesDimensions;
+        private ObservableCollection<EdgeModel> edgeModels;
 
-        public ObservableCollection<EdgeModel> Edges
+        public Services.GraphGridToPixelService GraphGridToPixelService
         {
             get
             {
-                if (null == edges)
+                if (null == graphGridToPixelService)
                 {
-                    edges = new ObservableCollection<EdgeModel>();
+                    GraphGridToPixelService = new Services.GraphGridToPixelService();
                 }
-                return edges;
+                return graphGridToPixelService;
+            }
+            set
+            {
+                if (null != graphGridToPixelService)
+                {
+                    throw new System.Exception();
+                }
+                graphGridToPixelService = value;
+                graphGridToPixelService.Dimensions = Dimensions;
             }
         }
-        private ObservableCollection<EdgeModel> edges;
+        private Services.GraphGridToPixelService graphGridToPixelService;
+
+        public Services.SimpleGridPlacementService GridPlacementService
+        {
+            get
+            {
+                if (null == gridPlacementService)
+                {
+                    GridPlacementService = new Services.SimpleGridPlacementService();
+                }
+                return gridPlacementService;
+            }
+            set
+            {
+                if (null != gridPlacementService)
+                {
+                    throw new System.Exception();
+                }
+                gridPlacementService = value;
+                gridPlacementService.Nodes = NodeModels;
+            }
+        }
+        private Services.SimpleGridPlacementService gridPlacementService;
+
+        public DimensionsModel Dimensions
+        {
+            get
+            {
+                if (null == dimensions)
+                {
+                    Dimensions = new DimensionsModel();
+                }
+                return dimensions;
+            }
+            set
+            {
+
+                if (null != dimensions)
+                {
+
+                    dimensions.Nodes              = null;
+                    NodeModels.CollectionChanged -= dimensions.Nodes_CollectionChanged;
+
+                    dimensions.Edges              = null;
+                    EdgeModels.CollectionChanged -= dimensions.Edges_CollectionChanged;
+
+                }
+
+                dimensions = value;
+
+                if (null != dimensions)
+                {
+
+                    dimensions.Nodes              = NodeModels;
+                    NodeModels.CollectionChanged += dimensions.Nodes_CollectionChanged;
+
+                    dimensions.Edges              = EdgeModels;
+                    EdgeModels.CollectionChanged += dimensions.Edges_CollectionChanged;
+
+                }
+
+            }
+        }
+        private DimensionsModel dimensions;
 
     }
 

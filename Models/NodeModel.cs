@@ -1,6 +1,4 @@
-﻿using Grapher.Algorithms;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Grapher.Models
 {
@@ -18,164 +16,87 @@ namespace Grapher.Models
             }
             set
             {
-                label = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(Label))
-                );
-            }
-        }
-        private string label;
-
-        public double CornerRadius
-        {
-            get
-            {
-                return cornerRadius;
-            }
-            set
-            {
-                cornerRadius = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(CornerRadius))
-                );
-            }
-        }
-        private double cornerRadius = 10;
-
-        public double MinWidth
-        {
-            get
-            {
-                return minWidth;
-            }
-            set
-            {
-                minWidth = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(MinWidth))
-                );
-            }
-        }
-        private double minWidth;
-
-        public double MinHeight
-        {
-            get
-            {
-                return minHeight;
-            }
-            set
-            {
-                minHeight = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(MinHeight))
-                );
-            }
-        }
-        private double minHeight;
-
-        public double Width
-        {
-            get
-            {
-                return width;
-            }
-            set
-            {
-                width = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(Width))
-                );
-            }
-        }
-        private double width = double.NaN;
-
-        public double Height
-        {
-            get
-            {
-                return height;
-            }
-            set
-            {
-                height = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(Height))
-                );
-            }
-        }
-        private double height = double.NaN;
-
-        public Point Center
-        {
-            get
-            {
-                return center;
-            }
-            set
-            {
-                center = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(Center))
-                );
-            }
-        }
-        private Point center;
-        
-        public List<Point> Grid
-        {
-            get
-            {
-                if (null == grid)
+                if (value != label)
                 {
-                    grid = new List<Point>();
+                    label = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(Label))
+                    );
                 }
+            }
+        }
+        private string label = "";
+
+        public double LocalWidth
+        {
+            get
+            {
+                return localWidth;
+            }
+            set
+            {
+                if (value != localWidth)
+                {
+                    localWidth = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(LocalWidth))
+                    );
+                }
+            }
+        }
+        private double localWidth;
+
+        public double LocalHeight
+        {
+            get
+            {
+                return localHeight;
+            }
+            set
+            {
+                if (value != localHeight)
+                {
+                    localHeight = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(LocalHeight))
+                    );
+                }
+            }
+        }
+        private double localHeight;
+        
+        public Point Grid
+        {
+            get
+            {
                 return grid;
             }
             set
             {
                 grid = value;
-            }
-        }
-        private List<Point> grid;
-
-        public int GridIndex
-        {
-            get
-            {
-                return gridIndex;
-            }
-            set
-            {
-                gridIndex = value;
-                Center = new Point(
-                    Grid[gridIndex].X * ( Width * 2),
-                    Grid[gridIndex].Y * (Height * 2)
+                PropertyChanged?.Invoke(
+                    this,
+                    new PropertyChangedEventArgs(nameof(Grid))
                 );
             }
         }
-        private int gridIndex;
-        
-        public NodeAnchorsModel Anchors
+        private Point grid;
+
+        public NodeGeometryModel Geometry
         {
             get
             {
-                if(null==anchors)
+                if(null == geometry)
                 {
-                    anchors = new NodeAnchorsModel();
-                    PropertyChanged += anchors.NodeModel_PropertyChanged;
+                    geometry = new NodeGeometryModel();
                 }
-                return anchors;
+                return geometry;
             }
         }
-        private NodeAnchorsModel anchors;
+        private NodeGeometryModel geometry;
 
     }
 

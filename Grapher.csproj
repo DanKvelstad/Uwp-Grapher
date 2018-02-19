@@ -46,21 +46,23 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\Line.cs" />
     <Compile Include="Algorithms\LinearAlgebra.cs" />
     <Compile Include="Algorithms\PermutationArray.cs" />
-    <Compile Include="Algorithms\Point.cs" />
     <Compile Include="Algorithms\Web.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\EdgeModel.cs" />
+    <Compile Include="Models\DimensionsModel.cs" />
+    <Compile Include="Models\PointModels.cs" />
     <Compile Include="Models\MainModel.cs" />
     <Compile Include="Models\NodeAnchorModel.cs" />
-    <Compile Include="Models\NodeAnchorsModel.cs" />
+    <Compile Include="Models\NodeGeometryModel.cs" />
     <Compile Include="Models\NodeModel.cs" />
-    <Compile Include="Models\NodesDimensionsModel.cs" />
+    <Compile Include="Services\GraphGridToPixelService.cs" />
+    <Compile Include="Services\SimpleGridPlacementService.cs" />
     <Compile Include="ViewModels\EdgeViewModel.cs" />
+    <Compile Include="ViewModels\GraphViewModel.cs" />
     <Compile Include="ViewModels\Graph\Stage1GraphViewModel.cs" />
     <Compile Include="ViewModels\Graph\GraphViewModel.cs" />
     <Compile Include="ViewModels\Graph\Stage2GraphViewModel.cs" />
@@ -69,13 +71,22 @@
     <Compile Include="ViewModels\NodeViewModel.cs" />
     <Compile Include="Serialization\Xml.cs" />
     <Compile Include="Models\GraphModel.cs" />
-    <Compile Include="Views\DataTemplates\GraphElementSelector.cs" />
-    <Compile Include="Views\DataTemplates\GraphSelector.cs" />
-    <Compile Include="Views\GraphEdge.cs" />
+    <Compile Include="Views\EdgeUserControl.xaml.cs">
+      <DependentUpon>EdgeUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GraphPanelUserControl.xaml.cs">
+      <DependentUpon>GraphPanelUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GraphUserControl.xaml.cs">
+      <DependentUpon>GraphUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\NodeUserControl.xaml.cs">
+      <DependentUpon>NodeUserControl.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -98,19 +109,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\DataTemplates\GraphElements.xaml">
+    <Page Include="Views\EdgeUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="Views\DataTemplates\Graph.xaml">
+    <Page Include="Views\GraphPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\GraphUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NodeUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -9,10 +9,10 @@ namespace Grapher.Algorithms
         public static bool Intersection(EdgeModel alpha, EdgeModel bravo, int index)
         {
 
-            Point ts = alpha.Source;
-            Point tt = alpha.Target;
-            Point os = bravo.Source;
-            Point ot = bravo.Target;
+            Pixel ts = alpha.Source;
+            Pixel tt = alpha.Target;
+            Pixel os = bravo.Source;
+            Pixel ot = bravo.Target;
 
             // https://en.wikipedia.org/wiki/line%E2%80%93line_intersection
 
@@ -68,10 +68,11 @@ namespace Grapher.Algorithms
                 else
                 {
 
-                    var point = new Point(
-                        (ts.X * tt.Y - ts.Y * tt.X) * (os.X - ot.X) - (ts.X - tt.X) * (os.X * ot.Y - os.Y * ot.X) / denominator,
-                        (ts.X * tt.Y - ts.Y * tt.X) * (os.Y - ot.Y) - (ts.Y - tt.Y) * (os.X * ot.Y - os.Y * ot.X) / denominator
-                    );
+                    var point = new Pixel
+                    {
+                        X = (ts.X * tt.Y - ts.Y * tt.X) * (os.X - ot.X) - (ts.X - tt.X) * (os.X * ot.Y - os.Y * ot.X) / denominator,
+                        Y = (ts.X * tt.Y - ts.Y * tt.X) * (os.Y - ot.Y) - (ts.Y - tt.Y) * (os.X * ot.Y - os.Y * ot.X) / denominator
+                    };
 
                     return Contains(ts, tt, point) && Contains(os, ot, point);
 
@@ -80,7 +81,7 @@ namespace Grapher.Algorithms
 
         }
 
-        private static bool Contains(Point s, Point t, Point p)
+        private static bool Contains(Pixel s, Pixel t, Pixel p)
         {
 
             var cross_product = (p.Y - s.Y) * (t.X - s.X) - (p.X - s.X) * (t.Y - s.Y);

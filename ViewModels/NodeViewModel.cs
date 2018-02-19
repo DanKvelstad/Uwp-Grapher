@@ -18,15 +18,21 @@ namespace Grapher.ViewModels
             }
             set
             {
+
                 if (null != model)
                 {
-                    model.PropertyChanged -= Model_PropertyChanged;
+                    model.Geometry.PropertyChanged -= NodeGeometry_PropertyChanged;
+                    model.PropertyChanged          -= Model_PropertyChanged;
                 }
+
                 model = value;
+
                 if (null != model)
                 {
-                    model.PropertyChanged += Model_PropertyChanged;
+                    model.PropertyChanged          += Model_PropertyChanged;
+                    model.Geometry.PropertyChanged += NodeGeometry_PropertyChanged;
                 }
+
             }
         }
         private NodeModel model;
@@ -35,25 +41,39 @@ namespace Grapher.ViewModels
         {
             switch(e.PropertyName)
             {
-                case nameof(NodeModel.Center):
+                case nameof(NodeModel.Label):
                     PropertyChanged?.Invoke(
                         this,
-                        new PropertyChangedEventArgs(nameof(Left))
-                    );
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(nameof(Top))
-                    );
-                    break;
-                default:
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(e.PropertyName)
+                        new PropertyChangedEventArgs(nameof(Label))
                     );
                     break;
             }
         }
-        
+
+        private void NodeGeometry_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(nameof(Left))
+            );
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(nameof(Top))
+            );
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(nameof(Width))
+            );
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(nameof(Height))
+            );
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(nameof(CornerRadius))
+            );
+        }
+
         public string Label
         {
             get
@@ -70,31 +90,7 @@ namespace Grapher.ViewModels
         {
             get
             {
-                return new CornerRadius(Model.CornerRadius);
-            }
-        }
-
-        public double MinWidth
-        {
-            get
-            {
-                return Model.MinWidth;
-            }
-            set
-            {
-                Model.MinWidth = value;
-            }
-        }
-
-        public double MinHeight
-        {
-            get
-            {
-                return Model.MinHeight;
-            }
-            set
-            {
-                Model.MinHeight = value;
+                return new CornerRadius(Model.Geometry.CornerRadius);
             }
         }
 
@@ -102,11 +98,11 @@ namespace Grapher.ViewModels
         {
             get
             {
-                return Model.Width;
+                return Model.Geometry.Right - Model.Geometry.Left;
             }
             set
             {
-                Model.Width = value;
+                Model.LocalWidth = value;
             }
         }
 
@@ -114,11 +110,11 @@ namespace Grapher.ViewModels
         {
             get
             {
-                return Model.Height;
+                return Model.Geometry.Bottom - Model.Geometry.Top;
             }
             set
             {
-                Model.Height = value;
+                Model.LocalHeight = value;
             }
         }
 
@@ -126,38 +122,18 @@ namespace Grapher.ViewModels
         {
             get
             {
-                //return Model.Center.X - Model.Width / 2;
-                return left;
-            }
-            set
-            {
-                left = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(Left))
-                );
+                return Model.Geometry.Left;
             }
         }
-        private double left;
 
         public double Top
         {
             get
             {
-                //return Model.Center.Y - Model.Height / 2;
-                return top;
-            }
-            set
-            {
-                top = value;
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(Top))
-                );
+                return Model.Geometry.Top;
             }
         }
-        private double top;
-        
+
     }
 
 }

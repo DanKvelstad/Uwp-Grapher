@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<graph label="single"
-       debug="true">
-  <nodes>
-    <node label="I am a state"/>
-  </nodes>
-  <edges>
-  </edges>
-</graph>

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<graph index="0">
+<graph label="Edge">
   <nodes>
-    <node label="s0" />
-    <node label="s1" />
+    <node label="s0"/>
+    <node label="s1"/>
   </nodes>
   <edges>
     <edge label="e0" source="s0" target="s1" />

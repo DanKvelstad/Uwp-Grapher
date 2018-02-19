@@ -1,49 +1,67 @@
-﻿using Grapher.ViewModels.Graphs;
-using System;
+﻿using Grapher.Models;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.Storage;
 
 namespace Grapher.ViewModels
 {
 
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel
     {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public MainViewModel()
+        
+        public MainModel Model
         {
-            Model.GraphModels.CollectionChanged    += GraphsModels_CollectionChanged;
-            GraphViewModels.CollectionChanged += GraphsViewModels_CollectionChanged;
-        }
+            get
+            {
+                if (null == model)
+                {
+                    Model = new Models.MainModel();
+                }
+                return model;
+            }
+            set
+            {
 
-        private void GraphsModels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+                if (null != model)
+                {
+                    model.GraphModels.CollectionChanged -= GraphModels_CollectionChanged;
+                }
+
+                model = value;
+
+                if (null != model)
+                {
+                    model.GraphModels.CollectionChanged += GraphModels_CollectionChanged;
+                }
+
+            }
+        }
+        private MainModel model;
+
+        private void GraphModels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (var GraphModel in e.NewItems)
+                    foreach (var graphModel in e.NewItems)
                     {
                         GraphViewModels.Add(
-                            new Graphs.GraphViewModel(
-                                GraphModel as Models.GraphModel
-                            )
+                            new GraphViewModel()
+                            {
+                                Model = graphModel as GraphModel
+                            }
                         );
-                        Task.Run(new Action(GraphViewModels[GraphViewModels.Count - 1].Process));
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (var GraphModel in e.OldItems)
+                    foreach (var graphModel in e.OldItems)
                     {
-                        foreach (var GraphViewModel in GraphViewModels)
+                        foreach (var graphViewModel in GraphViewModels)
                         {
-                            if (GraphViewModel.Model == GraphModel)
+                            if (graphViewModel.Model == graphModel)
                             {
-                                GraphViewModels.Remove(GraphViewModel);
+                                GraphViewModels.Remove(graphViewModel);
                             }
                         }
                     }
@@ -52,112 +70,21 @@ namespace Grapher.ViewModels
                     break;
             }
         }
-
-        private void GraphsViewModels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (GraphViewModel GraphViewhModel in e.NewItems)
-                    {
-                        GraphViewhModel.PropertyChanged += GraphViewModel_PropertyChangedAsync;
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    foreach (GraphViewModel GraphViewhModel in e.OldItems)
-                    {
-                        GraphViewhModel.PropertyChanged -= GraphViewModel_PropertyChangedAsync;
-                    }
-                    foreach (GraphViewModel GraphViewhModel in e.NewItems)
-                    {
-                        GraphViewhModel.PropertyChanged += GraphViewModel_PropertyChangedAsync;
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (GraphViewModel GraphViewhModel in e.OldItems)
-                    {
-                        GraphViewhModel.PropertyChanged -= GraphViewModel_PropertyChangedAsync;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private async void GraphViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-
-            var GraphViewModel = sender as GraphViewModel;
-
-            if (e.PropertyName == nameof(Graphs.GraphViewModel.Stage))
-            {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                    Windows.UI.Core.CoreDispatcherPriority.Normal,
-                    () =>
-                    {
-
-                        switch (GraphViewModel.Stage)
-                        {
-                            case GraphViewModel.Stages.Stage1:
-                                var Stage1GraphViewModel = new Stage1GraphViewModel(
-                                    (GraphViewModel as GraphViewModel)
-                                );
-                                GraphViewModels[GraphViewModels.IndexOf(GraphViewModel)] = Stage1GraphViewModel;
-                                GraphViewModel = Stage1GraphViewModel;
-                                break;
-                            case GraphViewModel.Stages.Stage2:
-                                var Stage2GraphViewModel = new Stage2GraphViewModel(
-                                    GraphViewModel as Stage1GraphViewModel
-                                );
-                                GraphViewModels[GraphViewModels.IndexOf(GraphViewModel)] = Stage2GraphViewModel;
-                                GraphViewModel = Stage2GraphViewModel;
-                                break;
-                            case GraphViewModel.Stages.Stage3:
-                                var Stage3GraphViewModel = new Stage3GraphViewModel(
-                                    GraphViewModel as Stage2GraphViewModel
-                                );
-                                GraphViewModels[GraphViewModels.IndexOf(GraphViewModel)] = Stage3GraphViewModel;
-                                GraphViewModel = Stage3GraphViewModel;
-                                break;
-                        }
-
-                        GraphViewModel.Process();
-
-                    }
-
-                );
-
-            };
-            
-        }
-
-        public Models.MainModel Model
-        {
-            get
-            {
-                if (null == model)
-                {
-                    model = new Models.MainModel();
-                }
-                return model;
-            }
-        }
-        private Models.MainModel model;
-
-        public ObservableCollection<Graphs.GraphViewModel> GraphViewModels
+        
+        public ObservableCollection<GraphViewModel> GraphViewModels
         {
             get
             {
                 if (null == graphViewModels)
                 {
-                    graphViewModels = new ObservableCollection<Graphs.GraphViewModel>();
+                    graphViewModels = new ObservableCollection<GraphViewModel>();
                 }
                 return graphViewModels;
             }
         }
-        private ObservableCollection<Graphs.GraphViewModel> graphViewModels;
+        private ObservableCollection<GraphViewModel> graphViewModels;
 
-        public async Task<bool> OpenAsync(IStorageFile File)
+        public async Task<bool> OpenFileAsync(IStorageFile File)
         {
             var graphModel = await Serialization.Serializor.Deserialize(File);
             if (null == graphModel)
@@ -170,7 +97,7 @@ namespace Grapher.ViewModels
                 return true;
             }
         }
-
+        
     }
 
 }

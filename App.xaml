@@ -2,14 +2,5 @@
     x:Class="Grapher.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Grapher"
     RequestedTheme="Light">
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Views/DataTemplates/GraphElements.xaml"/>
-                <ResourceDictionary Source="Views/DataTemplates/Graph.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
 </Application>

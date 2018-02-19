@@ -1,0 +1,22 @@
+﻿<UserControl
+    x:Class="Grapher.Views.GraphPanelUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <UserControl.Content>
+        <ScrollViewer HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      AllowDrop="True" 
+                      DragOver="Page_DragOver"
+                      Drop="Page_Drop">
+            <ItemsControl ItemsSource="{x:Bind graphUserControls, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </UserControl.Content>
+
+</UserControl>

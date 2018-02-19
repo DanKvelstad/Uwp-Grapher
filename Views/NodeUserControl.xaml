@@ -1,0 +1,24 @@
+﻿<UserControl
+    x:Class="Grapher.Views.NodeUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Canvas.Left="{x:Bind viewModel.Left, Mode=OneWay}"
+    Canvas.Top="{x:Bind viewModel.Top, Mode=OneWay}"
+    Width="{x:Bind viewModel.Width, Mode=OneWay}"
+    Height="{x:Bind viewModel.Height, Mode=OneWay}">
+
+    <Border BorderThickness="2"
+            BorderBrush="Black"
+            CornerRadius="{x:Bind viewModel.CornerRadius, Mode=OneWay}"
+            Padding="10">
+        
+        <TextBlock Text="{x:Bind viewModel.Label, Mode=OneWay}"
+                   SizeChanged="TextBlock_SizeChanged"
+                   FontSize="15"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+        
+    </Border>
+    
+</UserControl>

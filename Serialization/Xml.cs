@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -25,7 +23,7 @@ namespace Grapher.Serialization
 
             graph.Add(new XElement("nodes"));
             var nodes = graph.Element("nodes");
-            foreach (var node in ToSerialize.Nodes)
+            foreach (var node in ToSerialize.NodeModels)
             {
                 nodes.Add(
                     new XElement(
@@ -37,7 +35,7 @@ namespace Grapher.Serialization
 
             graph.Add(new XElement("edges"));
             var edges = graph.Element("edges");
-            foreach (var edge in ToSerialize.Edges)
+            foreach (var edge in ToSerialize.EdgeModels)
             {
                 edges.Add(
                     new XElement(
@@ -82,17 +80,9 @@ namespace Grapher.Serialization
                 var doc = XDocument.Load(Input);
                 var graph = doc.Element("graph");
                 Result.Label = graph.Attribute("label").Value;
-                if(null==graph.Attribute("debug"))
-                {
-                    Result.Debug = false;
-                }
-                else
-                {
-                    Result.Debug = "true"==graph.Attribute("debug").Value;
-                }
                 foreach (var Element in graph.Element("nodes").Elements())
                 {
-                    Result.Nodes.Add(
+                    Result.NodeModels.Add(
                         new NodeModel()
                         {
                             Label = Element.Attribute("label").Value
@@ -102,20 +92,48 @@ namespace Grapher.Serialization
 
                 foreach (var edge in graph.Element("edges").Elements())
                 {
-                    Result.Edges.Add(
-                        new EdgeModel()
+
+                    var label        = edge.Attribute("label").Value;
+                    var sourceString = edge.Attribute("source").Value;
+                    var targetString = edge.Attribute("target").Value;
+
+                    NodeGeometryModel sourceGeometry = null;
+                    NodeGeometryModel targetGeometry = null;
+
+                    foreach (var nodeModel in Result.NodeModels)
+                    {
+                        if (nodeModel.Label == sourceString)
                         {
-                            Label  = edge.Attribute("label").Value,
-                            SourceAnchors = Result.Nodes.ToList().Find(n => n.Label == edge.Attribute("source").Value).Anchors,
-                            TargetAnchors = Result.Nodes.ToList().Find(n => n.Label == edge.Attribute("target").Value).Anchors
+                            sourceGeometry = nodeModel.Geometry;
                         }
-                    );
+                        if (nodeModel.Label == targetString)
+                        {
+                            targetGeometry = nodeModel.Geometry;
+                        }
+                    }
+
+                    if (null != label && null != sourceGeometry && null != targetGeometry)
+                    {
+                        Result.EdgeModels.Add(
+                            new EdgeModel()
+                            {
+                                Label          = label,
+                                SourceGeometry = sourceGeometry,
+                                TargetGeometry = targetGeometry
+                            }
+                        );
+                    }
+
                 }
 
                 return Result;
 
             }
             catch (XmlException)
+            {
+                return null;
+            }
+            catch(ArgumentNullException)
             {
                 return null;
             }

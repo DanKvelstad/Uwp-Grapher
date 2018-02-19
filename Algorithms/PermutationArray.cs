@@ -1,9 +1,6 @@
 ﻿using Grapher.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grapher.Algorithms
 {
@@ -38,34 +35,23 @@ namespace Grapher.Algorithms
             }
         }
         
-        public Point[] Current
+        public Pixel[] Current
         {
             get
             {
-                var current = new Point[rows * cols];
+                var current = new Pixel[rows * cols];
                 for (uint i = 0; i < array.Length; i++)
                 {
-                    current[(int)array[i]] = new Point(i / cols, i % cols);
+                    current[(int)array[i]] = new Pixel
+                    {
+                        X = i % cols,
+                        Y = i / cols
+                    };
                 }
                 return current;
             }
         }
         
-        public int MapGridToNodes(List<NodeModel> nodes)
-        {
-
-            var current = Current;
-
-            int index = nodes[0].Grid.Count;
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                nodes[i].Grid.Add(current[i]);
-            }
-
-            return index;
-
-        }
-
         public bool Permutate()
         {
 
