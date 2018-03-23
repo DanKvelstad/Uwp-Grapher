@@ -1,5 +1,4 @@
-﻿
-using Grapher.Algorithms;
+﻿using System;
 using System.ComponentModel;
 
 namespace Grapher.Models
@@ -9,6 +8,12 @@ namespace Grapher.Models
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public DimensionsModel Dimensions
+        {
+            get;
+            set;
+        }
 
         public string Label
         {
@@ -48,7 +53,7 @@ namespace Grapher.Models
                 }
             }
         }
-        private double localWidth = 50;
+        private double localWidth;
 
         public double LocalHeight
         {
@@ -68,7 +73,7 @@ namespace Grapher.Models
                 }
             }
         }
-        private double localHeight = 50;
+        private double localHeight;
 
         public NodeGeometryModel SourceGeometry
         {
@@ -218,69 +223,102 @@ namespace Grapher.Models
             }
         }
         
-        //public double AngleInRadians
-        //{
-        //    get
-        //    {
-        //        if(double.NaN == angleInRadians)
-        //        {
-        //            angleInRadians = Math.Atan2(
-        //                Target.Y - Source.Y,
-        //                Target.X - Source.X 
-        //            );
-        //        }
-        //        return angleInRadians;
-        //    }
-        //}
-        //private double angleInRadians;
-        //
-        //public Point ArrowAlpha
-        //{
-        //    get
-        //    {
-        //        if (Point.IsValid() == arrowAlpha)
-        //        {
-        //            var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
-        //            var arrowAngle = AngleInRadians - Math.PI / 4;
-        //            arrowAlpha = new Point(
-        //                Target.X + ArrowLenght * Math.Cos(arrowAngle),
-        //                Target.Y + ArrowLenght * Math.Sin(arrowAngle)
-        //            );
-        //        }
-        //        return arrowAlpha;
-        //    }
-        //}
-        //public Point arrowAlpha;
-        //
-        //public Point ArrowBravo
-        //{
-        //    get
-        //    {
-        //        if(Point.IsValid() == arrowBravo)
-        //        {
-        //            var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
-        //            var arrowAngle  = AngleInRadians + Math.PI / 4;
-        //            arrowBravo = new Point(
-        //                Target.X + ArrowLenght * Math.Cos(arrowAngle),
-        //                Target.Y + ArrowLenght * Math.Sin(arrowAngle)
-        //            );
-        //        }
-        //        return arrowBravo;
-        //    }
-        //}
-        //public Point arrowBravo;
-        //
-        //public double EndpointRadius = 10;
-        //
-        //public string Label;
-        //public double LabelWidth;
-        //public double LabelHeight;
-        //public double LabelLeft;
-        //public double LabelTop;
-        //
-        //public double MinWidth;
-        //public double MinHeight;
+        public double AngleInRadians
+        {
+            get
+            {
+                return Math.Atan2(
+                    Target.Y - Source.Y,
+                    Target.X - Source.X 
+                );
+            }
+        }
+        
+        public Pixel ArrowAlpha
+        {
+            get
+            {
+                var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
+                var arrowAngle = AngleInRadians - Math.PI / 4;
+                return new Pixel
+                {
+                    X = Target.X + ArrowLenght * Math.Cos(arrowAngle),
+                    Y = Target.Y + ArrowLenght * Math.Sin(arrowAngle)
+                };
+            }
+        }
+        
+        public Pixel ArrowBravo
+        {
+            get
+            {
+                var ArrowLenght = Math.Sqrt((EndpointRadius * EndpointRadius) + (1 / 4) * (EndpointRadius * 2) * (EndpointRadius * 2));
+                var arrowAngle  = AngleInRadians + Math.PI / 4;
+                return new Pixel{
+                    X = Target.X + ArrowLenght * Math.Cos(arrowAngle),
+                    Y = Target.Y + ArrowLenght * Math.Sin(arrowAngle)
+                };
+            }
+        }
 
+        public double LabelWidth
+        {
+            get
+            {
+                return labelWidth;
+            }
+            set
+            {
+                if (labelWidth != value)
+                {
+                    labelWidth = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(LabelWidth))
+                    );
+                }
+                ToDo // calculate the local width/height
+            }
+        }
+        private double labelWidth;
+
+        public double LabelHeight
+        {
+            get
+            {
+                return labelHeight;
+            }
+            set
+            {
+                if (labelHeight != value)
+                {
+                    labelHeight = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(LabelHeight))
+                    );
+                    ToDo // calculate the local width/height
+                }
+            }
+        }
+        private double labelHeight;
+
+        public double EndpointRadius
+        {
+            get
+            {
+                return endpointRadius;
+            }
+            set
+            {
+                endpointRadius = value;
+                PropertyChanged?.Invoke(
+                    this,
+                    new PropertyChangedEventArgs(nameof(EndpointRadius))
+                );
+            }
+        }
+        private double endpointRadius = 10;
     }
 
 }

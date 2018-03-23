@@ -75,6 +75,46 @@ namespace Grapher.Models
 
         }
 
+        public double NodeWidth
+        {
+            get
+            {
+                return nodeWidth;
+            }
+            set
+            {
+                if (value != nodeWidth)
+                {
+                    nodeWidth = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(NodeWidth))
+                    );
+                }
+            }
+        }
+        private double nodeWidth;
+
+        public double NodeHeight
+        {
+            get
+            {
+                return nodeHeight;
+            }
+            set
+            {
+                if (value != nodeHeight)
+                {
+                    nodeHeight = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(NodeHeight))
+                    );
+                }
+            }
+        }
+        private double nodeHeight;
+
         public IEnumerable<EdgeModel> Edges
         {
             get
@@ -131,88 +171,8 @@ namespace Grapher.Models
 
             EdgeWidth  = EdgeWidthNew;
             EdgeHeight = EdgeHeightNew;
-            
-        }
 
-        public double GraphWidth
-        {
-            get
-            {
-                return graphWidth;
-            }
-            set
-            {
-                if (value != graphWidth)
-                {
-                    graphWidth = value;
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(nameof(GraphWidth))
-                    );
-                }
-            }
         }
-        private double graphWidth;
-
-        public double GraphHeight
-        {
-            get
-            {
-                return graphHeight;
-            }
-            set
-            {
-                if (value != graphHeight)
-                {
-                    graphHeight = value;
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(nameof(GraphHeight))
-                    );
-                }
-            }
-        }
-        private double graphHeight;
-
-        public double NodeWidth
-        {
-            get
-            {
-                return nodeWidth;
-            }
-            set
-            {
-                if (value != nodeWidth)
-                {
-                    nodeWidth = value;
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(nameof(NodeWidth))
-                    );
-                }
-            }
-        }
-        private double nodeWidth;
-
-        public double NodeHeight
-        {
-            get
-            {
-                return nodeHeight;
-            }
-            set
-            {
-                if (value != nodeHeight)
-                {
-                    nodeHeight = value;
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(nameof(NodeHeight))
-                    );
-                }
-            }
-        }
-        private double nodeHeight;
 
         public double EdgeWidth
         {
@@ -253,6 +213,46 @@ namespace Grapher.Models
             }
         }
         private double edgeHeight;
+
+        public double GraphWidth
+        {
+            get
+            {
+                return graphWidth;
+            }
+            set
+            {
+                if (value != graphWidth)
+                {
+                    graphWidth = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(GraphWidth))
+                    );
+                }
+            }
+        }
+        private double graphWidth;
+
+        public double GraphHeight
+        {
+            get
+            {
+                return graphHeight;
+            }
+            set
+            {
+                if (value != graphHeight)
+                {
+                    graphHeight = value;
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(GraphHeight))
+                    );
+                }
+            }
+        }
+        private double graphHeight;
 
     }
 }
